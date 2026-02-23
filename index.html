@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <title>Çağatay Motors</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <div class="ust-menu">
+        <h1>Çağatay Motors</h1>
+        <div class="menu-butonlari">
+            <button onclick="menuDegistir('pazar')">Satılık Araçlar</button>
+            <button onclick="menuDegistir('garaj')">Garajım</button>
+        </div>
+        <div class="bakiye-kutusu">Kasa: <span id="paramiz">5.000.000</span> TL</div>
+    </div>
+    
+    <div id="pazar-ekrani" class="oyun-alani">
+        <h2>Satılık Araçlar Piyasası</h2>
+        <div id="araba-listesi" class="liste-yapisi"></div>
+    </div>
+
+    <div id="garaj-ekrani" class="oyun-alani" style="display: none;">
+        <h2>Kendi Garajım</h2>
+        <p id="garaj-bilgi">Garajında henüz araba yok patron. Piyasadan araba almalısın!</p>
+        <div id="garaj-listesi" class="liste-yapisi"></div>
+    </div>
+
+    <script src="app.js"></script>
+</body>
+</html>
