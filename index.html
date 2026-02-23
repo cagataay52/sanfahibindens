@@ -2,28 +2,113 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <title>Çağatay Motors</title>
+    <title>SahibindenMotors.com - Profesyonel Galeri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <div class="ust-menu">
-        <h1>Çağatay Motors</h1>
-        <div class="menu-butonlari">
-            <button onclick="menuDegistir('pazar')">Satılık Araçlar</button>
-            <button onclick="menuDegistir('garaj')">Garajım</button>
+    <header class="sari-baslik">
+        <div class="header-icerik">
+            <h1 class="logo">SahibindenMotors<span>.com</span></h1>
+            <div class="arama-cubugu">
+                <input type="text" placeholder="Kelime, ilan no veya mağaza adı ile ara..." disabled>
+                <button>Ara</button>
+            </div>
+            <div class="kullanici-bilgi">
+                <div class="bilgi-kutu kapasite-kutu">🚗 Kapasite: <span id="kapasite-bilgi">0 / 2</span></div>
+                <div class="bilgi-kutu gun-kutu">📅 Gün: <span id="gun">1</span></div>
+                <div class="bilgi-kutu bakiye">💰 Kasa: <span id="paramiz">5.000.000</span> TL</div>
+            </div>
         </div>
-        <div class="bakiye-kutusu">Kasa: <span id="paramiz">5.000.000</span> TL</div>
-    </div>
-    
-    <div id="pazar-ekrani" class="oyun-alani">
-        <h2>Satılık Araçlar Piyasası</h2>
-        <div id="araba-listesi" class="liste-yapisi"></div>
+    </header>
+
+    <div class="ana-konteyner">
+        <aside class="sol-menu">
+            <h3>Kategoriler</h3>
+            <ul>
+                <li onclick="menuDegistir('pazar')" class="aktif" id="menu-pazar">🚗 Vasıta İlanları</li>
+                <li onclick="menuDegistir('garaj')" id="menu-garaj">🏠 Kendi Garajım</li>
+                <li onclick="menuDegistir('dukkan')" id="menu-dukkan">🏢 Dükkan Yönetimi</li>
+                <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka İşlemleri</li>
+                <li onclick="menuDegistir('istatistik')" id="menu-ist">📊 İstatistikler</li>
+            </ul>
+            <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Uykuya Yat (Sonraki Gün)</button>
+        </aside>
+
+        <main class="icerik-alani">
+            <div id="pazar-ekrani" class="sayfa">
+                <h2 class="sayfa-basligi">Piyasadaki Araçlar</h2>
+                <div id="araba-listesi" class="ilan-listesi"></div>
+            </div>
+
+            <div id="garaj-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">Garajımdaki Araçlar</h2>
+                <div class="uyari-mesaji" id="garaj-bilgi">Garajında henüz araba yok patron. Piyasadan araç toplamalısın!</div>
+                <div id="garaj-listesi" class="ilan-listesi"></div>
+            </div>
+
+            <div id="dukkan-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">Dükkan Seviyesi ve Kapasite</h2>
+                <div class="modern-kutu dukkan-kutusu">
+                    <h3 id="dukkan-isim" style="color: #0984e3; font-size: 24px; margin-top: 0;">Sokak Arası Galeri (Seviye 1)</h3>
+                    <p>Şu anki kapasiten: <strong id="dukkan-kapasite" style="font-size: 18px;">2 Araç</strong></p>
+                    <hr>
+                    <div id="yukseltme-alani">
+                        <p style="color: #636e72;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #2d3436;">Lüks Galeri (5 Araç Kapasitesi)</strong></p>
+                        <p style="font-size: 20px;">Gereken Yatırım: <strong id="yeni-seviye-fiyat" style="color: #d63031;">2.000.000 TL</strong></p>
+                        <button class="btn btn-yesil" style="font-size: 16px; padding: 15px;" onclick="dukkaniYukselt()">🚀 Dükkanı Büyüt ve Seviye Atla!</button>
+                    </div>
+                </div>
+            </div>
+
+            <div id="banka-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">Banka İşlemleri</h2>
+                <div class="modern-kutu">
+                    <h3>Güncel Borç: <span id="borc-miktari" style="color: #e74c3c;">0</span> TL</h3>
+                    <p class="alt-bilgi">* Uyarı: Banka, her gece borcunuza %5 gecikme faizi uygular.</p>
+                    <button class="btn btn-yesil" onclick="krediCek(500000)">500.000 TL Kredi Çek</button>
+                    <button class="btn btn-turuncu" onclick="borcOde(500000)">500.000 TL Borç Öde</button>
+                    <button class="btn btn-kirmizi" onclick="borcuKapat()">Tüm Borcu Kapat</button>
+                </div>
+            </div>
+
+            <div id="istatistik-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">Galeri İstatistikleri</h2>
+                <div class="modern-kutu">
+                    <p>Satılan Toplam Araç: <b id="ist-satilan" style="color:#3498db; font-size: 20px;">0</b></p>
+                    <p>Toplam Gelir: <b id="ist-gelir" style="color:#27ae60;">0</b> TL</p>
+                    <p>Toplam Gider: <b id="ist-gider" style="color:#e74c3c;">0</b> TL</p>
+                    <hr>
+                    <h3 style="font-size: 26px;">Net Kâr: <span id="ist-net">0</span> TL</h3>
+                </div>
+            </div>
+        </main>
     </div>
 
-    <div id="garaj-ekrani" class="oyun-alani" style="display: none;">
-        <h2>Kendi Garajım</h2>
-        <p id="garaj-bilgi">Garajında henüz araba yok patron. Piyasadan araba almalısın!</p>
-        <div id="garaj-listesi" class="liste-yapisi"></div>
+    <div id="teklif-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span>
+            <h2 class="modal-baslik">Gelen Müşteri Teklifleri</h2>
+            <div id="teklif-listesi"></div>
+        </div>
+    </div>
+
+    <div id="modifiye-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
+            <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
+            <p style="color: #636e72; font-size: 14px; margin-bottom: 20px;">Aracına değer kat! Yapılan işlemler aracın satış fiyatını maliyetinden daha fazla artırır.</p>
+            <div id="modifiye-listesi"></div>
+        </div>
+    </div>
+
+    <div id="uyari-modal" class="modal uyari-modal">
+        <div class="modal-icerik uyari-icerik">
+            <div id="uyari-ikon" class="uyari-ikon"></div>
+            <h2 id="uyari-baslik" class="modal-baslik" style="border:none; padding-bottom:5px; margin-bottom:5px;">Bilgi</h2>
+            <p id="uyari-mesaj" style="font-size: 16px; color: #636e72; margin-bottom: 25px;">Uyarı mesajı buraya gelecek.</p>
+            <button class="btn btn-mavi" style="width: 50%; padding: 12px; font-size: 16px;" onclick="uyariyiKapat()">Tamam</button>
+        </div>
     </div>
 
     <script src="app.js"></script>
