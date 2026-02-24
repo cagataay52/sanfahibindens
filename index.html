@@ -2,31 +2,40 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>SahibindenMotors.com - Profesyonel Galeri</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>SahibindenMotors - Profesyonel Galeri</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div id="mobil-menu-overlay" onclick="mobilMenuKapatAc()"></div>
+
     <header class="sari-baslik">
         <div class="header-icerik">
-            <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
-            <div class="arama-cubugu">
-                <input type="text" placeholder="Kelime, ilan no veya mağaza adı ile ara..." disabled>
+            <div class="mobil-ust-satir">
+                <div class="hamburger-btn" onclick="mobilMenuKapatAc()">☰</div>
+                <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
+                <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-gizle" title="Ayarlar">⚙️</div>
+            </div>
+
+            <div class="arama-cubugu masaustu-goster">
+                <input type="text" placeholder="Kelime veya ilan no ile ara..." disabled>
                 <button>Ara</button>
             </div>
+
             <div class="kullanici-bilgi">
-                <div class="bilgi-kutu kapasite-kutu">🚗 Kapasite: <span id="kapasite-bilgi">0 / 2</span></div>
-                <div class="bilgi-kutu gun-kutu">📅 Gün: <span id="gun">1</span></div>
-                <div class="bilgi-kutu bakiye">💰 Kasa: <span id="paramiz">15.000.000</span> TL</div>
-                <div onclick="ayarlarModalAc()" style="cursor:pointer; font-size:26px; display:flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='rotate(45deg)'" onmouseout="this.style.transform='rotate(0deg)'" title="Ayarlar">⚙️</div>
+                <div class="bilgi-kutu kapasite-kutu">🚗 <span id="kapasite-bilgi">0/2</span></div>
+                <div class="bilgi-kutu gun-kutu">📅 <span class="masaustu-goster-inline">Gün: </span><span id="gun">1</span></div>
+                <div class="bilgi-kutu bakiye">💰 <span id="paramiz">15.000.000</span> ₺</div>
+                <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-goster" title="Ayarlar">⚙️</div>
             </div>
         </div>
     </header>
 
     <div class="ana-konteyner">
         <aside class="sol-menu">
-            <h3>Kategoriler</h3>
+            <h3 class="masaustu-goster">Kategoriler</h3>
+            <h2 class="masaustu-gizle" style="color:#0984e3; margin-top:0; border-bottom:1px solid #eee; padding-bottom:10px;">Menü</h2>
             <ul>
                 <li onclick="menuDegistir('pazar')" class="aktif" id="menu-pazar">🚗 Vasıta İlanları</li>
                 <li onclick="menuDegistir('garaj')" id="menu-garaj">🏠 Kendi Garajım</li>
@@ -104,29 +113,27 @@
                 <div class="ilan-sol">
                     <img id="detay-foto" src="" alt="Araba Görseli">
                     <div class="ilan-aciklama">
-                        <h3 style="margin-top:0; color:#d63031;">Satıcının Açıklaması</h3>
-                        <p id="detay-aciklama" style="font-size: 14px; line-height: 1.6; color: #636e72;"></p>
+                        <h3 style="margin-top:0; color:#d63031; font-size:16px;">Satıcının Açıklaması</h3>
+                        <p id="detay-aciklama" style="font-size: 13px; line-height: 1.5; color: #636e72;"></p>
                     </div>
                 </div>
                 <div class="ilan-sag">
-                    <h2 id="detay-baslik" style="margin-top:0; color:#2d3436; font-size:24px;"></h2>
-                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 10px 0; font-size: 32px;"></h1>
-                    <hr style="border: 1px solid #f1f2f6; width: 100%;">
+                    <h2 id="detay-baslik" style="margin-top:0; color:#2d3436; font-size:20px;"></h2>
+                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 5px 0 15px 0; font-size: 28px;"></h1>
                     
                     <ul class="detay-liste">
-                        <li><strong>İl / İlçe:</strong> <span>İstanbul / Kadıköy</span></li>
                         <li><strong>Marka:</strong> <span id="detay-marka"></span></li>
                         <li><strong>Seri:</strong> <span id="detay-model"></span></li>
                         <li><strong>Yıl:</strong> <span id="detay-yil"></span></li>
                         <li><strong>Kilometre:</strong> <span id="detay-km"></span></li>
                     </ul>
                     
-                    <h3 style="margin-bottom: 10px;">🛠️ Oto Rapor Ekspertiz Durumu</h3>
+                    <h3 style="margin-bottom: 10px; font-size:16px;">🛠️ Oto Rapor Ekspertiz</h3>
                     <div class="ekspertiz-arabasi">
                         <div class="eks-row">
-                            <div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çamurluk</div>
+                            <div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çam.</div>
                             <div class="eks-parca" id="eks-kaput">Kaput</div>
-                            <div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çamurluk</div>
+                            <div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çam.</div>
                         </div>
                         <div class="eks-row">
                             <div class="eks-parca" id="eks-solOnKapi">Sol Ön Kapı</div>
@@ -139,15 +146,15 @@
                             <div class="eks-parca" id="eks-sagArkaKapi">Sağ Arka Kapı</div>
                         </div>
                         <div class="eks-row">
-                            <div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Çam.</div>
+                            <div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Ç.</div>
                             <div class="eks-parca" style="visibility:hidden;"></div>
-                            <div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Çam.</div>
+                            <div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Ç.</div>
                         </div>
                     </div>
 
                     <div class="ekspertiz-lejant">
                         <span style="color:#2d3436;">⚪ Orijinal</span>
-                        <span style="color:#f39c12;">🟡 Lokal Boya</span>
+                        <span style="color:#f39c12;">🟡 Lokal</span>
                         <span style="color:#3498db;">🔵 Boyalı</span>
                         <span style="color:#e74c3c;">🔴 Değişen</span>
                     </div>
@@ -161,7 +168,7 @@
     <div id="teklif-modal" class="modal">
         <div class="modal-icerik">
             <span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span>
-            <h2 class="modal-baslik">Gelen Müşteri Teklifleri</h2>
+            <h2 class="modal-baslik">Müşteri Teklifleri</h2>
             <div id="teklif-listesi"></div>
         </div>
     </div>
@@ -170,7 +177,6 @@
         <div class="modal-icerik">
             <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
             <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
-            <p style="color: #636e72; font-size: 14px; margin-bottom: 20px;">Aracına değer kat! Yapılan işlemler aracın satış fiyatını artırır.</p>
             <div id="modifiye-listesi"></div>
         </div>
     </div>

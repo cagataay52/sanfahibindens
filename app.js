@@ -17,6 +17,12 @@ function uyariyiKapat() { document.getElementById('uyari-modal').style.display =
 function modaliKapat(modalId) { document.getElementById(modalId).style.display = "none"; }
 function ayarlarModalAc() { document.getElementById('ayarlar-modal').style.display = "block"; }
 
+// YENİ: MOBİL HAMBURGER MENÜ FONKSİYONU
+function mobilMenuKapatAc() {
+    document.querySelector('.sol-menu').classList.toggle('acik');
+    document.getElementById('mobil-menu-overlay').classList.toggle('acik');
+}
+
 const audioCtx = new (window.AudioContext || window.webkitAudioContext)();
 function oyunSesi(tip) {
     if (audioCtx.state === 'suspended') { audioCtx.resume(); }
@@ -53,9 +59,9 @@ const seviyeler = [
 ];
 
 const modifiyePaketleri = [
-    { id: 1, isim: "Cam Filmi & Seramik Boya Koruma", ikon: "✨", maliyet: 25000, degerArtisi: 60000 },
-    { id: 2, isim: "Spor Çelik Jant & Performans Lastik", ikon: "🛞", maliyet: 55000, degerArtisi: 130000 },
-    { id: 3, isim: "Stage 1 Chiptuning & Spor Egzoz", ikon: "💻", maliyet: 90000, degerArtisi: 220000 }
+    { id: 1, isim: "Cam Filmi & Seramik Boya", ikon: "✨", maliyet: 25000, degerArtisi: 60000 },
+    { id: 2, isim: "Spor Çelik Jant & Lastik", ikon: "🛞", maliyet: 55000, degerArtisi: 130000 },
+    { id: 3, isim: "Stage 1 Yazılım & Egzoz", ikon: "💻", maliyet: 90000, degerArtisi: 220000 }
 ];
 
 const musteriIsimleri = ["Ahmet Bey", "Mehmet Bey", "Ayşe Hanım", "Can", "Zeynep", "Burak", "Kemal Abi", "Elif Hanım", "Mert", "Selin"];
@@ -154,13 +160,11 @@ function rastgeleOlayTetikle() {
         let ceza = Math.floor(paramiz * 0.05) + 15000; 
         if(ceza > paramiz) ceza = paramiz; 
         paramiz -= ceza; toplamGider += ceza;
-        oyunSesi('hata');
-        ozelUyari(`Vergi dairesi denetime geldi! Evrak eksikliğinden ${ceza.toLocaleString('tr-TR')} TL ceza yedin.`, 'hata');
+        oyunSesi('hata'); ozelUyari(`Vergi dairesi denetime geldi! Evrak eksikliğinden ${ceza.toLocaleString('tr-TR')} TL ceza yedin.`, 'hata');
     } else if (sans > 0.85) { 
         let bonus = Math.floor(Math.random() * 40000) + 20000;
         paramiz += bonus; toplamGelir += bonus;
-        oyunSesi('kasa');
-        ozelUyari(`Dükkana gelen zengin bir müşteri kahveni çok beğendi ve sana ${bonus.toLocaleString('tr-TR')} TL bahşiş bıraktı!`, 'basari');
+        oyunSesi('kasa'); ozelUyari(`Dükkana gelen zengin bir müşteri sana ${bonus.toLocaleString('tr-TR')} TL bahşiş bıraktı!`, 'basari');
     }
 }
 
@@ -195,10 +199,7 @@ function sonrakiGun() {
         }
     });
 
-    piyasayiYenile(); 
-    ekraniGuncelle();
-    oyunuKaydet(); 
-    menuDegistir('pazar'); 
+    piyasayiYenile(); ekraniGuncelle(); oyunuKaydet(); menuDegistir('pazar'); 
 }
 
 function menuDegistir(menu) {
@@ -212,6 +213,9 @@ function menuDegistir(menu) {
     if (menu === 'istatistik') istatistikleriGuncelle();
     if (menu === 'dukkan') dukkanEkraniniGuncelle();
     if (menu === 'banka') document.getElementById('borc-miktari').innerText = bankaBorcu.toLocaleString('tr-TR');
+
+    // MOBİLDE MENÜYE TIKLANINCA ÇEKMECEYİ OTOMATİK KAPAT
+    if(window.innerWidth <= 768) { document.querySelector('.sol-menu').classList.remove('acik'); document.getElementById('mobil-menu-overlay').classList.remove('acik'); }
 }
 
 function krediCek(miktar) { oyunSesi('kasa'); paramiz += miktar; bankaBorcu += miktar; ekraniGuncelle(); oyunuKaydet(); ozelUyari(`Bankadan ${miktar.toLocaleString('tr-TR')} TL kredi çektin.`, 'basari'); document.getElementById('borc-miktari').innerText = bankaBorcu.toLocaleString('tr-TR'); }
@@ -236,18 +240,18 @@ function ekraniGuncelle() {
 function arabalariEkranaGetir() {
     const liste = document.getElementById('araba-listesi'); liste.innerHTML = ''; 
     arabalar.forEach(araba => {
-        let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı Olabilir</span>' : '<span class="etiket etiket-yesil">Ekspertiz Raporlu</span>';
+        let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı</span>' : '<span class="etiket etiket-yesil">Raporlu</span>';
         liste.innerHTML += `
             <div class="ilan-karti">
                 <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
                 <div class="ilan-detay">
-                    <h3 class="ilan-baslik">Sahibinden ${araba.marka} ${araba.model}</h3>
+                    <h3 class="ilan-baslik">${araba.marka} ${araba.model}</h3>
                     <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
                     <div class="ilan-durum" style="margin-top: 5px;">${hasarMetni}</div>
                 </div>
                 <div class="ilan-sag-taraf">
                     <div class="ilan-fiyat">${araba.fiyat.toLocaleString('tr-TR')} ₺</div>
-                    <button class="btn btn-turuncu" onclick="ilanDetayEkraniAc(${araba.id})">🔍 İlanı İncele</button>
+                    <button class="btn btn-turuncu" onclick="ilanDetayEkraniAc(${araba.id})">🔍 İncele</button>
                 </div>
             </div>`;
     });
@@ -293,9 +297,9 @@ function garajiEkranaGetir() {
         bilgiMesaji.style.display = 'none';
         garaj.forEach(araba => {
             let teklifSayisi = araba.teklifler ? araba.teklifler.length : 0;
-            let teklifUyari = teklifSayisi > 0 ? `<span style="color:#00b894; font-weight:bold;">🔥 ${teklifSayisi} Yeni Teklif Var!</span>` : `<span style="color:#e67e22;">Teklif Bekleniyor...</span>`;
-            let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı Olabilir</span>' : '<span class="etiket etiket-yesil">Sorunsuz</span>';
-            let tamirButonuKodu = araba.hasarli ? `<button class="btn btn-turuncu" style="margin-bottom:5px;" onclick="tamirEt(${araba.id})">🛠️ Sanayide Tamir Et (${araba.tamirMasrafi.toLocaleString('tr-TR')} ₺)</button>` : '';
+            let teklifUyari = teklifSayisi > 0 ? `<span style="color:#00b894; font-weight:bold;">🔥 ${teklifSayisi} Yeni Teklif!</span>` : `<span style="color:#e67e22;">Teklif Bekleniyor...</span>`;
+            let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı</span>' : '<span class="etiket etiket-yesil">Sorunsuz</span>';
+            let tamirButonuKodu = araba.hasarli ? `<button class="btn btn-turuncu" style="margin-bottom:5px;" onclick="tamirEt(${araba.id})">🛠️ Tamir Et (${araba.tamirMasrafi.toLocaleString('tr-TR')} ₺)</button>` : '';
             
             let modifiyeEtiketleri = '';
             araba.modifiyeler.forEach(mod => { modifiyeEtiketleri += `<span class="etiket" style="background:#2d3436; margin-right:5px;">${mod}</span>`; });
@@ -304,7 +308,7 @@ function garajiEkranaGetir() {
                 <div class="ilan-karti">
                     <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
                     <div class="ilan-detay">
-                        <h3 class="ilan-baslik">${araba.marka} ${araba.model} (Benim İlanım)</h3>
+                        <h3 class="ilan-baslik">${araba.marka} ${araba.model}</h3>
                         <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
                         <div class="ilan-durum" style="margin-top: 5px;">${hasarMetni} <br><div style="margin-top:5px;">${modifiyeEtiketleri}</div></div>
                         <div style="margin-top:8px; color:#b2bec3; font-size:13px; font-weight: 600;">Maliyet: ${araba.fiyat.toLocaleString('tr-TR')} ₺</div>
@@ -313,7 +317,7 @@ function garajiEkranaGetir() {
                     <div class="ilan-sag-taraf">
                         ${tamirButonuKodu}
                         <button class="btn btn-mor" style="background:#6c5ce7; color:white; margin-bottom:5px;" onclick="modifiyeEkraniAc(${araba.id})">✨ Modifiye Et</button>
-                        <button class="btn btn-kirmizi" onclick="araciSat(${araba.id})">🤝 Gelen Teklifleri Gör</button>
+                        <button class="btn btn-kirmizi" onclick="araciSat(${araba.id})">🤝 Teklifleri Gör</button>
                     </div>
                 </div>`;
         });
@@ -343,7 +347,7 @@ function modifiyeEkraniAc(arabaId) {
                 <div class="teklif-karti">
                     <div style="text-align: left;">
                         <span style="font-size: 20px;">${paket.ikon}</span> <span style="font-weight: 700; color: #2d3436;">${paket.isim}</span><br>
-                        <span style="font-size: 14px; color: #636e72;">Maliyet: <strong style="color:#d63031;">${paket.maliyet.toLocaleString('tr-TR')} ₺</strong> | Değer Artışı: <strong style="color:#00b894;">+${paket.degerArtisi.toLocaleString('tr-TR')} ₺</strong></span>
+                        <span style="font-size: 14px; color: #636e72;">Maliyet: <strong style="color:#d63031;">${paket.maliyet.toLocaleString('tr-TR')} ₺</strong></span>
                     </div>
                     <button class="btn" style="background:#6c5ce7; color:white; width: auto; margin:0;" onclick="modifiyeUygula(${araba.id}, ${paket.id})">Uygula</button>
                 </div>`;
@@ -362,8 +366,8 @@ function modifiyeUygula(arabaId, paketId) {
         oyunSesi('tamir'); paramiz -= paket.maliyet; toplamGider += paket.maliyet;
         araba.fiyat += paket.degerArtisi; araba.modifiyeler.push(paket.isim);
         ekraniGuncelle(); garajiEkranaGetir(); modaliKapat('modifiye-modal'); oyunuKaydet();
-        ozelUyari(`${paket.isim} araca başarıyla eklendi. Aracın değeri uçtu!`, "basari");
-    } else { oyunSesi('hata'); ozelUyari(`Bu modifiyeyi yapmak için kasanızda yeterli para yok.`, "hata"); }
+        ozelUyari(`${paket.isim} başarıyla eklendi!`, "basari");
+    } else { oyunSesi('hata'); ozelUyari(`Yeterli paranız yok.`, "hata"); }
 }
 
 function araciSat(arabaId) {
@@ -372,7 +376,7 @@ function araciSat(arabaId) {
     listeHTML.innerHTML = `<p style="color: #636e72; margin-bottom: 20px; font-size: 15px;">Aracın Maliyeti: <strong style="color: #2d3436;">${araba.fiyat.toLocaleString('tr-TR')} TL</strong></p>`;
 
     if (!araba.teklifler || araba.teklifler.length === 0) {
-        listeHTML.innerHTML += `<p style="text-align:center; color:#e74c3c; font-weight:bold; padding:20px;">Bu araca henüz teklif veren olmadı. Geceyi atlayarak ("Sonraki Gün") yeni müşterilerin gelmesini bekle.</p>`;
+        listeHTML.innerHTML += `<p style="text-align:center; color:#e74c3c; font-weight:bold; padding:20px;">Henüz teklif yok. Sonraki Gün'e geçerek müşteri bekle.</p>`;
     } else {
         let siraliTeklifler = araba.teklifler.sort((a,b) => b.fiyat - a.fiyat);
         
@@ -383,7 +387,7 @@ function araciSat(arabaId) {
                     <div style="text-align: left;">
                         <span style="color: #0984e3; font-weight: 700; font-size: 16px;">👤 ${teklif.musteri}</span>
                         <span style="font-size:12px; color:#b2bec3; margin-left:10px;">(⏱️ ${kalanGun} Gün Kaldı)</span><br>
-                        <span style="font-size: 22px; color: #00b894; font-weight: 700;">${teklif.fiyat.toLocaleString('tr-TR')} ₺</span>
+                        <span style="font-size: 20px; color: #00b894; font-weight: 700;">${teklif.fiyat.toLocaleString('tr-TR')} ₺</span>
                     </div>
                     <div style="display: flex; gap: 8px; flex-direction: column;">
                         <button class="btn btn-yesil" style="margin:0;" onclick="teklifiKabulEt(${arabaId}, '${teklif.id}')">Kabul Et</button>
@@ -409,20 +413,15 @@ function pazarlikYap(arabaId, teklifId) {
         kart.innerHTML = `
             <div style="text-align: left;">
                 <span style="color: #0984e3; font-weight: 700; font-size: 16px;">👤 ${teklif.musteri} (İkna Oldu!)</span><br>
-                <span style="font-size: 22px; color: #00b894; font-weight: 700;">${teklif.fiyat.toLocaleString('tr-TR')} ₺</span>
+                <span style="font-size: 20px; color: #00b894; font-weight: 700;">${teklif.fiyat.toLocaleString('tr-TR')} ₺</span>
             </div>
-            <button class="btn btn-yesil" style="width: auto; margin:0;" onclick="teklifiKabulEt(${arabaId}, '${teklif.id}')">Yeni Teklifi Kabul Et</button>
+            <button class="btn btn-yesil" style="width: auto; margin:0;" onclick="teklifiKabulEt(${arabaId}, '${teklif.id}')">Kabul Et</button>
         `;
     } else {
         oyunSesi('hata');
         araba.teklifler.splice(teklifIndex, 1);
         oyunuKaydet();
-        
-        kart.innerHTML = `
-            <div style="text-align: center; width: 100%; padding: 10px 0;">
-                <span style="color: #d63031; font-weight: 700;">Müşteri sinirlendi ve teklifi geri çekti! 😡</span>
-            </div>
-        `;
+        kart.innerHTML = `<div style="text-align: center; width: 100%; padding: 10px 0;"><span style="color: #d63031; font-weight: 700;">Müşteri sinirlendi ve gitti! 😡</span></div>`;
     }
 }
 
@@ -469,7 +468,6 @@ function istatistikleriGuncelle() {
     if (netKar < 0) { netGosterge.style.color = '#d63031'; } else { netGosterge.style.color = '#00b894'; }
 }
 
-// OYUN BAŞLANGICI (Yeni Arayüzlü Sistem)
 function oyunuBaslat() {
     if (!oyunuYukle()) {
         document.getElementById('baslangic-modal').style.display = 'block';
