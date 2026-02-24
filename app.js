@@ -40,7 +40,11 @@ let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0;
 let dukkanSeviyesi = 1; let aracKapasitesi = 2;
 let arabalar = [];
 let hakanAbiSonKullanim = -15; 
-const noterUcreti = 2500; // YENİ: NOTER ÜCRETİ SABİTİ
+const noterUcreti = 2500; 
+
+// YENİ: EKONOMİ DEĞİŞKENLERİ
+let piyasaDurumu = "Normal"; 
+let piyasaCarpani = 1.0;
 
 const seviyeler = [
     { seviye: 1, isim: "Sokak Arası Galeri", kapasite: 2, fiyat: 0 }, { seviye: 2, isim: "Lüks Galeri", kapasite: 5, fiyat: 2000000 },
@@ -67,7 +71,7 @@ const aracSablonlari = [
 ];
 
 function oyunuKaydet() {
-    const kayitData = { galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci, hakanAbiSonKullanim };
+    const kayitData = { galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci, hakanAbiSonKullanim, piyasaDurumu, piyasaCarpani };
     localStorage.setItem('sahibindenMotorsKayit', JSON.stringify(kayitData));
 }
 
@@ -79,6 +83,11 @@ function oyunuYukle() {
         toplamSatilanArac = eskiKayit.toplamSatilanArac; toplamGelir = eskiKayit.toplamGelir; toplamGider = eskiKayit.toplamGider;
         arabalar = eskiKayit.arabalar || []; idSayaci = eskiKayit.idSayaci || 1;
         hakanAbiSonKullanim = eskiKayit.hakanAbiSonKullanim || -15;
+        piyasaDurumu = eskiKayit.piyasaDurumu || "Normal";
+        piyasaCarpani = eskiKayit.piyasaCarpani || 1.0;
+        
+        garaj.forEach(a => { if(a.tamirDurumu === undefined) a.tamirDurumu = 0; });
+        
         document.getElementById('gun').innerText = gun;
         return true; 
     }
@@ -105,22 +114,13 @@ function ekspertizUret() {
     return { detay: ekspertiz, puan: hasarPuan };
 }
 
-// YENİ: TRAMER MESAJI ÜRETİCİSİ
 function tramerUret(hasarPuan, tavanHasarliMi) {
     let sasiNo = "WBA" + Math.random().toString(36).substring(2, 8).toUpperCase() + "***";
     let mesaj = `Sayın İlgili, kayıtlarımıza göre <b>${sasiNo}</b> şasi numaralı araçta `;
-    
-    if (hasarPuan === 0) {
-        return mesaj + `<b>HASAR KAYDI BULUNMAMIŞTIR.</b> B002`;
-    } 
-
-    let kazaSayisi = Math.floor(Math.random() * 3) + 1; // 1 ile 3 arası kaza
-    let toplamTramer = hasarPuan * (Math.floor(Math.random() * 15000) + 10000); // Puana göre tutar
-
-    if (tavanHasarliMi || hasarPuan > 15) {
-        return mesaj + `<b>AĞIR HASAR KAYDI (ÇARPMA)</b> bulunmuştur. Toplam Hasar: <b>${toplamTramer.toLocaleString('tr-TR')} TL</b>. B002`;
-    }
-
+    if (hasarPuan === 0) return mesaj + `<b>HASAR KAYDI BULUNMAMIŞTIR.</b> B002`;
+    let kazaSayisi = Math.floor(Math.random() * 3) + 1; 
+    let toplamTramer = hasarPuan * (Math.floor(Math.random() * 15000) + 10000); 
+    if (tavanHasarliMi || hasarPuan > 15) return mesaj + `<b>AĞIR HASAR KAYDI (ÇARPMA)</b> bulunmuştur. Toplam Hasar: <b>${toplamTramer.toLocaleString('tr-TR')} TL</b>. B002`;
     return mesaj + `<b>${kazaSayisi} adet</b> kazaya karışmıştır. Toplam Hasar Tutarı: <b>${toplamTramer.toLocaleString('tr-TR')} TL</b>. B002`;
 }
 
@@ -145,7 +145,9 @@ function rastgeleArabaUret() {
     let ekspertizVerisi = ekspertizUret();
     let hasarIndirimi = ekspertizVerisi.puan * 0.015; 
     if (hasarIndirimi > 0.50) hasarIndirimi = 0.50; 
-    let fiyat = tabanHesap * (1 - hasarIndirimi);
+    
+    // YENİ: PİYASA ÇARPANI İLE FİYAT BELİRLEME
+    let fiyat = (tabanHesap * (1 - hasarIndirimi)) * piyasaCarpani;
 
     let agirHasarliMi = ekspertizVerisi.puan > 15 || ekspertizVerisi.detay['tavan'] === 'degisen';
     let tamirMasrafi = agirHasarliMi ? Math.floor(fiyat * 0.1) : 0; 
@@ -156,13 +158,42 @@ function rastgeleArabaUret() {
         id: idSayaci++, marka: sablon.marka, model: sablon.model, yil: yil, km: Math.floor(km), 
         fiyat: Math.floor(fiyat), hasarli: agirHasarliMi, tamirMasrafi: tamirMasrafi, modifiyeler: [],
         gorsel: sablon.gorsel, ekspertiz: ekspertizVerisi.detay, ilanAciklamasi: aciklamaUret(ekspertizVerisi.puan, km, sablon.marka),
-        teklifler: [], telefon: telNo, tramer: tramerMesaji
+        teklifler: [], telefon: telNo, tramer: tramerMesaji, tamirDurumu: 0 // 0 ise sanayide değil
     };
 }
 
 function piyasayiYenile() {
     arabalar = []; for(let i = 0; i < 4; i++) { arabalar.push(rastgeleArabaUret()); }
     if (document.getElementById('pazar-ekrani').style.display === 'block') { arabalariEkranaGetir(); }
+}
+
+// YENİ: PİYASA EKONOMİSİ OLAYI
+function ekonomiOlayiTetikle() {
+    const sans = Math.random();
+    let eskiCarpan = piyasaCarpani;
+    
+    if (sans < 0.05 && piyasaDurumu !== "Kriz") {
+        piyasaDurumu = "Kriz"; piyasaCarpani = 0.85;
+        oyunSesi('hata');
+        ozelUyari("📉 FLAŞ HABER: Kredi faizleri uçtu, piyasa kilitlendi! Araç fiyatları anında %15 düştü. Kötü günlere hazır ol!", "hata");
+    } else if (sans > 0.95 && piyasaDurumu !== "Canli") {
+        piyasaDurumu = "Canli"; piyasaCarpani = 1.20;
+        oyunSesi('kasa');
+        ozelUyari("📈 FLAŞ HABER: Devletten muazzam kredi kampanyası! Millet galeriye akın ediyor, fiyatlar %20 fırladı!", "basari");
+    } else if (sans > 0.40 && sans < 0.45 && piyasaDurumu !== "Normal") {
+        piyasaDurumu = "Normal"; piyasaCarpani = 1.0;
+        ozelUyari("⚖️ Piyasa ateşini kaybetti, alım-satımlar normale döndü. Fiyatlar dengelendi.", "bilgi");
+    }
+
+    // Piyasa değiştiyse, garajdaki araçların da değeri değişmeli (Gerçekçilik!)
+    if (eskiCarpan !== piyasaCarpani) {
+        let degisimOrani = piyasaCarpani / eskiCarpan;
+        garaj.forEach(araba => {
+            araba.fiyat = Math.floor(araba.fiyat * degisimOrani);
+            // Teklifleri iptal et, çünkü fiyatlar tamamen değişti
+            araba.teklifler = []; 
+        });
+    }
 }
 
 function sonrakiGun() {
@@ -173,27 +204,58 @@ function sonrakiGun() {
         document.getElementById('borc-miktari').innerText = bankaBorcu.toLocaleString('tr-TR');
     }
 
-    if(Math.random() < 0.15) {
+    // Ekonomi Kontrolü
+    ekonomiOlayiTetikle();
+
+    if(Math.random() < 0.10) {
         let ceza = Math.floor(paramiz * 0.05) + 15000; 
         if(ceza > paramiz) ceza = paramiz; 
         paramiz -= ceza; toplamGider += ceza;
-        oyunSesi('hata'); ozelUyari(`Vergi dairesi denetime geldi! ${ceza.toLocaleString('tr-TR')} TL ceza yedin.`, 'hata');
+        oyunSesi('hata'); ozelUyari(`Maliye denetime geldi! Evrak eksikliğinden ${ceza.toLocaleString('tr-TR')} TL ceza yedin.`, 'hata');
     }
 
+    // GARAJ VE SANAYİ SÜRECİ
     garaj.forEach(araba => {
-        if (!araba.teklifler) araba.teklifler = [];
-        araba.teklifler = araba.teklifler.filter(t => (gun - t.gelisGunu) < 3);
+        // SANAYİ KONTROLÜ
+        if (araba.tamirDurumu > 0) {
+            araba.tamirDurumu--; // 1 gün geçti
+            if (araba.tamirDurumu === 0) {
+                // Araba tamir oldu
+                araba.hasarli = false;
+                araba.fiyat += (araba.tamirMasrafi * 3); 
+                araba.tamirMasrafi = 0;
+                oyunSesi('kasa');
+                ozelUyari(`🛠️ Usta: "Patron araban hazır, cillop gibi oldu. Gelip alabilirsin."`, "basari");
+            } else {
+                // %15 İhtimalle Usta Tribi (Ekstra Masraf ve Süre)
+                if (Math.random() < 0.15) {
+                    let ekstra = Math.floor(araba.tamirMasrafi * 0.3);
+                    if (paramiz >= ekstra) {
+                        paramiz -= ekstra; toplamGider += ekstra;
+                        araba.tamirDurumu++;
+                        oyunSesi('hata');
+                        ozelUyari(`📞 Usta Aradı: "Ustam bunun şasede de eğrilik varmış, 1 gün daha yatacak. Sana da ${ekstra.toLocaleString('tr-TR')} ₺ parça parası kilitledim helal et."`, "hata");
+                    }
+                }
+            }
+        } else {
+            // Araba sanayide değilse teklif alabilir
+            if (!araba.teklifler) araba.teklifler = [];
+            araba.teklifler = araba.teklifler.filter(t => (gun - t.gelisGunu) < 3);
 
-        if (Math.random() > 0.3) {
-            let yeniTeklifSayisi = Math.floor(Math.random() * 2) + 1;
-            let minFiyat = araba.fiyat * 0.85; let maxFiyat = araba.fiyat * 1.30;
-            if (araba.hasarli) maxFiyat = araba.fiyat * 1.0; 
+            let teklifIhtimali = piyasaDurumu === "Canli" ? 0.6 : (piyasaDurumu === "Kriz" ? 0.1 : 0.3);
 
-            for(let i=0; i<yeniTeklifSayisi; i++) {
-                araba.teklifler.push({
-                    id: 'tklf-' + Math.floor(Math.random() * 1000000), musteri: musteriIsimleri[Math.floor(Math.random() * musteriIsimleri.length)],
-                    fiyat: Math.floor(Math.random() * (maxFiyat - minFiyat + 1)) + minFiyat, gelisGunu: gun
-                });
+            if (Math.random() < teklifIhtimali) {
+                let yeniTeklifSayisi = Math.floor(Math.random() * 2) + 1;
+                let minFiyat = araba.fiyat * 0.85; let maxFiyat = araba.fiyat * 1.30;
+                if (araba.hasarli) maxFiyat = araba.fiyat * 1.0; 
+
+                for(let i=0; i<yeniTeklifSayisi; i++) {
+                    araba.teklifler.push({
+                        id: 'tklf-' + Math.floor(Math.random() * 1000000), musteri: musteriIsimleri[Math.floor(Math.random() * musteriIsimleri.length)],
+                        fiyat: Math.floor(Math.random() * (maxFiyat - minFiyat + 1)) + minFiyat, gelisGunu: gun
+                    });
+                }
             }
         }
     });
@@ -274,7 +336,6 @@ function ilanDetayEkraniAc(arabaId) {
         parcaDiv.classList.add(araba.ekspertiz[p]);
     });
 
-    // YENİ: TRAMER BUTONU KONTROLÜ
     document.getElementById('detay-tramer-btn').onclick = function() { tramerSorgula(araba.id); };
 
     const hakanAbiBtn = document.getElementById('detay-hakan-abi-btn');
@@ -293,15 +354,9 @@ function ilanDetayEkraniAc(arabaId) {
     document.getElementById('ilan-detay-modal').style.display = 'block';
 }
 
-// YENİ: TRAMER SORGULAMA FONKSİYONU
 function tramerSorgula(arabaId) {
     if (paramiz < 150) { ozelUyari("Tramer sorgulamak için 150 TL'niz yok!", "hata"); return; }
-    
-    paramiz -= 150; 
-    toplamGider += 150;
-    ekraniGuncelle();
-    oyunSesi('kasa');
-
+    paramiz -= 150; toplamGider += 150; ekraniGuncelle(); oyunSesi('kasa');
     const araba = arabalar.find(a => a.id === arabaId);
     document.getElementById('tramer-mesaj-icerik').innerHTML = araba.tramer;
     document.getElementById('tramer-modal').style.display = 'block';
@@ -309,10 +364,7 @@ function tramerSorgula(arabaId) {
 
 let aktifAramaArabaId = null;
 
-function telefonuKapat() {
-    document.getElementById('telefon-modal').style.display = 'none';
-    document.querySelector('.telefon-ekrani').classList.remove('caliyor');
-}
+function telefonuKapat() { document.getElementById('telefon-modal').style.display = 'none'; document.querySelector('.telefon-ekrani').classList.remove('caliyor'); }
 
 function saticiAra(arabaId) {
     if (garaj.length >= aracKapasitesi) { ozelUyari("Garaj kapasiten tamamen dolu! Dükkanı büyüt.", "hata"); return; }
@@ -346,14 +398,13 @@ function telPazarlikYap(arabaId) {
         araba.fiyat = Math.floor(araba.fiyat * (1 - indirimOrani));
         oyunSesi('kasa');
         
-        document.getElementById('tel-diyalog').innerHTML = `"Valla kardeşim beni zorluyorsun ama esnaf adamız... Hadi senin güzel hatrına <strong style='color:#00b894;'>${araba.fiyat.toLocaleString('tr-TR')} TL</strong> olsun. Gel al."`;
+        document.getElementById('tel-diyalog').innerHTML = `"Valla kardeşim beni zorluyorsun ama esnaf adamız... Hadi senin hatrına <strong style='color:#00b894;'>${araba.fiyat.toLocaleString('tr-TR')} TL</strong> olsun. Gel al."`;
         document.getElementById('tel-aksiyonlar').style.display = 'flex';
         document.getElementById('tel-pazarlik-btn').style.display = 'none'; 
     } else {
         oyunSesi('hata');
         document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">"Kardeşim ölücülerle işim olmaz benim, hadi eyvallah!"</span> (Telefon kapandı)`;
-        arabalar = arabalar.filter(a => a.id !== arabaId);
-        piyasayiYenile(); 
+        arabalar = arabalar.filter(a => a.id !== arabaId); piyasayiYenile(); 
     }
 }
 
@@ -375,29 +426,26 @@ function hakanAbiAra(arabaId) {
         
         let indirimliFiyat = Math.floor(araba.fiyat * 0.60); 
         
-        document.getElementById('tel-diyalog').innerHTML = `"Buyrun benim, hallettim arabayı. Adam sana <strong style='color:#f1c40f;'>${indirimliFiyat.toLocaleString('tr-TR')} TL</strong>'ye bırakıyor. Battı balık yan gider al gitsin."`;
+        document.getElementById('tel-diyalog').innerHTML = `"Buyrun benim, hallettim o işi. Adam sana <strong style='color:#f1c40f;'>${indirimliFiyat.toLocaleString('tr-TR')} TL</strong>'ye bırakıyor. Battı balık yan gider al gitsin."`;
         document.getElementById('tel-aksiyonlar').style.display = 'flex';
         document.getElementById('tel-pazarlik-btn').style.display = 'none'; 
         
         document.getElementById('tel-satin-al-btn').onclick = function() { 
-            araba.fiyat = indirimliFiyat; 
-            hakanAbiSonKullanim = gun; 
-            telSatinAl(araba.id); 
+            araba.fiyat = indirimliFiyat; hakanAbiSonKullanim = gun; telSatinAl(araba.id); 
         };
     }, 2500);
 }
 
-// YENİ: NOTER KESİNTİSİ EKLENDİ (Alış)
 function telSatinAl(arabaId) {
     const araba = arabalar.find(a => a.id === arabaId);
     let toplamMaliyet = araba.fiyat + noterUcreti;
 
     if (paramiz >= toplamMaliyet) {
         oyunSesi('kasa'); paramiz -= toplamMaliyet; toplamGider += toplamMaliyet; 
+        araba.tamirDurumu = 0; // Aldığımızda sanayide değil
         garaj.push(araba); arabalar = arabalar.filter(a => a.id !== arabaId); 
-        ekraniGuncelle(); arabalariEkranaGetir(); oyunuKaydet();
-        telefonuKapat();
-        ozelUyari(`Araç başarıyla garajınıza eklendi!\nNoter Masrafı: ${noterUcreti.toLocaleString('tr-TR')} ₺`, "basari");
+        ekraniGuncelle(); arabalariEkranaGetir(); oyunuKaydet(); telefonuKapat();
+        ozelUyari(`Araç garajınıza çekildi!\nNoter Masrafı: ${noterUcreti.toLocaleString('tr-TR')} ₺`, "basari");
     } else { 
         oyunSesi('hata'); 
         document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c;">"Kardeşim araba + noter parası çıkışmıyor sende, vaktimi alma!"</span>`;
@@ -405,48 +453,71 @@ function telSatinAl(arabaId) {
     }
 }
 
+// YENİ: GARAJDA SANAYİ DURUMU EKRANA BASILMASI
 function garajiEkranaGetir() {
     const garajListesi = document.getElementById('garaj-listesi'); const bilgiMesaji = document.getElementById('garaj-bilgi');
     garajListesi.innerHTML = '';
     if (garaj.length === 0) { bilgiMesaji.style.display = 'block'; } else {
         bilgiMesaji.style.display = 'none';
         garaj.forEach(araba => {
-            let teklifSayisi = araba.teklifler ? araba.teklifler.length : 0;
-            let teklifUyari = teklifSayisi > 0 ? `<span style="color:#00b894; font-weight:bold;">🔥 ${teklifSayisi} Yeni Teklif!</span>` : `<span style="color:#e67e22;">Teklif Bekleniyor...</span>`;
-            let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı</span>' : '<span class="etiket etiket-yesil">Sorunsuz</span>';
-            let tamirButonuKodu = araba.hasarli ? `<button class="btn btn-turuncu" style="margin-bottom:5px;" onclick="tamirEt(${araba.id})">🛠️ Tamir Et (${araba.tamirMasrafi.toLocaleString('tr-TR')} ₺)</button>` : '';
             
-            let modifiyeEtiketleri = '';
-            araba.modifiyeler.forEach(mod => { modifiyeEtiketleri += `<span class="etiket" style="background:#2d3436; margin-right:5px;">${mod}</span>`; });
+            // EĞER ARABA SANAYİDEYSE BUTONLARI GİZLE, SÜREYİ GÖSTER
+            if (araba.tamirDurumu > 0) {
+                garajListesi.innerHTML += `
+                    <div class="ilan-karti" style="opacity:0.8; border-left:5px solid #e67e22;">
+                        <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
+                        <div class="ilan-detay">
+                            <h3 class="ilan-baslik">${araba.marka} ${araba.model} (Sanayide)</h3>
+                            <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
+                            <div style="margin-top:8px; color:#e67e22; font-size:14px; font-weight: bold;">🛠️ Kaportacıda Yatıyor...</div>
+                        </div>
+                        <div class="ilan-sag-taraf" style="justify-content:center;">
+                            <span style="font-size:18px; font-weight:bold; color:#2d3436; text-align:center;">⏳ Kalan:<br>${araba.tamirDurumu} Gün</span>
+                        </div>
+                    </div>`;
+            } else {
+                // ARABA SANAYİDE DEĞİLSE NORMAL GÖSTER
+                let teklifSayisi = araba.teklifler ? araba.teklifler.length : 0;
+                let teklifUyari = teklifSayisi > 0 ? `<span style="color:#00b894; font-weight:bold;">🔥 ${teklifSayisi} Yeni Teklif!</span>` : `<span style="color:#e67e22;">Teklif Bekleniyor...</span>`;
+                let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı</span>' : '<span class="etiket etiket-yesil">Sorunsuz</span>';
+                let tamirButonuKodu = araba.hasarli ? `<button class="btn btn-turuncu" style="margin-bottom:5px;" onclick="tamirEt(${araba.id})">🛠️ Sanayiye Ver (${araba.tamirMasrafi.toLocaleString('tr-TR')} ₺)</button>` : '';
+                
+                let modifiyeEtiketleri = '';
+                araba.modifiyeler.forEach(mod => { modifiyeEtiketleri += `<span class="etiket" style="background:#2d3436; margin-right:5px;">${mod}</span>`; });
 
-            garajListesi.innerHTML += `
-                <div class="ilan-karti">
-                    <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
-                    <div class="ilan-detay">
-                        <h3 class="ilan-baslik">${araba.marka} ${araba.model}</h3>
-                        <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
-                        <div class="ilan-durum" style="margin-top: 5px;">${hasarMetni} <br><div style="margin-top:5px;">${modifiyeEtiketleri}</div></div>
-                        <div style="margin-top:8px; color:#b2bec3; font-size:13px; font-weight: 600;">Maliyet: ${araba.fiyat.toLocaleString('tr-TR')} ₺</div>
-                        <div style="margin-top:5px; font-size:13px;">${teklifUyari}</div>
-                    </div>
-                    <div class="ilan-sag-taraf">
-                        ${tamirButonuKodu}
-                        <button class="btn btn-mor" style="background:#6c5ce7; color:white; margin-bottom:5px;" onclick="modifiyeEkraniAc(${araba.id})">✨ Modifiye Et</button>
-                        <button class="btn btn-kirmizi" onclick="araciSat(${araba.id})">🤝 Teklifleri Gör</button>
-                    </div>
-                </div>`;
+                garajListesi.innerHTML += `
+                    <div class="ilan-karti">
+                        <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
+                        <div class="ilan-detay">
+                            <h3 class="ilan-baslik">${araba.marka} ${araba.model}</h3>
+                            <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
+                            <div class="ilan-durum" style="margin-top: 5px;">${hasarMetni} <br><div style="margin-top:5px;">${modifiyeEtiketleri}</div></div>
+                            <div style="margin-top:8px; color:#b2bec3; font-size:13px; font-weight: 600;">Maliyet: ${araba.fiyat.toLocaleString('tr-TR')} ₺</div>
+                            <div style="margin-top:5px; font-size:13px;">${teklifUyari}</div>
+                        </div>
+                        <div class="ilan-sag-taraf">
+                            ${tamirButonuKodu}
+                            <button class="btn btn-mor" style="background:#6c5ce7; color:white; margin-bottom:5px;" onclick="modifiyeEkraniAc(${araba.id})">✨ Modifiye Et</button>
+                            <button class="btn btn-kirmizi" onclick="araciSat(${araba.id})">🤝 Teklifleri Gör</button>
+                        </div>
+                    </div>`;
+            }
         });
     }
 }
 
+// YENİ: SANAYİYE VERME MANTIĞI
 function tamirEt(arabaId) {
     const araba = garaj.find(a => a.id === arabaId);
     if (paramiz >= araba.tamirMasrafi) {
         oyunSesi('tamir'); paramiz -= araba.tamirMasrafi; toplamGider += araba.tamirMasrafi; 
-        araba.hasarli = false; araba.fiyat += (araba.tamirMasrafi * 3); araba.tamirMasrafi = 0; 
+        
+        araba.tamirDurumu = Math.floor(Math.random() * 3) + 2; // 2 ile 4 gün arası yatar
+        araba.teklifler = []; // Sanayiye giren arabanın müşteri teklifleri silinir
+        
         ekraniGuncelle(); garajiEkranaGetir(); oyunuKaydet();
-        ozelUyari(`${araba.marka} sanayiden pırıl pırıl çıktı. Değeri arttı!`, "basari");
-    } else { oyunSesi('hata'); ozelUyari("Sanayiciye verecek paran yok patron!", "hata"); }
+        ozelUyari(`Araç kaportacıya bırakıldı. Usta ${araba.tamirDurumu} gün sonra teslim edeceğini söyledi.`, "basari");
+    } else { oyunSesi('hata'); ozelUyari("Ustanın parasını peşin vermen lazım, kasanda para yok!", "hata"); }
 }
 
 function modifiyeEkraniAc(arabaId) {
@@ -540,12 +611,11 @@ function pazarlikYapp(arabaId, teklifId) {
     }
 }
 
-// YENİ: NOTER KESİNTİSİ EKLENDİ (Satış)
 function teklifiKabulEt(arabaId, teklifId) {
     const araba = garaj.find(a => a.id === arabaId);
     const teklif = araba.teklifler.find(t => t.id === teklifId);
     
-    let netKazanc = teklif.fiyat - noterUcreti; // Satarken de noter ücreti kesilir
+    let netKazanc = teklif.fiyat - noterUcreti; 
     
     modaliKapat('teklif-modal'); oyunSesi('kasa');
     paramiz += netKazanc; toplamGelir += netKazanc; toplamGider += noterUcreti; toplamSatilanArac++; 
