@@ -42,11 +42,15 @@ let arabalar = [];
 let hakanAbiSonKullanim = -15; 
 const noterUcreti = 2500; 
 
-// YENİ: EKONOMİ DEĞİŞKENLERİ
+// EKONOMİ DEĞİŞKENLERİ
 let piyasaDurumu = "Normal"; 
 let piyasaCarpani = 1.0;
 let aylikFaturalar = 4500;
 let sigortaVeMtvUcreti = 4000;
+
+// YENİ: SOSYAL MEDYA DEĞİŞKENLERİ
+let sosyalMedya = { aktif: false, platform: "", kullaniciAdi: "", takipci: 0, populerlik: 0 };
+let dmKutusu = [];
 
 const seviyeler = [
     { seviye: 1, isim: "Sokak Arası Galeri", kapasite: 2, fiyat: 0, kira: 5000 }, 
@@ -75,7 +79,11 @@ const aracSablonlari = [
 ];
 
 function oyunuKaydet() {
-    const kayitData = { galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci, hakanAbiSonKullanim, piyasaDurumu, piyasaCarpani };
+    const kayitData = { 
+        galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, 
+        toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci, hakanAbiSonKullanim, 
+        piyasaDurumu, piyasaCarpani, sosyalMedya, dmKutusu 
+    };
     localStorage.setItem('sahibindenMotorsKayit', JSON.stringify(kayitData));
 }
 
@@ -90,6 +98,10 @@ function oyunuYukle() {
         piyasaDurumu = eskiKayit.piyasaDurumu || "Normal";
         piyasaCarpani = eskiKayit.piyasaCarpani || 1.0;
         
+        // Eski kayıtlarda sosyal medya yoksa patlamaması için:
+        sosyalMedya = eskiKayit.sosyalMedya || { aktif: false, platform: "", kullaniciAdi: "", takipci: 0, populerlik: 0 };
+        dmKutusu = eskiKayit.dmKutusu || [];
+
         garaj.forEach(a => { if(a.tamirDurumu === undefined) a.tamirDurumu = 0; });
         
         document.getElementById('gun').innerText = gun;
@@ -175,7 +187,7 @@ function ekonomiOlayiTetikle() {
     let eskiCarpan = piyasaCarpani;
     
     if (sans < 0.05 && piyasaDurumu !== "Kriz") {
-        piyaDurumu = "Kriz"; piyasaCarpani = 0.85;
+        piyasaDurumu = "Kriz"; piyasaCarpani = 0.85;
         oyunSesi('hata');
         ozelUyari("📉 FLAŞ HABER: Kredi faizleri uçtu, piyasa kilitlendi! Araç fiyatları anında %15 düştü. Kötü günlere hazır ol!", "hata");
     } else if (sans > 0.95 && piyasaDurumu !== "Canli") {
@@ -199,7 +211,7 @@ function ekonomiOlayiTetikle() {
 function sonrakiGun() {
     gun++; document.getElementById('gun').innerText = gun;
     
-    // AY SONU GİDERLERİ (Dinamik Kira ve Faturalar)
+    // AY SONU GİDERLERİ
     if (gun % 30 === 0) {
         let guncelKira = seviyeler[dukkanSeviyesi - 1].kira;
         let toplamAylikGider = guncelKira + aylikFaturalar;
@@ -234,13 +246,12 @@ function sonrakiGun() {
                 oyunSesi('kasa');
                 ozelUyari(`🛠️ Usta: "Patron araban hazır, gel al."`, "basari");
             } else {
-                // Usta Kazığı ve Sürpriz Masraflar (%25 ihtimal)
                 let ustaOlayi = Math.random();
                 if (ustaOlayi < 0.25) {
                     let ekstra = Math.floor(araba.tamirMasrafi * 0.5);
                     if (paramiz >= ekstra) {
                         paramiz -= ekstra; toplamGider += ekstra;
-                        araba.tamirDurumu += 2; // 2 gün ekstra yatar
+                        araba.tamirDurumu += 2; 
                         oyunSesi('hata');
                         ozelUyari(`📞 Kaportacı Hamza Usta: "Ustam motoru indirdik, yatak sarmış bu. Sana ${ekstra.toLocaleString('tr-TR')} ₺ daha kilitledim, araç 2 gün daha bende."`, "hata");
                     }
@@ -263,11 +274,17 @@ function sonrakiGun() {
                     let takasArabasi = null;
                     let usteNakit = 0;
 
-                    // %20 Ölücü, %25 Takasçı, %55 Normal Müşteri
-                    if (musteriTipiRnd < 0.20) {
+                    let girtlakDoluMu = araba.modifiyeler && araba.modifiyeler.length >= 3;
+
+                    if (girtlakDoluMu && Math.random() < 0.40) {
+                        musteriTipi = "Tayfa";
+                        teklifTutari = Math.floor(araba.fiyat * (Math.random() * 0.20 + 1.10)); 
+                    } 
+                    else if (musteriTipiRnd < 0.20) {
                         musteriTipi = "Olucu";
                         teklifTutari = Math.floor(araba.fiyat * (Math.random() * 0.20 + 0.50));
-                    } else if (musteriTipiRnd < 0.45) {
+                    } 
+                    else if (musteriTipiRnd < 0.45) {
                         musteriTipi = "Takas";
                         takasArabasi = rastgeleArabaUret();
                         if (takasArabasi.fiyat >= araba.fiyat) {
@@ -275,7 +292,8 @@ function sonrakiGun() {
                         }
                         usteNakit = Math.floor((araba.fiyat - takasArabasi.fiyat) * (Math.random() * 0.2 + 0.9));
                         teklifTutari = usteNakit; 
-                    } else {
+                    } 
+                    else {
                         let minFiyat = araba.fiyat * 0.90; let maxFiyat = araba.fiyat * 1.20;
                         if (araba.hasarli) maxFiyat = araba.fiyat * 0.95; 
                         teklifTutari = Math.floor(Math.random() * (maxFiyat - minFiyat + 1)) + minFiyat;
@@ -294,20 +312,49 @@ function sonrakiGun() {
         }
     });
 
-    piyasayiYenile(); ekraniGuncelle(); oyunuKaydet(); menuDegistir('pazar'); 
+    // YENİ: SOSYAL MEDYA DM DÖNGÜSÜ
+    if (sosyalMedya.aktif && garaj.length > 0) {
+        let dmIhtimali = (sosyalMedya.takipci / 50000) + 0.10; 
+        if (dmIhtimali > 0.80) dmIhtimali = 0.80; 
+        
+        if (Math.random() < dmIhtimali) {
+            let sansliAraba = garaj[Math.floor(Math.random() * garaj.length)];
+            let minF = sansliAraba.fiyat * 0.95; let maxF = sansliAraba.fiyat * 1.15;
+            let teklif = Math.floor(Math.random() * (maxF - minF + 1)) + minF;
+            
+            dmKutusu.push({
+                gonderen: "@" + musteriIsimleri[Math.floor(Math.random() * musteriIsimleri.length)].toLowerCase() + Math.floor(Math.random()*99),
+                metin: `Reis profildeki ${sansliAraba.marka} duruyor mu? Nakit hazır, gelip alayım hemen.`,
+                teklifFiyat: teklif,
+                arabaId: sansliAraba.id
+            });
+            ozelUyari("📱 Sosyal medyan yıkılıyor! Bir araca DM'den ciddi bir teklif geldi.", "bilgi");
+        }
+    }
+
+    piyasayiYenile(); ekraniGuncelle(); oyunuKaydet(); 
+    
+    if(document.getElementById('sosyal-ekrani').style.display === 'block') { sosyalEkraniGuncelle(); }
+    else { menuDegistir('pazar'); }
 }
 
 function menuDegistir(menu) {
     document.querySelectorAll('.sayfa').forEach(s => s.style.display = 'none');
     document.querySelectorAll('.sol-menu li').forEach(l => l.classList.remove('aktif'));
-    document.getElementById(menu + '-ekrani').style.display = 'block';
-    document.getElementById('menu-' + menu).classList.add('aktif');
+    
+    if(document.getElementById(menu + '-ekrani')) {
+        document.getElementById(menu + '-ekrani').style.display = 'block';
+    }
+    if(document.getElementById('menu-' + menu)) {
+        document.getElementById('menu-' + menu).classList.add('aktif');
+    }
     
     if (menu === 'pazar') arabalariEkranaGetir();
     if (menu === 'garaj') garajiEkranaGetir();
     if (menu === 'istatistik') istatistikleriGuncelle();
     if (menu === 'dukkan') dukkanEkraniniGuncelle();
     if (menu === 'banka') document.getElementById('borc-miktari').innerText = bankaBorcu.toLocaleString('tr-TR');
+    if (menu === 'sosyal') sosyalEkraniGuncelle();
 
     if(window.innerWidth <= 768) { document.querySelector('.sol-menu').classList.remove('acik'); document.getElementById('mobil-menu-overlay').classList.remove('acik'); }
 }
@@ -600,7 +647,10 @@ function araciSat(arabaId) {
             let musteriEtiketi = "";
             let teklifGorunumu = `${teklif.fiyat.toLocaleString('tr-TR')} ₺`;
 
-            if (teklif.tip === "Olucu") {
+            if (teklif.tip === "Tayfa") {
+                musteriEtiketi = `<span class="etiket" style="background: #2c3e50; color:#f1c40f;">🔊 Piyasa Tayfası</span>`;
+                teklifGorunumu = `${teklif.fiyat.toLocaleString('tr-TR')} ₺ <br><span style="font-size:11px; color:#636e72;">(Motive çalarak yanaştı)</span>`;
+            } else if (teklif.tip === "Olucu") {
                 musteriEtiketi = `<span class="etiket etiket-kirmizi">💀 Ölücü</span>`;
             } else if (teklif.tip === "Takas") {
                 musteriEtiketi = `<span class="etiket etiket-yesil">🔄 Takasçı</span>`;
@@ -714,6 +764,111 @@ function istatistikleriGuncelle() {
     let netKar = toplamGelir - toplamGider; const netGosterge = document.getElementById('ist-net');
     netGosterge.innerText = netKar.toLocaleString('tr-TR');
     if (netKar < 0) { netGosterge.style.color = '#d63031'; } else { netGosterge.style.color = '#00b894'; }
+}
+
+// YENİ: SOSYAL MEDYA FONKSİYONLARI
+function sosyalEkraniGuncelle() {
+    if (!sosyalMedya.aktif) {
+        document.getElementById('sosyal-kurulum').style.display = 'block';
+        document.getElementById('sosyal-yonetim').style.display = 'none';
+    } else {
+        document.getElementById('sosyal-kurulum').style.display = 'none';
+        document.getElementById('sosyal-yonetim').style.display = 'block';
+        
+        document.getElementById('profil-ad').innerText = sosyalMedya.kullaniciAdi;
+        document.getElementById('profil-platform').innerText = sosyalMedya.platform;
+        document.getElementById('profil-takipci').innerText = Math.floor(sosyalMedya.takipci).toLocaleString('tr-TR');
+        
+        dmKutusunuEkranaBas();
+    }
+}
+
+function sosyalHesapAc() {
+    let ka = document.getElementById('sm-kullanici-adi').value;
+    let plat = document.getElementById('sm-platform').value;
+    
+    if (ka.trim() === "") { ozelUyari("Geçerli bir kullanıcı adı girin.", "hata"); return; }
+    
+    sosyalMedya.aktif = true;
+    sosyalMedya.platform = plat;
+    sosyalMedya.kullaniciAdi = ka.startsWith('@') ? ka : '@' + ka;
+    sosyalMedya.takipci = Math.floor(Math.random() * 50) + 10; 
+    
+    oyunSesi('kasa'); oyunuKaydet(); sosyalEkraniGuncelle();
+    ozelUyari(`Hayırlı olsun! ${plat} hesabın açıldı. Artık dijitaldesin.`, "basari");
+}
+
+function gonderiPaylas() {
+    if (paramiz < 1500) { ozelUyari("İçerik üretmek ve boostlamak için 1.500 TL lazım.", "hata"); return; }
+    if (garaj.length === 0) { ozelUyari("Garajda araba yok, neyin videosunu çekeceksin?", "hata"); return; }
+    
+    paramiz -= 1500; toplamGider += 1500;
+    let kazanilanTakipci = Math.floor(Math.random() * 300) + 50;
+    sosyalMedya.takipci += kazanilanTakipci;
+    sosyalMedya.populerlik += 2;
+    
+    oyunSesi('kasa'); ekraniGuncelle(); sosyalEkraniGuncelle(); oyunuKaydet();
+    ozelUyari(`Garajdaki araçların afili bir videosunu paylaştın! ${kazanilanTakipci} yeni takipçi geldi.`, "basari");
+}
+
+function influencerReklamVer() {
+    if (paramiz < 50000) { ozelUyari("Fenomenlere yedirecek 50.000 TL paran yok!", "hata"); return; }
+    
+    paramiz -= 50000; toplamGider += 50000;
+    let kazanilanTakipci = Math.floor(Math.random() * 8000) + 2000;
+    sosyalMedya.takipci += kazanilanTakipci;
+    sosyalMedya.populerlik += 15;
+    
+    oyunSesi('kasa'); ekraniGuncelle(); sosyalEkraniGuncelle(); oyunuKaydet();
+    ozelUyari(`Şehrin en ünlü influencer'ı galerini ziyaret edip story attı! İnanılmaz bir etkileşim aldın, ${kazanilanTakipci.toLocaleString('tr-TR')} takipçi geldi!`, "basari");
+}
+
+function dmKutusunuEkranaBas() {
+    const kutu = document.getElementById('dm-kutusu');
+    kutu.innerHTML = '';
+    
+    if (dmKutusu.length === 0) {
+        kutu.innerHTML = '<p style="text-align:center; color:#b2bec3;">Mesaj kutun şu an boş.</p>';
+        return;
+    }
+    
+    dmKutusu.forEach((mesaj, index) => {
+        kutu.innerHTML += `
+            <div class="ilan-karti" style="border-left: 5px solid #0984e3;">
+                <div class="ilan-detay">
+                    <div style="font-weight: bold; color: #2d3436;">📩 ${mesaj.gonderen}</div>
+                    <div style="font-size: 13px; color: #636e72; margin-top: 5px;">"${mesaj.metin}"</div>
+                    <div style="font-size: 16px; font-weight: bold; color: #00b894; margin-top: 8px;">Teklif: ${mesaj.teklifFiyat.toLocaleString('tr-TR')} ₺</div>
+                </div>
+                <div class="ilan-sag-taraf">
+                    <button class="btn btn-yesil" style="margin-bottom:5px;" onclick="dmTeklifKabul(${index}, ${mesaj.arabaId})">Satışı Onayla</button>
+                    <button class="btn btn-kirmizi" onclick="dmSil(${index})">Sil</button>
+                </div>
+            </div>`;
+    });
+}
+
+function dmSil(index) {
+    dmKutusu.splice(index, 1);
+    oyunSesi('hata'); dmKutusunuEkranaBas(); oyunuKaydet();
+}
+
+function dmTeklifKabul(dmIndex, arabaId) {
+    const arabaIndex = garaj.findIndex(a => a.id === arabaId);
+    if (arabaIndex === -1) { 
+        ozelUyari("Müşterinin istediği bu araç artık garajında değil!", "hata"); 
+        dmSil(dmIndex); return; 
+    }
+    
+    let mesaj = dmKutusu[dmIndex];
+    let netKazanc = mesaj.teklifFiyat - noterUcreti;
+    
+    paramiz += netKazanc; toplamGelir += netKazanc; toplamGider += noterUcreti; toplamSatilanArac++;
+    garaj.splice(arabaIndex, 1);
+    dmKutusu.splice(dmIndex, 1);
+    
+    oyunSesi('kasa'); ekraniGuncelle(); garajiEkranaGetir(); sosyalEkraniGuncelle(); oyunuKaydet();
+    ozelUyari(`DM üzerinden satış tamamlandı! ${mesaj.gonderen} aracı aldı.\nNet Kasa Girişi: ${netKazanc.toLocaleString('tr-TR')} TL.`, "basari");
 }
 
 function oyunuBaslat() {

@@ -42,6 +42,7 @@
                 <li onclick="menuDegistir('dukkan')" id="menu-dukkan">🏢 Dükkan Yönetimi</li>
                 <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka İşlemleri</li>
                 <li onclick="menuDegistir('istatistik')" id="menu-istatistik">📊 İstatistikler</li>
+                <li onclick="menuDegistir('sosyal')" id="menu-sosyal">📱 Sosyal Medya</li>
             </ul>
             <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Uykuya Yat (Sonraki Gün)</button>
         </aside>
@@ -93,7 +94,56 @@
                     <h3 style="font-size: 26px;">Net Kâr: <span id="ist-net">0</span> TL</h3>
                 </div>
             </div>
-        </main>
+
+            <div id="sosyal-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">📱 Dijital Pazarlama & Sosyal Medya</h2>
+                
+                <div id="sosyal-kurulum" class="modern-kutu" style="text-align: center;">
+                    <h3 style="color: #0984e3;">Sosyal Medyaya Adım At</h3>
+                    <p style="color: #636e72; margin-bottom: 20px;">Zorunlu değil, ama yeni nesil müşterilere (ve piyasa tayfasına) ulaşmak istiyorsan bir hesap açmalısın.</p>
+                    
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                        <select id="sm-platform" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9; font-family: 'Poppins'; outline: none;">
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                            <option value="Facebook">Facebook</option>
+                        </select>
+                        <input type="text" id="sm-kullanici-adi" placeholder="@kullaniciadi belirle" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9; font-family: 'Poppins'; outline: none; width: 50%;">
+                    </div>
+                    <button class="btn btn-mavi" style="width: auto; padding: 10px 30px;" onclick="sosyalHesapAc()">Hesabı Oluştur</button>
+                </div>
+
+                <div id="sosyal-yonetim" style="display: none;">
+                    <div class="modern-kutu" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white;">
+                        <div>
+                            <h2 style="margin: 0;" id="profil-ad">@kullanici</h2>
+                            <span id="profil-platform" style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 5px; font-size: 12px;">Instagram</span>
+                        </div>
+                        <div style="text-align: right;">
+                            <div style="font-size: 24px; font-weight: bold;" id="profil-takipci">0</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Takipçi</div>
+                        </div>
+                    </div>
+
+                    <div style="display: flex; gap: 15px; margin-top: 15px;">
+                        <div class="modern-kutu" style="flex: 1; text-align: center;">
+                            <h3>📸 İçerik Üret</h3>
+                            <p style="font-size: 13px; color: #636e72;">Araçların videosunu çekip paylaş. (Maliyet: 1.500 ₺)</p>
+                            <button class="btn btn-yesil" onclick="gonderiPaylas()">Gönderi Paylaş</button>
+                        </div>
+                        <div class="modern-kutu" style="flex: 1; text-align: center;">
+                            <h3>✨ Fenomen Sponsorluğu</h3>
+                            <p style="font-size: 13px; color: #636e72;">Sanal influencer'lar ile reklam anlaşması yap. (Maliyet: 50.000 ₺)</p>
+                            <button class="btn btn-mor" style="background: #9b59b6; color: white;" onclick="influencerReklamVer()">Reklam Ver</button>
+                        </div>
+                    </div>
+
+                    <h3 style="margin-top: 25px;">💬 DM Kutusu (Gelen Mesajlar)</h3>
+                    <div id="dm-kutusu" class="ilan-listesi">
+                        </div>
+                </div>
+            </div>
+            </main>
     </div>
 
     <div id="baslangic-modal" class="modal" style="display: none; background: rgba(0,0,0,0.9);">
