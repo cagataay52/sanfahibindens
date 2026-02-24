@@ -7,9 +7,9 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <header class="sari-baslik">
+<header class="sari-baslik">
         <div class="header-icerik">
-            <h1 class="logo">SahibindenMotors<span>.com</span></h1>
+            <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
             <div class="arama-cubugu">
                 <input type="text" placeholder="Kelime, ilan no veya mağaza adı ile ara..." disabled>
                 <button>Ara</button>
@@ -17,7 +17,8 @@
             <div class="kullanici-bilgi">
                 <div class="bilgi-kutu kapasite-kutu">🚗 Kapasite: <span id="kapasite-bilgi">0 / 2</span></div>
                 <div class="bilgi-kutu gun-kutu">📅 Gün: <span id="gun">1</span></div>
-                <div class="bilgi-kutu bakiye">💰 Kasa: <span id="paramiz">5.000.000</span> TL</div>
+                <div class="bilgi-kutu bakiye">💰 Kasa: <span id="paramiz">15.000.000</span> TL</div>
+                <div onclick="ayarlarModalAc()" style="cursor:pointer; font-size:26px; display:flex; align-items:center; transition:0.2s;" onmouseover="this.style.transform='rotate(45deg)'" onmouseout="this.style.transform='rotate(0deg)'" title="Ayarlar">⚙️</div>
             </div>
         </div>
     </header>
@@ -172,6 +173,15 @@
                     <button id="detay-satin-al-btn" class="btn btn-mavi" style="margin-top:20px; font-size:16px; padding:15px;">Bu İlanı Satın Al</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+<div id="ayarlar-modal" class="modal">
+        <div class="modal-icerik" style="text-align: center; max-width: 400px;">
+            <span class="kapat-btn" onclick="modaliKapat('ayarlar-modal')">&times;</span>
+            <h2 class="modal-baslik">⚙️ Oyun Ayarları</h2>
+            <p style="color: #636e72; margin-bottom: 25px;">Buradan galerini sıfırlayabilir ve oyuna baştan başlayabilirsin.</p>
+            <button class="btn btn-kirmizi" style="font-size: 16px; padding: 15px;" onclick="oyunuSifirlaEkrani()">🔄 Tüm İlerlemeyi Sil ve Baştan Başla</button>
         </div>
     </div>
 
