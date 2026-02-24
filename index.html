@@ -152,7 +152,15 @@
                         </div>
                     </div>
 
+                    <div class="ekspertiz-lejant">
+                        <span style="color:#2d3436;">⚪ Orijinal</span>
+                        <span style="color:#f39c12;">🟡 Lokal</span>
+                        <span style="color:#3498db;">🔵 Boyalı</span>
+                        <span style="color:#e74c3c;">🔴 Değişen</span>
+                    </div>
+
                     <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <button id="detay-tramer-btn" class="btn" style="background:#34495e; color:white; font-size:14px; padding:12px; margin:0;">💬 5664'e Tramer SMS'i Gönder (150 ₺)</button>
                         <button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:16px; padding:15px; margin:0;">📞 Satıcıyı Ara (<span id="detay-telefon"></span>)</button>
                         <button id="detay-hakan-abi-btn" class="btn" style="background:#2d3436; color:#f1c40f; font-size:14px; padding:12px; margin:0;">👑 Hakan Abi'ye Çöktürt</button>
                     </div>
@@ -169,7 +177,7 @@
             <p id="tel-diyalog" style="font-size: 15px; line-height: 1.6; min-height: 80px; margin-bottom: 25px; padding: 0 10px;">Dıt... Dıt... Dıt...</p>
             
             <div id="tel-aksiyonlar" style="display: flex; flex-direction: column; gap: 10px; display: none;">
-                <button class="btn btn-yesil" id="tel-satin-al-btn" style="padding: 15px; font-size: 16px;">Satın Al</button>
+                <button class="btn btn-yesil" id="tel-satin-al-btn" style="padding: 15px; font-size: 16px;">Satın Al (Noterde)</button>
                 <button class="btn btn-turuncu" id="tel-pazarlik-btn" style="padding: 15px; font-size: 16px;">Pazarlık Yapmayı Dene</button>
             </div>
             <button class="btn btn-kirmizi" style="margin-top: 20px; border-radius: 30px; padding: 12px; font-size: 16px;" onclick="telefonuKapat()">📞 Kapat</button>
@@ -189,6 +197,21 @@
             <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
             <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
             <div id="modifiye-listesi"></div>
+        </div>
+    </div>
+
+    <div id="tramer-modal" class="modal" style="z-index: 3500;">
+        <div class="modal-icerik" style="max-width: 350px; background: #f1f2f6; border-radius: 20px; padding: 20px;">
+            <div style="display: flex; align-items: center; gap: 10px; border-bottom: 1px solid #dfe6e9; padding-bottom: 10px; margin-bottom: 15px;">
+                <div style="width: 40px; height: 40px; background: #e74c3c; color: white; border-radius: 50%; display: flex; justify-content: center; align-items: center; font-weight: bold; font-size: 18px;">5664</div>
+                <div>
+                    <h3 style="margin: 0; font-size: 16px; color: #2d3436;">Tramer Sorgu</h3>
+                    <p style="margin: 0; font-size: 12px; color: #636e72;">Az önce</p>
+                </div>
+            </div>
+            <div style="background: white; padding: 15px; border-radius: 12px; font-size: 14px; color: #2d3436; box-shadow: 0 2px 5px rgba(0,0,0,0.05); line-height: 1.6;" id="tramer-mesaj-icerik">
+                </div>
+            <button class="btn btn-mavi" style="margin-top: 20px;" onclick="modaliKapat('tramer-modal')">Kapat</button>
         </div>
     </div>
 
