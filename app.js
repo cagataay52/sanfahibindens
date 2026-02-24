@@ -348,7 +348,7 @@ function hakanAbiAra(arabaId) {
         
         let indirimliFiyat = Math.floor(araba.fiyat * 0.60); // %40 İndirim
         
-        document.getElementById('tel-diyalog').innerHTML = `"Buyrun benim, hallettim arabayı. Adam sana <strong style='color:#f1c40f;'>${indirimliFiyat.toLocaleString('tr-TR')} TL</strong>'ye bırakıyor. Yattı balık yan gider al gitsin."`;
+        document.getElementById('tel-diyalog').innerHTML = `"Buyrun benim, hallettim arabayı. Adam sana <strong style='color:#f1c40f;'>${indirimliFiyat.toLocaleString('tr-TR')} TL</strong>'ye bırakıyor. Battı balık yan gider al gitsin."`;
         document.getElementById('tel-aksiyonlar').style.display = 'flex';
         document.getElementById('tel-pazarlik-btn').style.display = 'none'; // Hakan Abiyle pazarlık olmaz :)
         
