@@ -111,6 +111,70 @@
         </div>
     </div>
 
+    <div id="ilan-detay-modal" class="modal">
+        <div class="modal-icerik ilan-detay-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('ilan-detay-modal')">&times;</span>
+            <div class="ilan-detay-grid">
+                
+                <div class="ilan-sol">
+                    <img id="detay-foto" src="" alt="Araba Görseli">
+                    <div class="ilan-aciklama">
+                        <h3 style="margin-top:0; color:#d63031;">Satıcının Açıklaması</h3>
+                        <p id="detay-aciklama" style="font-size: 14px; line-height: 1.6; color: #636e72;"></p>
+                    </div>
+                </div>
+
+                <div class="ilan-sag">
+                    <h2 id="detay-baslik" style="margin-top:0; color:#2d3436; font-size:24px;"></h2>
+                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 10px 0; font-size: 32px;"></h1>
+                    <hr style="border: 1px solid #f1f2f6; width: 100%;">
+                    
+                    <ul class="detay-liste">
+                        <li><strong>İl / İlçe:</strong> <span>İstanbul / Kadıköy</span></li>
+                        <li><strong>Marka:</strong> <span id="detay-marka"></span></li>
+                        <li><strong>Seri:</strong> <span id="detay-model"></span></li>
+                        <li><strong>Yıl:</strong> <span id="detay-yil"></span></li>
+                        <li><strong>Kilometre:</strong> <span id="detay-km"></span></li>
+                    </ul>
+                    
+                    <h3 style="margin-bottom: 10px;">🛠️ Oto Rapor Ekspertiz Durumu</h3>
+                    
+                    <div class="ekspertiz-arabasi">
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çamurluk</div>
+                            <div class="eks-parca" id="eks-kaput">Kaput</div>
+                            <div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çamurluk</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solOnKapi">Sol Ön Kapı</div>
+                            <div class="eks-parca" id="eks-tavan">Tavan</div>
+                            <div class="eks-parca" id="eks-sagOnKapi">Sağ Ön Kapı</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solArkaKapi">Sol Arka Kapı</div>
+                            <div class="eks-parca" id="eks-bagaj">Bagaj</div>
+                            <div class="eks-parca" id="eks-sagArkaKapi">Sağ Arka Kapı</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Çam.</div>
+                            <div class="eks-parca" style="visibility:hidden;"></div>
+                            <div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Çam.</div>
+                        </div>
+                    </div>
+
+                    <div class="ekspertiz-lejant">
+                        <span style="color:#2d3436;">⚪ Orijinal</span>
+                        <span style="color:#f39c12;">🟡 Lokal Boya</span>
+                        <span style="color:#3498db;">🔵 Boyalı</span>
+                        <span style="color:#e74c3c;">🔴 Değişen</span>
+                    </div>
+
+                    <button id="detay-satin-al-btn" class="btn btn-mavi" style="margin-top:20px; font-size:16px; padding:15px;">Bu İlanı Satın Al</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>

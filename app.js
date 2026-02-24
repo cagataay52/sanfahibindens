@@ -39,7 +39,7 @@ function oyunSesi(tip) {
     }
 }
 
-// OYUN DEĞİŞKENLERİ (Türkiye Ekonomisine Göre Güncellendi)
+// OYUN DEĞİŞKENLERİ
 let paramiz = 15000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
 let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0;
 let dukkanSeviyesi = 1; let aracKapasitesi = 2;
@@ -58,7 +58,6 @@ const modifiyePaketleri = [
 
 const musteriIsimleri = ["Ahmet Bey", "Mehmet Bey", "Ayşe Hanım", "Can", "Zeynep", "Burak", "Kemal Abi", "Elif Hanım"];
 
-// GÜNCELLENMİŞ ARAÇ ŞABLONLARI (Gerçekçi Fiyatlar ve Görseller)
 const aracSablonlari = [
     { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80" },
     { marka: "Mercedes", model: "C200", tabanFiyat: 4200000, gorsel: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=80" },
@@ -79,13 +78,11 @@ function oyunuKaydet() {
 function oyunuYukle() {
     const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
     if (eskiKayit) {
-        // Eski sürüm kontrolü (Eğer araçlarda görsel yoksa eski sürümdür, sıfırdan başlat)
-        if (eskiKayit.arabalar && eskiKayit.arabalar.length > 0 && !eskiKayit.arabalar[0].gorsel) {
-            console.log("Eski sürüm kayıt bulundu, sistem sıfırlanıyor...");
+        if (eskiKayit.arabalar && eskiKayit.arabalar.length > 0 && !eskiKayit.arabalar[0].ekspertiz) {
+            console.log("Ekspertizsiz eski sürüm kayıt bulundu, sistem sıfırlanıyor...");
             localStorage.removeItem('sahibindenMotorsKayit');
             return false;
         }
-
         paramiz = eskiKayit.paramiz; bankaBorcu = eskiKayit.bankaBorcu; garaj = eskiKayit.garaj;
         gun = eskiKayit.gun; dukkanSeviyesi = eskiKayit.dukkanSeviyesi; aracKapasitesi = eskiKayit.aracKapasitesi;
         toplamSatilanArac = eskiKayit.toplamSatilanArac; toplamGelir = eskiKayit.toplamGelir; toplamGider = eskiKayit.toplamGider;
@@ -103,30 +100,65 @@ function oyunuSifirla() {
     }
 }
 
-// GÜNCELLENMİŞ FİYAT HESAPLAMA ALGORİTMASI
+// YENİ: DİNAMİK EKSPERTİZ ÜRETİCİSİ
+function ekspertizUret() {
+    const parcalar = ['kaput', 'tavan', 'bagaj', 'solOnCamurluk', 'solOnKapi', 'solArkaKapi', 'solArkaCamurluk', 'sagOnCamurluk', 'sagOnKapi', 'sagArkaKapi', 'sagArkaCamurluk'];
+    const ekspertiz = {};
+    let hasarPuan = 0;
+    
+    let temizMi = Math.random() < 0.25;
+
+    parcalar.forEach(p => {
+        if (temizMi) {
+            ekspertiz[p] = 'orijinal';
+        } else {
+            let rnd = Math.random();
+            if (rnd < 0.50) { ekspertiz[p] = 'orijinal'; } 
+            else if (rnd < 0.70) { ekspertiz[p] = 'lokal'; hasarPuan += 1; } 
+            else if (rnd < 0.88) { ekspertiz[p] = 'boyali'; hasarPuan += 3; } 
+            else { ekspertiz[p] = 'degisen'; hasarPuan += 6; }
+        }
+    });
+
+    return { detay: ekspertiz, puan: hasarPuan };
+}
+
+// YENİ: İLAN AÇIKLAMASI ÜRETİCİSİ
+function aciklamaUret(ekspertizPuan, km, marka) {
+    if (ekspertizPuan === 0 && km < 50000) return `Aracım kapalı garaj arabasıdır. İçinde sigara içilmemiştir. Nokta hatasız, boyasız, tramersizdir. Dosta gidecek temizlikte bir ${marka}. Alıcısına şimdiden hayırlı olsun.`;
+    if (ekspertizPuan === 0) return `Aracın motoru yürüyeni kusursuzdur. Yaşına göre ufak tefek çizikleri var ama orijinaldir, boya vurdurmadım. Model yükseltmek için satıyorum.`;
+    if (ekspertizPuan < 5) return `Araçta sadece sürtmelerden kaynaklı temizlik boyaları ve lokal boyalar mevcuttur. Şase, podye, direkler kesinlikle işlemsizdir. Ekspere açıktır.`;
+    if (ekspertizPuan < 15) return `Aracın çeşitli yerlerinde boya ve değişenler mevcuttur, ekspertiz şablonunda işaretledim. Ağır bir kazası yoktur. Parça parça trameri var. Fiyatı uygun tuttum, ölücüler aramasın.`;
+    return `Araç ağır hasar kayıtlıdır (Pert). Tavan dahil işlemlidir, takla atmış olabilir. Kaportaya takıntısı olanlar sıfır araba baksın. Motoru yapılmıştır, yürüründe sıkıntı yok. Acil nakit ihtiyacından bu fiyata!`;
+}
+
+// ARAÇ ÜRETİMİ (Ekspertiz ve Açıklama Entegreli)
 function rastgeleArabaUret() {
     const sablon = aracSablonlari[Math.floor(Math.random() * aracSablonlari.length)];
     const yil = Math.floor(Math.random() * (2026 - 2005 + 1)) + 2005; 
     const km = ((2026 - yil) * Math.floor(Math.random() * 15000 + 10000)) + Math.floor(Math.random() * 10000);
     
-    // Gerçekçi Değer Kaybı Hesaplaması (Yıl ve KM'ye göre yüzdelik düşüş)
     let yas = 2026 - yil;
-    let degerKaybiOrani = (yas * 0.03) + ((km / 10000) * 0.015); 
-    if (degerKaybiOrani > 0.65) degerKaybiOrani = 0.65; 
+    let degerKaybiOrani = (yas * 0.02) + ((km / 10000) * 0.015); 
+    if (degerKaybiOrani > 0.60) degerKaybiOrani = 0.60; 
+    let tabanHesap = sablon.tabanFiyat * (1 - degerKaybiOrani);
+
+    let ekspertizVerisi = ekspertizUret();
     
-    let fiyat = sablon.tabanFiyat * (1 - degerKaybiOrani);
+    let hasarIndirimi = ekspertizVerisi.puan * 0.015; 
+    if (hasarIndirimi > 0.50) hasarIndirimi = 0.50; 
     
-    const hasarliMi = Math.random() < 0.35; 
-    let tamirMasrafi = 0;
-    if (hasarliMi) {
-        fiyat = fiyat * 0.85; 
-        tamirMasrafi = Math.floor(fiyat * ((Math.floor(Math.random() * 8) + 5) / 100)); 
-    }
-    
+    let fiyat = tabanHesap * (1 - hasarIndirimi);
+
+    let agirHasarliMi = ekspertizVerisi.puan > 15 || ekspertizVerisi.detay['tavan'] === 'degisen';
+    let tamirMasrafi = agirHasarliMi ? Math.floor(fiyat * 0.1) : 0; 
+
+    let aciklama = aciklamaUret(ekspertizVerisi.puan, km, sablon.marka);
+
     return { 
         id: idSayaci++, marka: sablon.marka, model: sablon.model, yil: yil, km: Math.floor(km), 
-        fiyat: Math.floor(fiyat), hasarli: hasarliMi, tamirMasrafi: Math.floor(tamirMasrafi), modifiyeler: [],
-        gorsel: sablon.gorsel 
+        fiyat: Math.floor(fiyat), hasarli: agirHasarliMi, tamirMasrafi: tamirMasrafi, modifiyeler: [],
+        gorsel: sablon.gorsel, ekspertiz: ekspertizVerisi.detay, ilanAciklamasi: aciklama
     };
 }
 
@@ -135,7 +167,6 @@ function piyasayiYenile() {
     if (document.getElementById('pazar-ekrani').style.display === 'block') { arabalariEkranaGetir(); }
 }
 
-// RASTGELE OLAYLAR
 function rastgeleOlayTetikle() {
     const sans = Math.random();
     if (sans < 0.15) { 
@@ -200,27 +231,56 @@ function ekraniGuncelle() {
     if (garaj.length >= aracKapasitesi && aracKapasitesi !== 999) { document.getElementById('kapasite-bilgi').style.color = '#e74c3c'; } else { document.getElementById('kapasite-bilgi').style.color = '#0984e3'; }
 }
 
-// FOTOĞRAFLI EKRANA GETİRME
+// PAZAR LİSTESİ ("İlan İncele" Butonu Eklendi)
 function arabalariEkranaGetir() {
     const liste = document.getElementById('araba-listesi'); liste.innerHTML = ''; 
     arabalar.forEach(araba => {
-        let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasar Kayıtlı</span>' : '<span class="etiket etiket-yesil">Hatasız Boyasız Orijinal</span>';
+        let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı Olabilir</span>' : '<span class="etiket etiket-yesil">Ekspertiz Raporlu</span>';
         liste.innerHTML += `
             <div class="ilan-karti">
                 <div class="araba-foto">
                     <img src="${araba.gorsel}" alt="${araba.marka}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
                 </div>
                 <div class="ilan-detay">
-                    <h3 class="ilan-baslik">Sahibinden Temiz ${araba.marka} ${araba.model}</h3>
-                    <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong> Model</span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
+                    <h3 class="ilan-baslik">Sahibinden ${araba.marka} ${araba.model}</h3>
+                    <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
                     <div class="ilan-durum" style="margin-top: 5px;">${hasarMetni}</div>
                 </div>
                 <div class="ilan-sag-taraf">
                     <div class="ilan-fiyat">${araba.fiyat.toLocaleString('tr-TR')} ₺</div>
-                    <button class="btn btn-mavi" onclick="satinAl(${araba.id})">İlanı Satın Al</button>
+                    <button class="btn btn-turuncu" onclick="ilanDetayEkraniAc(${araba.id})">🔍 İlanı İncele</button>
                 </div>
             </div>`;
     });
+}
+
+// YENİ: İLAN DETAY MODALINI AÇAN FONKSİYON
+function ilanDetayEkraniAc(arabaId) {
+    const araba = arabalar.find(a => a.id === arabaId);
+    
+    document.getElementById('detay-foto').src = araba.gorsel;
+    document.getElementById('detay-baslik').innerText = `Sahibinden Satılık ${araba.marka} ${araba.model}`;
+    document.getElementById('detay-fiyat').innerText = `${araba.fiyat.toLocaleString('tr-TR')} TL`;
+    document.getElementById('detay-marka').innerText = araba.marka;
+    document.getElementById('detay-model').innerText = araba.model;
+    document.getElementById('detay-yil').innerText = araba.yil;
+    document.getElementById('detay-km').innerText = araba.km.toLocaleString('tr-TR');
+    document.getElementById('detay-aciklama').innerText = araba.ilanAciklamasi;
+
+    const parcalar = ['kaput', 'tavan', 'bagaj', 'solOnCamurluk', 'solOnKapi', 'solArkaKapi', 'solArkaCamurluk', 'sagOnCamurluk', 'sagOnKapi', 'sagArkaKapi', 'sagArkaCamurluk'];
+    
+    parcalar.forEach(p => {
+        const parcaDiv = document.getElementById(`eks-${p}`);
+        parcaDiv.classList.remove('orijinal', 'lokal', 'boyali', 'degisen');
+        parcaDiv.classList.add(araba.ekspertiz[p]);
+    });
+
+    document.getElementById('detay-satin-al-btn').onclick = function() {
+        satinAl(araba.id);
+        modaliKapat('ilan-detay-modal');
+    };
+
+    document.getElementById('ilan-detay-modal').style.display = 'block';
 }
 
 function satinAl(arabaId) {
@@ -230,17 +290,17 @@ function satinAl(arabaId) {
         oyunSesi('satin-al'); paramiz -= secilenAraba.fiyat; toplamGider += secilenAraba.fiyat; 
         garaj.push(secilenAraba); arabalar = arabalar.filter(araba => araba.id !== arabaId); 
         ekraniGuncelle(); arabalariEkranaGetir(); oyunuKaydet();
+        ozelUyari(`Araç başarıyla satın alındı ve garajınıza eklendi!`, "basari");
     } else { oyunSesi('hata'); ozelUyari("Kasadaki paran bu aracı almaya yetmiyor!", "hata"); }
 }
 
-// FOTOĞRAFLI GARAJ EKRANI
 function garajiEkranaGetir() {
     const garajListesi = document.getElementById('garaj-listesi'); const bilgiMesaji = document.getElementById('garaj-bilgi');
     garajListesi.innerHTML = '';
     if (garaj.length === 0) { bilgiMesaji.style.display = 'block'; } else {
         bilgiMesaji.style.display = 'none';
         garaj.forEach(araba => {
-            let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Hasarlı (Müşteri Kırar)</span>' : '<span class="etiket etiket-yesil">Sorunsuz (Hızlı Satılır)</span>';
+            let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasarlı Olabilir</span>' : '<span class="etiket etiket-yesil">Sorunsuz</span>';
             let tamirButonuKodu = araba.hasarli ? `<button class="btn btn-turuncu" onclick="tamirEt(${araba.id})">🛠️ Sanayide Tamir Et (${araba.tamirMasrafi.toLocaleString('tr-TR')} ₺)</button>` : '';
             
             let modifiyeEtiketleri = '';
@@ -341,7 +401,6 @@ function araciSat(arabaId) {
     document.getElementById('teklif-modal').style.display = "block";
 }
 
-// PAZARLIK SİSTEMİ
 function pazarlikYap(arabaId, eskiTeklif, teklifId) {
     const kart = document.getElementById(teklifId);
     const sans = Math.random();

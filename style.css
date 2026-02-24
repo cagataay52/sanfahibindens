@@ -126,3 +126,34 @@ body {
     .ilan-sag-taraf { align-items: center; width: 100%; margin-top: 15px; }
     .ilan-ozellikler { justify-content: center; }
 }
+
+/* İLAN DETAY & EKSPERTİZ SAYFASI TASARIMI */
+.ilan-detay-icerik { width: 95%; max-width: 1000px; padding: 40px; margin: 4% auto; }
+.ilan-detay-grid { display: flex; gap: 40px; }
+.ilan-sol { flex: 1.2; }
+.ilan-sol img { width: 100%; height: 350px; object-fit: cover; border-radius: 8px; box-shadow: 0 5px 15px rgba(0,0,0,0.1); }
+.ilan-aciklama { margin-top: 20px; padding: 25px; background: #fffdf5; border-radius: 8px; border-left: 5px solid #ffeaa7; box-shadow: 0 2px 5px rgba(0,0,0,0.03); }
+
+.ilan-sag { flex: 1; display: flex; flex-direction: column; }
+.detay-liste { list-style: none; padding: 0; margin: 15px 0; font-size: 15px; }
+.detay-liste li { padding: 12px 0; border-bottom: 1px dashed #dfe6e9; display: flex; justify-content: space-between; color: #636e72; }
+.detay-liste li strong { color: #2d3436; }
+
+/* ARABA EKSPERTİZ ŞABLONU */
+.ekspertiz-arabasi { display: flex; flex-direction: column; gap: 8px; margin: 10px 0; align-items: center; background: #f8f9fa; padding: 25px; border-radius: 12px; border: 1px solid #eee; }
+.eks-row { display: flex; gap: 8px; width: 100%; justify-content: center; }
+.eks-parca { width: 95px; height: 60px; background-color: #ffffff; border: 2px solid #b2bec3; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 11px; font-weight: 700; text-align: center; color: #2d3436; transition: 0.3s; box-shadow: inset 0 2px 4px rgba(0,0,0,0.02); padding: 2px; }
+
+/* EKSPERTİZ RENKLERİ */
+.eks-parca.orijinal { background-color: #ffffff; border-color: #b2bec3; }
+.eks-parca.lokal { background-color: #fff3cd; border-color: #f1c40f; color: #d35400; }
+.eks-parca.boyali { background-color: #e3f2fd; border-color: #3498db; color: #0984e3; }
+.eks-parca.degisen { background-color: #ffcccc; border-color: #e74c3c; color: #c0392b; }
+
+.ekspertiz-lejant { display: flex; gap: 15px; font-size: 14px; font-weight: 700; justify-content: center; margin-top: 15px; flex-wrap: wrap; background: white; padding: 10px; border-radius: 30px; box-shadow: 0 2px 5px rgba(0,0,0,0.05); }
+
+/* Detay Sayfası Mobil Uyumu */
+@media (max-width: 768px) {
+    .ilan-detay-grid { flex-direction: column; }
+    .ilan-detay-icerik { padding: 20px; margin: 10% auto; }
+}
