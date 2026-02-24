@@ -39,8 +39,8 @@ function oyunSesi(tip) {
     }
 }
 
-// OYUN DEĞİŞKENLERİ
-let paramiz = 5000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
+// OYUN DEĞİŞKENLERİ (Türkiye Ekonomisine Göre Güncellendi)
+let paramiz = 15000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
 let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0;
 let dukkanSeviyesi = 1; let aracKapasitesi = 2;
 let arabalar = [];
@@ -57,14 +57,20 @@ const modifiyePaketleri = [
 ];
 
 const musteriIsimleri = ["Ahmet Bey", "Mehmet Bey", "Ayşe Hanım", "Can", "Zeynep", "Burak", "Kemal Abi", "Elif Hanım"];
+
+// GÜNCELLENMİŞ ARAÇ ŞABLONLARI (Gerçekçi Fiyatlar ve Görseller)
 const aracSablonlari = [
-    { marka: "BMW", model: "320i", tabanFiyat: 1500000 }, { marka: "Mercedes", model: "C200", tabanFiyat: 1600000 },
-    { marka: "Audi", model: "A3", tabanFiyat: 1300000 }, { marka: "Volkswagen", model: "Golf", tabanFiyat: 900000 },
-    { marka: "Renault", model: "Megane", tabanFiyat: 750000 }, { marka: "Fiat", model: "Egea", tabanFiyat: 600000 },
-    { marka: "Toyota", model: "Corolla", tabanFiyat: 850000 }, { marka: "Honda", model: "Civic", tabanFiyat: 950000 }
+    { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80" },
+    { marka: "Mercedes", model: "C200", tabanFiyat: 4200000, gorsel: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=80" },
+    { marka: "Audi", model: "A3", tabanFiyat: 2600000, gorsel: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=400&q=80" },
+    { marka: "Volkswagen", model: "Golf", tabanFiyat: 1900000, gorsel: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=400&q=80" },
+    { marka: "Renault", model: "Megane", tabanFiyat: 1350000, gorsel: "https://images.unsplash.com/photo-1612083042468-b39177a41221?w=400&q=80" }, 
+    { marka: "Fiat", model: "Egea", tabanFiyat: 1100000, gorsel: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&q=80" },
+    { marka: "Toyota", model: "Corolla", tabanFiyat: 1600000, gorsel: "https://images.unsplash.com/photo-1629897048514-3dd74142ffbe?w=400&q=80" },
+    { marka: "Honda", model: "Civic", tabanFiyat: 1850000, gorsel: "https://images.unsplash.com/photo-1605816988069-b1c09eb0534d?w=400&q=80" }
 ];
 
-// --- 1. YENİ ÖZELLİK: KAYIT SİSTEMİ (SAVE/LOAD) ---
+// KAYIT SİSTEMİ
 function oyunuKaydet() {
     const kayitData = { paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci };
     localStorage.setItem('sahibindenMotorsKayit', JSON.stringify(kayitData));
@@ -73,17 +79,23 @@ function oyunuKaydet() {
 function oyunuYukle() {
     const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
     if (eskiKayit) {
+        // Eski sürüm kontrolü (Eğer araçlarda görsel yoksa eski sürümdür, sıfırdan başlat)
+        if (eskiKayit.arabalar && eskiKayit.arabalar.length > 0 && !eskiKayit.arabalar[0].gorsel) {
+            console.log("Eski sürüm kayıt bulundu, sistem sıfırlanıyor...");
+            localStorage.removeItem('sahibindenMotorsKayit');
+            return false;
+        }
+
         paramiz = eskiKayit.paramiz; bankaBorcu = eskiKayit.bankaBorcu; garaj = eskiKayit.garaj;
         gun = eskiKayit.gun; dukkanSeviyesi = eskiKayit.dukkanSeviyesi; aracKapasitesi = eskiKayit.aracKapasitesi;
         toplamSatilanArac = eskiKayit.toplamSatilanArac; toplamGelir = eskiKayit.toplamGelir; toplamGider = eskiKayit.toplamGider;
         arabalar = eskiKayit.arabalar || []; idSayaci = eskiKayit.idSayaci || 1;
         document.getElementById('gun').innerText = gun;
-        return true; // Kayıt bulundu
+        return true; 
     }
-    return false; // Kayıt yok, sıfırdan başla
+    return false; 
 }
 
-// Oyunu Sıfırlama Butonu İşlevi (İstersen ayarlara eklersin)
 function oyunuSifirla() {
     if(confirm("Tüm ilerlemen silinecek ve oyuna baştan başlayacaksın. Emin misin?")) {
         localStorage.removeItem('sahibindenMotorsKayit');
@@ -91,20 +103,30 @@ function oyunuSifirla() {
     }
 }
 
+// GÜNCELLENMİŞ FİYAT HESAPLAMA ALGORİTMASI
 function rastgeleArabaUret() {
     const sablon = aracSablonlari[Math.floor(Math.random() * aracSablonlari.length)];
-    const yil = Math.floor(Math.random() * (2025 - 2005 + 1)) + 2005; 
+    const yil = Math.floor(Math.random() * (2026 - 2005 + 1)) + 2005; 
     const km = ((2026 - yil) * Math.floor(Math.random() * 15000 + 10000)) + Math.floor(Math.random() * 10000);
-    let fiyat = sablon.tabanFiyat - ((2026 - yil) * 25000) - (km * 1.5); 
-    if (fiyat < sablon.tabanFiyat * 0.2) fiyat = sablon.tabanFiyat * 0.2;
-    const hasarliMi = Math.random() < 0.40; let tamirMasrafi = 0;
+    
+    // Gerçekçi Değer Kaybı Hesaplaması (Yıl ve KM'ye göre yüzdelik düşüş)
+    let yas = 2026 - yil;
+    let degerKaybiOrani = (yas * 0.03) + ((km / 10000) * 0.015); 
+    if (degerKaybiOrani > 0.65) degerKaybiOrani = 0.65; 
+    
+    let fiyat = sablon.tabanFiyat * (1 - degerKaybiOrani);
+    
+    const hasarliMi = Math.random() < 0.35; 
+    let tamirMasrafi = 0;
     if (hasarliMi) {
-        fiyat = fiyat - (fiyat * ((Math.floor(Math.random() * 20) + 30) / 100));
-        tamirMasrafi = Math.floor(fiyat * ((Math.floor(Math.random() * 10) + 10) / 100));
+        fiyat = fiyat * 0.85; 
+        tamirMasrafi = Math.floor(fiyat * ((Math.floor(Math.random() * 8) + 5) / 100)); 
     }
+    
     return { 
         id: idSayaci++, marka: sablon.marka, model: sablon.model, yil: yil, km: Math.floor(km), 
-        fiyat: Math.floor(fiyat), hasarli: hasarliMi, tamirMasrafi: Math.floor(tamirMasrafi), modifiyeler: [] 
+        fiyat: Math.floor(fiyat), hasarli: hasarliMi, tamirMasrafi: Math.floor(tamirMasrafi), modifiyeler: [],
+        gorsel: sablon.gorsel 
     };
 }
 
@@ -113,16 +135,16 @@ function piyasayiYenile() {
     if (document.getElementById('pazar-ekrani').style.display === 'block') { arabalariEkranaGetir(); }
 }
 
-// --- 2. YENİ ÖZELLİK: RASTGELE OLAYLAR ---
+// RASTGELE OLAYLAR
 function rastgeleOlayTetikle() {
     const sans = Math.random();
-    if (sans < 0.15) { // %15 İhtimalle Kötü Olay
-        let ceza = Math.floor(paramiz * 0.05) + 15000; // Kasadaki paraya göre dinamik vergi
-        if(ceza > paramiz) ceza = paramiz; // Eksiye düşmemesi için
+    if (sans < 0.15) { 
+        let ceza = Math.floor(paramiz * 0.05) + 15000; 
+        if(ceza > paramiz) ceza = paramiz; 
         paramiz -= ceza; toplamGider += ceza;
         oyunSesi('hata');
         ozelUyari(`Vergi dairesi denetime geldi! Evrak eksikliğinden ${ceza.toLocaleString('tr-TR')} TL ceza yedin.`, 'hata');
-    } else if (sans > 0.85) { // %15 İhtimalle İyi Olay
+    } else if (sans > 0.85) { 
         let bonus = Math.floor(Math.random() * 40000) + 20000;
         paramiz += bonus; toplamGelir += bonus;
         oyunSesi('kasa');
@@ -133,17 +155,16 @@ function rastgeleOlayTetikle() {
 function sonrakiGun() {
     gun++; document.getElementById('gun').innerText = gun;
     
-    // Faiz İşletimi
     if (bankaBorcu > 0) {
         let faizMiktari = Math.floor(bankaBorcu * 0.05); bankaBorcu += faizMiktari; toplamGider += faizMiktari; 
         document.getElementById('borc-miktari').innerText = bankaBorcu.toLocaleString('tr-TR');
         oyunSesi('hata'); ozelUyari(`Banka borcuna ${faizMiktari.toLocaleString('tr-TR')} TL gecikme faizi uyguladı!`, 'hata');
     }
 
-    rastgeleOlayTetikle(); // Gün doğarken rastgele olay kontrolü
+    rastgeleOlayTetikle(); 
     piyasayiYenile(); 
     ekraniGuncelle();
-    oyunuKaydet(); // Gün atladığında kaydet
+    oyunuKaydet(); 
     menuDegistir('pazar'); 
 }
 
@@ -179,13 +200,16 @@ function ekraniGuncelle() {
     if (garaj.length >= aracKapasitesi && aracKapasitesi !== 999) { document.getElementById('kapasite-bilgi').style.color = '#e74c3c'; } else { document.getElementById('kapasite-bilgi').style.color = '#0984e3'; }
 }
 
+// FOTOĞRAFLI EKRANA GETİRME
 function arabalariEkranaGetir() {
     const liste = document.getElementById('araba-listesi'); liste.innerHTML = ''; 
     arabalar.forEach(araba => {
         let hasarMetni = araba.hasarli ? '<span class="etiket etiket-kirmizi">Ağır Hasar Kayıtlı</span>' : '<span class="etiket etiket-yesil">Hatasız Boyasız Orijinal</span>';
         liste.innerHTML += `
             <div class="ilan-karti">
-                <div class="araba-foto">🚗</div>
+                <div class="araba-foto">
+                    <img src="${araba.gorsel}" alt="${araba.marka}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                </div>
                 <div class="ilan-detay">
                     <h3 class="ilan-baslik">Sahibinden Temiz ${araba.marka} ${araba.model}</h3>
                     <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong> Model</span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
@@ -209,6 +233,7 @@ function satinAl(arabaId) {
     } else { oyunSesi('hata'); ozelUyari("Kasadaki paran bu aracı almaya yetmiyor!", "hata"); }
 }
 
+// FOTOĞRAFLI GARAJ EKRANI
 function garajiEkranaGetir() {
     const garajListesi = document.getElementById('garaj-listesi'); const bilgiMesaji = document.getElementById('garaj-bilgi');
     garajListesi.innerHTML = '';
@@ -223,7 +248,9 @@ function garajiEkranaGetir() {
 
             garajListesi.innerHTML += `
                 <div class="ilan-karti">
-                    <div class="araba-foto">🚗</div>
+                    <div class="araba-foto">
+                        <img src="${araba.gorsel}" alt="${araba.marka}" style="width: 100%; height: 100%; object-fit: cover; border-radius: 8px;">
+                    </div>
                     <div class="ilan-detay">
                         <h3 class="ilan-baslik">${araba.marka} ${araba.model} (Benim İlanım)</h3>
                         <div class="ilan-ozellikler"><span>🗓️ <strong>${araba.yil}</strong></span><span>🛣️ <strong>${araba.km.toLocaleString('tr-TR')}</strong> KM</span></div>
@@ -297,7 +324,7 @@ function araciSat(arabaId) {
     for(let i=0; i<3; i++) {
         const teklifMiktari = Math.floor(Math.random() * (maxFiyat - minFiyat + 1)) + minFiyat;
         const musteriAdayi = musteriIsimleri[Math.floor(Math.random() * musteriIsimleri.length)];
-        const teklifId = `teklif-${arabaId}-${i}`; // Her teklife özel ID veriyoruz
+        const teklifId = `teklif-${arabaId}-${i}`; 
         
         listeHTML.innerHTML += `
             <div class="teklif-karti" id="${teklifId}">
@@ -314,19 +341,16 @@ function araciSat(arabaId) {
     document.getElementById('teklif-modal').style.display = "block";
 }
 
-// --- 3. YENİ ÖZELLİK: PAZARLIK SİSTEMİ ---
+// PAZARLIK SİSTEMİ
 function pazarlikYap(arabaId, eskiTeklif, teklifId) {
     const kart = document.getElementById(teklifId);
     const sans = Math.random();
     
-    // %50 Şansla başarılı pazarlık
     if (sans > 0.5) {
-        // Teklifi %5 ile %15 arası artır
         const artisOrani = (Math.floor(Math.random() * 10) + 5) / 100;
         const yeniTeklif = Math.floor(eskiTeklif * (1 + artisOrani));
         oyunSesi('kasa');
         
-        // Kartın içeriğini güncelle (Pazarlık butonunu kaldır)
         kart.innerHTML = `
             <div style="text-align: left;">
                 <span style="color: #0984e3; font-weight: 700; font-size: 16px;">👤 Müşteri (İkna Oldu!)</span><br>
@@ -335,7 +359,6 @@ function pazarlikYap(arabaId, eskiTeklif, teklifId) {
             <button class="btn btn-yesil" style="width: auto; margin:0;" onclick="teklifiKabulEt(${arabaId}, ${yeniTeklif})">Yeni Teklifi Kabul Et</button>
         `;
     } else {
-        // Pazarlık ters tepti
         oyunSesi('hata');
         kart.innerHTML = `
             <div style="text-align: center; width: 100%; padding: 10px 0;">
@@ -387,13 +410,11 @@ function istatistikleriGuncelle() {
     if (netKar < 0) { netGosterge.style.color = '#d63031'; } else { netGosterge.style.color = '#00b894'; }
 }
 
-// --- OYUN BAŞLANGICI ---
+// OYUN BAŞLANGICI
 if (!oyunuYukle()) {
-    // Eğer önceden kayıtlı oyun yoksa, piyasayı yenile
     piyasayiYenile();
 } else {
-    // Kayıtlı oyun varsa, arabaları direkt ekrana bas
-    if (arabalar.length === 0) piyasayiYenile(); // Çökmeye karşı önlem
+    if (arabalar.length === 0) piyasayiYenile(); 
     else arabalariEkranaGetir();
 }
 ekraniGuncelle();
