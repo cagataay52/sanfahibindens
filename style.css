@@ -31,7 +31,7 @@ body { background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #10
 .gun-atla-btn { margin-top: 30px; width: 100%; padding: 18px; background: linear-gradient(135deg, #a29bfe, #6c5ce7); color: white; font-weight: 700; border: none; border-radius: 14px; cursor: pointer; font-family: 'Poppins'; box-shadow: 0 8px 20px rgba(108, 92, 231, 0.3); transition: 0.3s; font-size: 15px;}
 .gun-atla-btn:hover { transform: translateY(-3px); box-shadow: 0 12px 25px rgba(108, 92, 231, 0.4); }
 
-/* GÖZ ALICI İLAN KARTLARI */
+/* İLAN KARTLARI */
 .icerik-alani { flex: 1; }
 .sayfa-basligi { margin-top: 0; font-size: 28px; color: #102a43; margin-bottom: 25px; font-weight: 800; letter-spacing: -0.5px; }
 .ilan-listesi { display: flex; flex-direction: column; gap: 20px; }
@@ -47,7 +47,24 @@ body { background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #10
 .ilan-sag-taraf { display: flex; flex-direction: column; align-items: flex-end; min-width: 160px; gap: 10px;}
 .ilan-fiyat { font-size: 24px; font-weight: 800; color: #0984e3; margin-bottom: 5px; }
 
-/* MODERN BUTONLAR */
+/* İLAN DETAY (İNCELE) VE EKSPERTİZ EKRANI (GERİ EKLENDİ) */
+.ilan-detay-icerik { max-width: 850px; }
+.ilan-detay-grid { display: flex; gap: 30px; }
+.ilan-sol { flex: 1.1; }
+.ilan-sag { flex: 1; display: flex; flex-direction: column; }
+.detay-liste { list-style: none; padding: 0; margin: 10px 0; font-size: 14px; border-top: 1px solid #f0f4f8; }
+.detay-liste li { padding: 10px 0; border-bottom: 1px dashed #dfe6e9; display: flex; justify-content: space-between; }
+
+.ekspertiz-arabasi { display: flex; flex-direction: column; gap: 5px; background: #f8f9fa; padding: 15px; border-radius: 12px; border: 1px solid #eee; align-items: center; }
+.eks-row { display: flex; gap: 5px; width: 100%; justify-content: center; }
+.eks-parca { width: 80px; height: 45px; background: white; border: 2px solid #b2bec3; border-radius: 6px; display: flex; justify-content: center; align-items: center; font-size: 10px; font-weight: bold; text-align: center; color: #102a43; padding: 2px; }
+.eks-parca.orijinal { background-color: #ffffff; border-color: #b2bec3; }
+.eks-parca.lokal { background-color: #fff3cd; border-color: #f1c40f; color: #d35400; }
+.eks-parca.boyali { background-color: #e3f2fd; border-color: #3498db; color: #0984e3; }
+.eks-parca.degisen { background-color: #ffcccc; border-color: #e74c3c; color: #c0392b; }
+.ekspertiz-lejant { display: flex; gap: 10px; font-size: 12px; font-weight: bold; justify-content: center; margin-top: 10px; flex-wrap: wrap; background: white; padding: 8px; border-radius: 30px; }
+
+/* MODERN BUTONLAR VE MODALLAR */
 .btn { border: none; padding: 12px 20px; border-radius: 10px; cursor: pointer; font-weight: 700; font-size: 14px; width: 100%; font-family: 'Poppins'; transition: all 0.3s ease; display: flex; justify-content: center; align-items: center; gap: 8px;}
 .btn:hover { transform: translateY(-2px); opacity: 0.9; }
 .btn-mavi { background: linear-gradient(45deg, #0984e3, #74b9ff); color: white; box-shadow: 0 4px 15px rgba(9, 132, 227, 0.3); }
@@ -56,14 +73,13 @@ body { background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #10
 .btn-yesil { background: linear-gradient(45deg, #00b894, #55efc4); color: white; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.3); }
 .btn-mor { background: linear-gradient(45deg, #9b59b6, #cd84f1); color: white; box-shadow: 0 4px 15px rgba(155, 89, 182, 0.3); }
 
-/* CAM MODALLAR */
 .modal { display: none; position: fixed; z-index: 2000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(16, 42, 67, 0.6); backdrop-filter: blur(8px); }
 .modal-icerik { background: white; margin: 5% auto; padding: 35px; border-radius: 24px; width: 90%; max-width: 550px; position: relative; max-height: 85vh; overflow-y: auto; box-shadow: 0 25px 50px rgba(0,0,0,0.2); border: 1px solid rgba(255,255,255,0.5); }
 .modal-baslik { border-bottom: 2px solid #f0f4f8; padding-bottom: 15px; margin-top: 0; color: #102a43; font-weight: 800; font-size: 22px;}
 .kapat-btn { color: #829ab1; position: absolute; right: 25px; top: 20px; font-size: 32px; font-weight: bold; cursor: pointer; transition: 0.3s; }
 .kapat-btn:hover { color: #d63031; transform: rotate(90deg); }
 
-/* YENİ: CANLI YAYIN EKRANI CSS */
+/* CANLI YAYIN EKRANI */
 .canli-yayin-ekrani { background: #111; color: white; border-radius: 24px; overflow: hidden; position: relative; padding: 0 !important; border: 4px solid #333;}
 .yayin-ust { position: absolute; top: 15px; left: 15px; right: 15px; display: flex; justify-content: space-between; z-index: 10; }
 .yayin-canli-ikon { background: #e84118; color: white; padding: 5px 12px; border-radius: 6px; font-weight: bold; font-size: 12px; animation: pulse 1s infinite; }
@@ -73,12 +89,13 @@ body { background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #10
 .yayin-fiyat { font-size: 40px; color: #4cd137; font-weight: 800; text-shadow: 0 0 20px rgba(76, 209, 55, 0.4); margin: 10px 0; }
 .yayin-yorumlar { height: 150px; overflow: hidden; position: relative; margin-top: 10px; text-align: left; mask-image: linear-gradient(to bottom, transparent, black 20%, black); -webkit-mask-image: linear-gradient(to bottom, transparent, black 20%, black); }
 .yayin-yorum { margin-bottom: 8px; font-size: 13px; animation: slideUp 0.3s ease-out; }
+
 @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
 @keyframes pulse { 0% { opacity: 1; } 50% { opacity: 0.5; } 100% { opacity: 1; } }
 .kalp-animasyon { position: absolute; bottom: 80px; right: 20px; font-size: 24px; animation: floatUp 2s forwards; z-index: 20;}
 @keyframes floatUp { 0% { transform: translateY(0) scale(1); opacity: 1; } 100% { transform: translateY(-150px) scale(1.5); opacity: 0; } }
 
-/* MOBİL VE DİĞER DÜZENLEMELER */
+/* MOBİL GÖRÜNÜM */
 .modern-kutu { background: white; padding: 25px; border-radius: 20px; box-shadow: 0 8px 25px rgba(0,0,0,0.03); border: 1px solid rgba(0,0,0,0.02); }
 @media (max-width: 768px) {
     .masaustu-goster { display: none !important; }
@@ -94,4 +111,8 @@ body { background: linear-gradient(135deg, #f0f4f8 0%, #d9e2ec 100%); color: #10
     .araba-foto { margin: 0 auto 20px auto; width: 100%; height: 200px; }
     .ilan-sag-taraf { align-items: center; width: 100%; margin-top: 15px; }
     .ilan-ozellikler { justify-content: center; flex-wrap: wrap; gap: 10px; }
+    
+    .ilan-detay-grid { flex-direction: column; gap: 15px; }
+    .eks-row { flex-wrap: wrap; }
+    .eks-parca { width: 28%; height: 40px; font-size: 9px; }
 }
