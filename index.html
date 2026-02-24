@@ -152,16 +152,27 @@
                         </div>
                     </div>
 
-                    <div class="ekspertiz-lejant">
-                        <span style="color:#2d3436;">⚪ Orijinal</span>
-                        <span style="color:#f39c12;">🟡 Lokal</span>
-                        <span style="color:#3498db;">🔵 Boyalı</span>
-                        <span style="color:#e74c3c;">🔴 Değişen</span>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:16px; padding:15px; margin:0;">📞 Satıcıyı Ara (<span id="detay-telefon"></span>)</button>
+                        <button id="detay-hakan-abi-btn" class="btn" style="background:#2d3436; color:#f1c40f; font-size:14px; padding:12px; margin:0;">👑 Hakan Abi'ye Çöktürt</button>
                     </div>
-
-                    <button id="detay-satin-al-btn" class="btn btn-mavi" style="margin-top:20px; font-size:16px; padding:15px;">Bu İlanı Satın Al</button>
                 </div>
             </div>
+        </div>
+    </div>
+
+    <div id="telefon-modal" class="modal" style="z-index: 3000;">
+        <div class="modal-icerik telefon-ekrani">
+            <h3 id="tel-aranan-kisi" style="margin-top: 10px; color: #bdc3c7; font-weight: 400; font-size: 16px;">Satıcı Aranıyor...</h3>
+            <div class="tel-profil-resmi">👤</div>
+            <div id="tel-bekleme-animasyonu" class="pulse"></div>
+            <p id="tel-diyalog" style="font-size: 15px; line-height: 1.6; min-height: 80px; margin-bottom: 25px; padding: 0 10px;">Dıt... Dıt... Dıt...</p>
+            
+            <div id="tel-aksiyonlar" style="display: flex; flex-direction: column; gap: 10px; display: none;">
+                <button class="btn btn-yesil" id="tel-satin-al-btn" style="padding: 15px; font-size: 16px;">Satın Al</button>
+                <button class="btn btn-turuncu" id="tel-pazarlik-btn" style="padding: 15px; font-size: 16px;">Pazarlık Yapmayı Dene</button>
+            </div>
+            <button class="btn btn-kirmizi" style="margin-top: 20px; border-radius: 30px; padding: 12px; font-size: 16px;" onclick="telefonuKapat()">📞 Kapat</button>
         </div>
     </div>
 
@@ -181,7 +192,7 @@
         </div>
     </div>
 
-    <div id="uyari-modal" class="modal uyari-modal">
+    <div id="uyari-modal" class="modal uyari-modal" style="z-index: 4000;">
         <div class="modal-icerik uyari-icerik">
             <div id="uyari-ikon" class="uyari-ikon"></div>
             <h2 id="uyari-baslik" class="modal-baslik" style="border:none; padding-bottom:5px; margin-bottom:5px;">Bilgi</h2>
