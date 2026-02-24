@@ -58,15 +58,16 @@ const modifiyePaketleri = [
 
 const musteriIsimleri = ["Ahmet Bey", "Mehmet Bey", "Ayşe Hanım", "Can", "Zeynep", "Burak", "Kemal Abi", "Elif Hanım"];
 
+// GÜNCELLENMİŞ ARAÇ ŞABLONLARI (Kendi Görsellerinle)
 const aracSablonlari = [
-    { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "https://images.unsplash.com/photo-1555215695-3004980ad54e?w=400&q=80" },
-    { marka: "Mercedes", model: "C200", tabanFiyat: 4200000, gorsel: "https://images.unsplash.com/photo-1618843479313-40f8afb4b4d8?w=400&q=80" },
-    { marka: "Audi", model: "A3", tabanFiyat: 2600000, gorsel: "https://images.unsplash.com/photo-1606152421802-db97b9c7a11b?w=400&q=80" },
-    { marka: "Volkswagen", model: "Golf", tabanFiyat: 1900000, gorsel: "https://images.unsplash.com/photo-1541899481282-d53bffe3c35d?w=400&q=80" },
-    { marka: "Renault", model: "Megane", tabanFiyat: 1350000, gorsel: "https://images.unsplash.com/photo-1612083042468-b39177a41221?w=400&q=80" }, 
-    { marka: "Fiat", model: "Egea", tabanFiyat: 1100000, gorsel: "https://images.unsplash.com/photo-1552519507-da3b142c6e3d?w=400&q=80" },
-    { marka: "Toyota", model: "Corolla", tabanFiyat: 1600000, gorsel: "https://images.unsplash.com/photo-1629897048514-3dd74142ffbe?w=400&q=80" },
-    { marka: "Honda", model: "Civic", tabanFiyat: 1850000, gorsel: "https://images.unsplash.com/photo-1605816988069-b1c09eb0534d?w=400&q=80" }
+    { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "img/bmw-320i.jpg" },
+    { marka: "Mercedes", model: "C200", tabanFiyat: 4200000, gorsel: "img/mercedes-c200.jpg" },
+    { marka: "Audi", model: "A3", tabanFiyat: 2600000, gorsel: "img/audi-a3.jpg" },
+    { marka: "Volkswagen", model: "Golf", tabanFiyat: 1900000, gorsel: "img/golf.jpg" },
+    { marka: "Renault", model: "Megane", tabanFiyat: 1350000, gorsel: "img/megane.jpg" }, 
+    { marka: "Fiat", model: "Egea", tabanFiyat: 1100000, gorsel: "img/egea.jpg" },
+    { marka: "Toyota", model: "Corolla", tabanFiyat: 1600000, gorsel: "img/corolla.jpg" },
+    { marka: "Honda", model: "Civic", tabanFiyat: 1850000, gorsel: "img/civic.jpg" }
 ];
 
 // KAYIT SİSTEMİ
