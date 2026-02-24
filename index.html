@@ -2,12 +2,13 @@
 <html lang="tr">
 <head>
     <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>SahibindenMotors.com - Profesyonel Galeri</title>
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-<header class="sari-baslik">
+    <header class="sari-baslik">
         <div class="header-icerik">
             <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
             <div class="arama-cubugu">
@@ -31,7 +32,7 @@
                 <li onclick="menuDegistir('garaj')" id="menu-garaj">🏠 Kendi Garajım</li>
                 <li onclick="menuDegistir('dukkan')" id="menu-dukkan">🏢 Dükkan Yönetimi</li>
                 <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka İşlemleri</li>
-                <li onclick="menuDegistir('istatistik')" id="menu-ist">📊 İstatistikler</li>
+                <li onclick="menuDegistir('istatistik')" id="menu-istatistik">📊 İstatistikler</li>
             </ul>
             <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Uykuya Yat (Sonraki Gün)</button>
         </aside>
@@ -51,12 +52,12 @@
             <div id="dukkan-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">Dükkan Seviyesi ve Kapasite</h2>
                 <div class="modern-kutu dukkan-kutusu">
-                    <h3 id="dukkan-isim" style="color: #0984e3; font-size: 24px; margin-top: 0;">Sokak Arası Galeri (Seviye 1)</h3>
-                    <p>Şu anki kapasiten: <strong id="dukkan-kapasite" style="font-size: 18px;">2 Araç</strong></p>
+                    <h3 id="dukkan-isim" style="color: #0984e3; font-size: 24px; margin-top: 0;"></h3>
+                    <p>Şu anki kapasiten: <strong id="dukkan-kapasite" style="font-size: 18px;"></strong></p>
                     <hr>
                     <div id="yukseltme-alani">
-                        <p style="color: #636e72;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #2d3436;">Lüks Galeri (5 Araç Kapasitesi)</strong></p>
-                        <p style="font-size: 20px;">Gereken Yatırım: <strong id="yeni-seviye-fiyat" style="color: #d63031;">2.000.000 TL</strong></p>
+                        <p style="color: #636e72;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #2d3436;"></strong></p>
+                        <p style="font-size: 20px;">Gereken Yatırım: <strong id="yeni-seviye-fiyat" style="color: #d63031;"></strong></p>
                         <button class="btn btn-yesil" style="font-size: 16px; padding: 15px;" onclick="dukkaniYukselt()">🚀 Dükkanı Büyüt ve Seviye Atla!</button>
                     </div>
                 </div>
@@ -86,29 +87,13 @@
         </main>
     </div>
 
-    <div id="teklif-modal" class="modal">
-        <div class="modal-icerik">
-            <span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span>
-            <h2 class="modal-baslik">Gelen Müşteri Teklifleri</h2>
-            <div id="teklif-listesi"></div>
-        </div>
-    </div>
-
-    <div id="modifiye-modal" class="modal">
-        <div class="modal-icerik">
-            <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
-            <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
-            <p style="color: #636e72; font-size: 14px; margin-bottom: 20px;">Aracına değer kat! Yapılan işlemler aracın satış fiyatını maliyetinden daha fazla artırır.</p>
-            <div id="modifiye-listesi"></div>
-        </div>
-    </div>
-
-    <div id="uyari-modal" class="modal uyari-modal">
-        <div class="modal-icerik uyari-icerik">
-            <div id="uyari-ikon" class="uyari-ikon"></div>
-            <h2 id="uyari-baslik" class="modal-baslik" style="border:none; padding-bottom:5px; margin-bottom:5px;">Bilgi</h2>
-            <p id="uyari-mesaj" style="font-size: 16px; color: #636e72; margin-bottom: 25px;">Uyarı mesajı buraya gelecek.</p>
-            <button class="btn btn-mavi" style="width: 50%; padding: 12px; font-size: 16px;" onclick="uyariyiKapat()">Tamam</button>
+    <div id="baslangic-modal" class="modal" style="display: none; background: rgba(0,0,0,0.9);">
+        <div class="modal-icerik" style="text-align: center; max-width: 450px; padding: 40px; margin-top: 10%;">
+            <h1 style="color: #0984e3; margin-top:0;">SahibindenMotors</h1>
+            <h2 style="color: #2d3436; font-size: 20px;">Kendi Galerini Kur!</h2>
+            <p style="color: #636e72; font-size: 14px; margin-bottom: 25px;">Milyonlarca liralık araç piyasasına girmeye hazır mısın? Önce galerinin adını belirle.</p>
+            <input type="text" id="galeri-adi-input" placeholder="İsmini buraya yaz..." style="width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; margin-bottom: 20px; outline: none; box-sizing: border-box; font-family: 'Poppins', sans-serif;">
+            <button class="btn btn-mavi" style="padding: 15px; font-size: 18px;" onclick="galeriAdiniKaydet()">🚀 Maceraya Başla</button>
         </div>
     </div>
 
@@ -116,7 +101,6 @@
         <div class="modal-icerik ilan-detay-icerik">
             <span class="kapat-btn" onclick="modaliKapat('ilan-detay-modal')">&times;</span>
             <div class="ilan-detay-grid">
-                
                 <div class="ilan-sol">
                     <img id="detay-foto" src="" alt="Araba Görseli">
                     <div class="ilan-aciklama">
@@ -124,7 +108,6 @@
                         <p id="detay-aciklama" style="font-size: 14px; line-height: 1.6; color: #636e72;"></p>
                     </div>
                 </div>
-
                 <div class="ilan-sag">
                     <h2 id="detay-baslik" style="margin-top:0; color:#2d3436; font-size:24px;"></h2>
                     <h1 id="detay-fiyat" style="color: #0984e3; margin: 10px 0; font-size: 32px;"></h1>
@@ -139,7 +122,6 @@
                     </ul>
                     
                     <h3 style="margin-bottom: 10px;">🛠️ Oto Rapor Ekspertiz Durumu</h3>
-                    
                     <div class="ekspertiz-arabasi">
                         <div class="eks-row">
                             <div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çamurluk</div>
@@ -176,7 +158,33 @@
         </div>
     </div>
 
-<div id="ayarlar-modal" class="modal">
+    <div id="teklif-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span>
+            <h2 class="modal-baslik">Gelen Müşteri Teklifleri</h2>
+            <div id="teklif-listesi"></div>
+        </div>
+    </div>
+
+    <div id="modifiye-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
+            <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
+            <p style="color: #636e72; font-size: 14px; margin-bottom: 20px;">Aracına değer kat! Yapılan işlemler aracın satış fiyatını artırır.</p>
+            <div id="modifiye-listesi"></div>
+        </div>
+    </div>
+
+    <div id="uyari-modal" class="modal uyari-modal">
+        <div class="modal-icerik uyari-icerik">
+            <div id="uyari-ikon" class="uyari-ikon"></div>
+            <h2 id="uyari-baslik" class="modal-baslik" style="border:none; padding-bottom:5px; margin-bottom:5px;">Bilgi</h2>
+            <p id="uyari-mesaj" style="font-size: 16px; color: #636e72; margin-bottom: 25px;">Uyarı mesajı.</p>
+            <button class="btn btn-mavi" style="width: 50%; padding: 12px; font-size: 16px;" onclick="uyariyiKapat()">Tamam</button>
+        </div>
+    </div>
+
+    <div id="ayarlar-modal" class="modal">
         <div class="modal-icerik" style="text-align: center; max-width: 400px;">
             <span class="kapat-btn" onclick="modaliKapat('ayarlar-modal')">&times;</span>
             <h2 class="modal-baslik">⚙️ Oyun Ayarları</h2>

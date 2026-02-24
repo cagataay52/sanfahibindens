@@ -1,4 +1,3 @@
-// SES VE UYARI SİSTEMLERİ
 function ozelUyari(mesaj, tip = 'bilgi') {
     const modal = document.getElementById('uyari-modal');
     const icerik = modal.querySelector('.uyari-icerik');
@@ -42,7 +41,6 @@ function oyunSesi(tip) {
     }
 }
 
-// OYUN DEĞİŞKENLERİ
 let galeriAdi = "Benim"; 
 let paramiz = 15000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
 let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0;
@@ -73,7 +71,6 @@ const aracSablonlari = [
     { marka: "Honda", model: "Civic", tabanFiyat: 1750000, gorsel: "img/civic.jpg" }
 ];
 
-// KAYIT SİSTEMİ
 function oyunuKaydet() {
     const kayitData = { galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci };
     localStorage.setItem('sahibindenMotorsKayit', JSON.stringify(kayitData));
@@ -81,8 +78,7 @@ function oyunuKaydet() {
 
 function oyunuYukle() {
     const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
-    if (eskiKayit) {
-        if (!eskiKayit.galeriAdi) return false; 
+    if (eskiKayit && eskiKayit.galeriAdi) {
         galeriAdi = eskiKayit.galeriAdi; paramiz = eskiKayit.paramiz; bankaBorcu = eskiKayit.bankaBorcu; garaj = eskiKayit.garaj;
         gun = eskiKayit.gun; dukkanSeviyesi = eskiKayit.dukkanSeviyesi; aracKapasitesi = eskiKayit.aracKapasitesi;
         toplamSatilanArac = eskiKayit.toplamSatilanArac; toplamGelir = eskiKayit.toplamGelir; toplamGider = eskiKayit.toplamGider;
@@ -100,7 +96,6 @@ function oyunuSifirlaEkrani() {
     }
 }
 
-// EKSPERTİZ VE AÇIKLAMA 
 function ekspertizUret() {
     const parcalar = ['kaput', 'tavan', 'bagaj', 'solOnCamurluk', 'solOnKapi', 'solArkaKapi', 'solArkaCamurluk', 'sagOnCamurluk', 'sagOnKapi', 'sagArkaKapi', 'sagArkaCamurluk'];
     const ekspertiz = {}; let hasarPuan = 0; let temizMi = Math.random() < 0.25;
@@ -122,7 +117,6 @@ function aciklamaUret(ekspertizPuan, km, marka) {
     return `Araç ağır hasar kayıtlıdır (Pert). Tavan dahil işlemlidir. Kaportaya takıntısı olanlar aramasın.`;
 }
 
-// ARAÇ ÜRETİMİ (2020-2026 Arası)
 function rastgeleArabaUret() {
     const sablon = aracSablonlari[Math.floor(Math.random() * aracSablonlari.length)];
     const yil = Math.floor(Math.random() * (2026 - 2020 + 1)) + 2020; 
@@ -170,7 +164,6 @@ function rastgeleOlayTetikle() {
     }
 }
 
-// SONRAKİ GÜN: TEKLİF BİRİKTİRME SİSTEMİ
 function sonrakiGun() {
     gun++; document.getElementById('gun').innerText = gun;
     
@@ -476,15 +469,27 @@ function istatistikleriGuncelle() {
     if (netKar < 0) { netGosterge.style.color = '#d63031'; } else { netGosterge.style.color = '#00b894'; }
 }
 
-// OYUN BAŞLANGICI
+// OYUN BAŞLANGICI (Yeni Arayüzlü Sistem)
 function oyunuBaslat() {
     if (!oyunuYukle()) {
-        let girilenAd = prompt("Galerinizin adını girin (Örn: Çağatay):");
-        galeriAdi = (girilenAd && girilenAd.trim() !== "") ? girilenAd : "Benim";
-        piyasayiYenile();
-        oyunuKaydet();
+        document.getElementById('baslangic-modal').style.display = 'block';
+    } else {
+        document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
+        ekraniGuncelle();
     }
+}
+
+function galeriAdiniKaydet() {
+    let girilenAd = document.getElementById('galeri-adi-input').value;
+    if (girilenAd.trim() === "") {
+        ozelUyari("Lütfen galeriniz için bir isim girin!", "hata");
+        return;
+    }
+    galeriAdi = girilenAd;
+    document.getElementById('baslangic-modal').style.display = 'none';
     document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
+    piyasayiYenile();
+    oyunuKaydet();
     ekraniGuncelle();
 }
 
