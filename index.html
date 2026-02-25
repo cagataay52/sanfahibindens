@@ -4,6 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
     <title>SahibindenMotors - Profesyonel Galeri</title>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -15,6 +16,11 @@
                 <div class="hamburger-btn" onclick="mobilMenuKapatAc()">☰</div>
                 <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
                 <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-gizle" title="Ayarlar">⚙️</div>
+            </div>
+
+            <div class="arama-cubugu masaustu-goster">
+                <input type="text" placeholder="Kelime veya ilan no ile ara..." disabled>
+                <button>Ara</button>
             </div>
 
             <div class="kullanici-bilgi">
@@ -36,9 +42,9 @@
                 <li onclick="menuDegistir('dukkan')" id="menu-dukkan">🏢 Dükkan Yönetimi</li>
                 <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka İşlemleri</li>
                 <li onclick="menuDegistir('istatistik')" id="menu-istatistik">📊 İstatistikler</li>
-                <li onclick="menuDegistir('sosyal')" id="menu-sosyal" style="background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); border: 1px solid #ff9a9e;">📱 Sosyal Medya 3.0</li>
+                <li onclick="menuDegistir('sosyal')" id="menu-sosyal" style="background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);">📱 Sosyal Medya</li>
             </ul>
-            <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Sonraki Gün</button>
+            <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Uykuya Yat (Sonraki Gün)</button>
         </aside>
 
         <main class="icerik-alani">
@@ -49,20 +55,20 @@
 
             <div id="garaj-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">Garajımdaki Araçlar</h2>
-                <div class="uyari-mesaji" id="garaj-bilgi" style="color:#627d98; font-weight:bold;">Garajında araç yok.</div>
+                <div class="uyari-mesaji" id="garaj-bilgi">Garajında henüz araba yok patron. Piyasadan araç toplamalısın!</div>
                 <div id="garaj-listesi" class="ilan-listesi"></div>
             </div>
 
             <div id="dukkan-ekrani" class="sayfa" style="display: none;">
-                <h2 class="sayfa-basligi">Dükkan Yönetimi</h2>
-                <div class="modern-kutu">
+                <h2 class="sayfa-basligi">Dükkan Seviyesi ve Kapasite</h2>
+                <div class="modern-kutu dukkan-kutusu">
                     <h3 id="dukkan-isim" style="color: #0984e3; font-size: 24px; margin-top: 0;"></h3>
                     <p>Şu anki kapasiten: <strong id="dukkan-kapasite" style="font-size: 18px;"></strong></p>
-                    <hr style="border:none; border-bottom:1px solid #f0f4f8; margin: 20px 0;">
+                    <hr>
                     <div id="yukseltme-alani">
-                        <p style="color: #627d98;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #102a43;"></strong></p>
+                        <p style="color: #636e72;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #2d3436;"></strong></p>
                         <p style="font-size: 20px;">Gereken Yatırım: <strong id="yeni-seviye-fiyat" style="color: #d63031;"></strong></p>
-                        <button class="btn btn-yesil" style="font-size: 16px; padding: 15px;" onclick="dukkaniYukselt()">🚀 Dükkanı Büyüt</button>
+                        <button class="btn btn-yesil" style="font-size: 16px; padding: 15px;" onclick="dukkaniYukselt()">🚀 Dükkanı Büyüt ve Seviye Atla!</button>
                     </div>
                 </div>
             </div>
@@ -70,142 +76,112 @@
             <div id="banka-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">Banka İşlemleri</h2>
                 <div class="modern-kutu">
-                    <h3>Güncel Borç: <span id="borc-miktari" style="color: #d63031;">0</span> TL</h3>
-                    <p style="color:#627d98; font-size:13px; margin-bottom:20px;">* Banka her gece %5 gecikme faizi uygular.</p>
-                    <div style="display:flex; flex-direction:column; gap:10px;">
-                        <button class="btn btn-yesil" onclick="krediCek(500000)">500.000 TL Kredi Çek</button>
-                        <button class="btn btn-turuncu" onclick="borcOde(500000)">500.000 TL Borç Öde</button>
-                        <button class="btn btn-kirmizi" onclick="borcuKapat()">Tüm Borcu Kapat</button>
-                    </div>
+                    <h3>Güncel Borç: <span id="borc-miktari" style="color: #e74c3c;">0</span> TL</h3>
+                    <p class="alt-bilgi">* Uyarı: Banka, her gece borcunuza %5 gecikme faizi uygular.</p>
+                    <button class="btn btn-yesil" onclick="krediCek(500000)">500.000 TL Kredi Çek</button>
+                    <button class="btn btn-turuncu" onclick="borcOde(500000)">500.000 TL Borç Öde</button>
+                    <button class="btn btn-kirmizi" onclick="borcuKapat()">Tüm Borcu Kapat</button>
                 </div>
             </div>
 
             <div id="istatistik-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">Galeri İstatistikleri</h2>
                 <div class="modern-kutu">
-                    <p style="font-size:18px;">Satılan Araç: <b id="ist-satilan" style="color:#0984e3;">0</b></p>
-                    <p style="font-size:18px;">Toplam Gelir: <b id="ist-gelir" style="color:#00b894;">0</b> TL</p>
-                    <p style="font-size:18px;">Toplam Gider: <b id="ist-gider" style="color:#d63031;">0</b> TL</p>
-                    <hr style="border:none; border-bottom:1px solid #f0f4f8; margin: 20px 0;">
+                    <p>Satılan Toplam Araç: <b id="ist-satilan" style="color:#3498db; font-size: 20px;">0</b></p>
+                    <p>Toplam Gelir: <b id="ist-gelir" style="color:#27ae60;">0</b> TL</p>
+                    <p>Toplam Gider: <b id="ist-gider" style="color:#e74c3c;">0</b> TL</p>
+                    <hr>
                     <h3 style="font-size: 26px;">Net Kâr: <span id="ist-net">0</span> TL</h3>
                 </div>
             </div>
 
             <div id="sosyal-ekrani" class="sayfa" style="display: none;">
-                <h2 class="sayfa-basligi">📱 Sosyal Medya & Dijital PR</h2>
+                <h2 class="sayfa-basligi">📱 Dijital Pazarlama & Sosyal Medya</h2>
                 
                 <div id="sosyal-kurulum" class="modern-kutu" style="text-align: center;">
-                    <h3 style="color: #0984e3; font-size:24px;">Yeni Nesil Galericilik</h3>
-                    <p style="color: #627d98; margin-bottom: 25px;">Zorunlu değil ama dijitalde yoksan piyasada da yoksun.</p>
-                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 25px;">
-                        <select id="sm-platform" style="padding: 12px; border-radius: 12px; border: 1px solid #dfe6e9; outline: none; font-family:'Poppins'; font-weight:bold;">
-                            <option value="TikTok">TikTok</option>
+                    <h3 style="color: #0984e3;">Sosyal Medyaya Adım At</h3>
+                    <p style="color: #636e72; margin-bottom: 20px;">Yeni nesil müşterilere ulaşmak için dükkanına hesap aç.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                        <select id="sm-platform" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9; outline: none;">
                             <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
                         </select>
-                        <input type="text" id="sm-kullanici-adi" placeholder="@kullaniciadi belirle" style="padding: 12px; border-radius: 12px; border: 1px solid #dfe6e9; outline: none; width: 50%; font-family:'Poppins';">
+                        <input type="text" id="sm-kullanici-adi" placeholder="@kullaniciadi belirle" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9; outline: none; width: 50%;">
                     </div>
-                    <button class="btn btn-mavi" style="width: auto; padding: 12px 40px; font-size:16px;" onclick="sosyalHesapAc()">Hesabı Aç</button>
+                    <button class="btn btn-mavi" style="width: auto; padding: 10px 30px;" onclick="sosyalHesapAc()">Hesabı Oluştur</button>
                 </div>
 
                 <div id="sosyal-yonetim" style="display: none;">
-                    <div class="modern-kutu" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #102a43, #243b53); color: white; border:none; box-shadow: 0 10px 30px rgba(16,42,67,0.3);">
+                    <div class="modern-kutu" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white;">
                         <div>
-                            <h2 style="margin: 0; display:flex; align-items:center; gap:8px;" id="profil-ad">@kullanici <span id="mavi-tik-ikon" style="display:none; color:#00d2d3; background:white; border-radius:50%; font-size:16px; padding:3px;">☑️</span></h2>
-                            <span id="profil-platform" style="background: rgba(255,255,255,0.1); padding: 5px 10px; border-radius: 8px; font-size: 13px; margin-top:5px; display:inline-block;">Platform</span>
+                            <h2 style="margin: 0; display:flex; align-items:center; gap:5px;" id="profil-ad">@kullanici <span id="mavi-tik-ikon" style="display:none; color:#00d2d3; background:white; border-radius:50%; font-size:16px; padding:2px;">☑️</span></h2>
+                            <span id="profil-platform" style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 5px; font-size: 12px;">Instagram</span>
                         </div>
                         <div style="text-align: right;">
-                            <div style="font-size: 32px; font-weight: 800; color:#00b894;" id="profil-takipci">0</div>
-                            <div style="font-size: 13px; opacity: 0.8; letter-spacing:1px;">TAKİPÇİ</div>
+                            <div style="font-size: 24px; font-weight: bold;" id="profil-takipci">0</div>
+                            <div style="font-size: 12px; opacity: 0.8;">Takipçi</div>
                         </div>
                     </div>
 
-                    <div id="sponsorluk-alani" style="display:none; margin-top:20px; background:linear-gradient(45deg, #f1c40f, #f39c12); color:white; padding:15px; border-radius:15px; text-align:center; font-weight:bold; box-shadow:0 5px 15px rgba(241,196,15,0.3);">
-                        ⭐ Marka Sponsorluğu Aktif! (Günlük +15.000 ₺ Pasif Gelir)
+                    <div id="sosyal-linc-uyari" style="display:none; background:#ff7675; color:white; padding:10px; border-radius:8px; margin-top:10px; text-align:center; font-weight:bold;">
+                        🚨 Hesabın Linç Yiyor! DM'ler kapandı. Bitiş: <span id="linc-kalan"></span> Gün Sonra.
                     </div>
 
-                    <div id="sosyal-linc-uyari" style="display:none; background:linear-gradient(45deg, #d63031, #ff7675); color:white; padding:20px; border-radius:15px; margin-top:20px; text-align:center; box-shadow:0 5px 15px rgba(214,48,49,0.3);">
-                        <h3 style="margin:0 0 10px 0;">🚨 SKANDAL! LİNÇ YİYORSUN!</h3>
-                        <p style="margin:0 0 15px 0; font-size:14px;">Müşteriler senden nefret ediyor. Bitiş: <strong id="linc-kalan"></strong> Gün.</p>
-                        <button class="btn" style="background:white; color:#d63031; width:auto;" onclick="ozurVideosuCek()">PR Ajansı Tut & Özür Dile (30.000 ₺)</button>
-                    </div>
-
-                    <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 15px; margin-top: 20px;">
-                        <div class="modern-kutu" style="text-align: center; padding: 20px;">
-                            <h3 style="font-size:16px;">📹 İçerik Üret</h3>
-                            <p style="font-size: 12px; color: #627d98;">Garajdan araç seçip farklı konseptlerde video çek.</p>
-                            <button class="btn btn-yesil" onclick="icerikSecimEkraniAc()">Kamera Karşısına Geç</button>
+                    <div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;">
+                        <div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;">
+                            <h3>📸 Araç Paylaş</h3>
+                            <p style="font-size: 12px; color: #636e72;">Garajdan araç seçip video çek. Yorumları oku! (Maliyet: 1.500 ₺)</p>
+                            <button class="btn btn-yesil" onclick="postIcinArabaSec()">Gönderi Paylaş</button>
                         </div>
-                        <div class="modern-kutu" style="text-align: center; padding: 20px;">
-                            <h3 style="font-size:16px; color:#e84118;">🔴 Canlı Mezat Aç</h3>
-                            <p style="font-size: 12px; color: #627d98;">Arabanı canlı yayında binlerce kişiye açık artırmayla sat!</p>
-                            <button class="btn btn-kirmizi" style="background:#e84118;" onclick="canliYayinSecimAc()">Yayın Başlat</button>
-                        </div>
-                        <div class="modern-kutu" style="text-align: center; padding: 20px;">
-                            <h3 style="font-size:16px;">✨ Mavi Tik Al</h3>
-                            <p style="font-size: 12px; color: #627d98;">Güven verir, teklifleri %10 artırır. (25.000 ₺)</p>
+                        <div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;">
+                            <h3>✨ Mavi Tik Al</h3>
+                            <p style="font-size: 12px; color: #636e72;">Ölücüleri azaltır, prestij katar, teklif fiyatını %10 artırır. (25.000 ₺)</p>
                             <button class="btn" style="background:#00d2d3; color: white;" onclick="maviTikAl()">Satın Al</button>
                         </div>
-                        <div class="modern-kutu" style="text-align: center; padding: 20px;">
-                            <h3 style="font-size:16px;">🤝 Sponsorluk</h3>
-                            <p style="font-size: 12px; color: #627d98;">100k takipçiye ulaşınca markalarla anlaş.</p>
-                            <button id="sponsor-btn" class="btn btn-turuncu" onclick="sponsorlukAnlasmasi()">Anlaşma İmzala</button>
+                        <div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;">
+                            <h3>🎁 iPhone Çekilişi</h3>
+                            <p style="font-size: 12px; color: #636e72;">Binlerce takipçi kazandırır. (%15 linç yeme riski var!) (80.000 ₺)</p>
+                            <button class="btn btn-turuncu" onclick="cekilisYap()">Çekiliş Başlat</button>
+                        </div>
+                        <div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;">
+                            <h3>💸 Fenomen Reklamı</h3>
+                            <p style="font-size: 12px; color: #636e72;">Ünlüleri dükkana çağır, garantili büyük kitle çek. (50.000 ₺)</p>
+                            <button class="btn btn-mor" style="background: #9b59b6; color: white;" onclick="influencerReklamVer()">Reklam Ver</button>
                         </div>
                     </div>
 
-                    <h3 style="margin-top: 30px;">💬 DM Kutusu (Gelen Özel Teklifler)</h3>
+                    <h3 style="margin-top: 25px;">💬 DM Kutusu (Gelen Teklifler)</h3>
                     <div id="dm-kutusu" class="ilan-listesi"></div>
                 </div>
             </div>
-        </main>
+            </main>
     </div>
 
-    <div id="icerik-secim-modal" class="modal">
-        <div class="modal-icerik" style="max-width: 600px;">
-            <span class="kapat-btn" onclick="modaliKapat('icerik-secim-modal')">&times;</span>
-            <h2 class="modal-baslik">Ne Çekiyoruz Patron?</h2>
-            
-            <div style="display:flex; gap:10px; margin-bottom:20px;">
-                <select id="icerik-konsept-secim" class="btn" style="background:#f0f4f8; color:#102a43; border:2px solid #dfe6e9; text-align:left;">
-                    <option value="normal">🚗 Normal Şov Videosu (Maliyet: 1.500 ₺)</option>
-                    <option value="teslimat">🎉 Teslimat Şovu (Güven verir, Maliyet: 5.000 ₺)</option>
-                    <option value="ifsa">🚨 Ekspertiz İfşası (Çok Riskli! Yüksek Takipçi)</option>
-                </select>
-            </div>
-            
-            <h3 style="font-size:15px; color:#627d98;">Videoda Kullanılacak Aracı Seç:</h3>
-            <div id="icerik-araba-listesi" class="ilan-listesi" style="max-height: 300px; overflow-y:auto; padding-right:10px;"></div>
-        </div>
-    </div>
-
-    <div id="canli-yayin-secim-modal" class="modal">
+    <div id="post-secim-modal" class="modal">
         <div class="modal-icerik">
-            <span class="kapat-btn" onclick="modaliKapat('canli-yayin-secim-modal')">&times;</span>
-            <h2 class="modal-baslik">🔴 Hangi Aracı Mezata Çıkarıyoruz?</h2>
-            <p style="font-size:13px; color:#e84118; font-weight:bold;">Uyarı: Canlı yayında fiyat anlık değişir. İyi fiyatta satmazsan izleyici kaçar!</p>
-            <div id="canli-araba-listesi" class="ilan-listesi" style="max-height: 300px; overflow-y:auto; margin-top:15px;"></div>
+            <span class="kapat-btn" onclick="modaliKapat('post-secim-modal')">&times;</span>
+            <h2 class="modal-baslik">Videoya Çekilecek Aracı Seç</h2>
+            <div id="post-araba-listesi" class="ilan-listesi"></div>
         </div>
     </div>
 
-    <div id="canli-yayin-modal" class="modal" style="z-index: 4000;">
-        <div class="modal-icerik canli-yayin-ekrani" style="max-width: 400px; margin-top: 2%;">
-            <div class="yayin-ust">
-                <div class="yayin-canli-ikon">🔴 CANLI</div>
-                <div class="yayin-izleyici">👁️ <span id="yayin-kisi-sayisi">0</span></div>
-            </div>
-            <img id="yayin-foto" src="" class="yayin-araba-gorsel">
-            
-            <div class="yayin-orta">
-                <div style="color:#f1c40f; font-weight:bold; font-size:14px;" id="yayin-araba-isim">Araba İsmi</div>
-                <div style="font-size:12px; color:#ccc; margin-top:5px;">Gelen En Yüksek Teklif:</div>
-                <div class="yayin-fiyat" id="yayin-guncel-teklif">0 ₺</div>
-                
-                <div style="display:flex; gap:10px; margin-top:15px;">
-                    <button class="btn btn-yesil" style="flex:2; font-size:16px; padding:15px;" onclick="yayindaSat()">SATIŞI ONAYLA</button>
-                    <button class="btn btn-kirmizi" style="flex:1;" onclick="yayiniKapat()">Kapat</button>
-                </div>
+    <div id="post-sonuc-modal" class="modal" style="z-index:3500;">
+        <div class="modal-icerik" style="max-width: 400px; text-align:center;">
+            <h2 style="color:#0984e3; margin-top:0;">Gönderi Paylaşıldı!</h2>
+            <div style="font-size: 24px; font-weight:bold; color:#00b894;" id="post-sonuc-takipci">+0 Takipçi</div>
+            <hr style="margin:20px 0; border:none; border-bottom:1px solid #eee;">
+            <h3 style="margin-bottom:10px; font-size:16px;">Gelen Yorumlar:</h3>
+            <div id="post-yorumlar" style="text-align:left; max-height:200px; overflow-y:auto;"></div>
+            <button class="btn btn-mavi" style="margin-top:20px;" onclick="modaliKapat('post-sonuc-modal')">Harika!</button>
+        </div>
+    </div>
 
-                <div class="yayin-yorumlar" id="yayin-yorum-alani"></div>
-            </div>
+    <div id="baslangic-modal" class="modal" style="display: none; background: rgba(0,0,0,0.9);">
+        <div class="modal-icerik" style="text-align: center; max-width: 450px; padding: 40px; margin-top: 10%;">
+            <h1 style="color: #0984e3; margin-top:0;">SahibindenMotors</h1>
+            <h2 style="color: #2d3436; font-size: 20px;">Kendi Galerini Kur!</h2>
+            <input type="text" id="galeri-adi-input" placeholder="İsmini buraya yaz..." style="width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; margin-bottom: 20px; outline: none;">
+            <button class="btn btn-mavi" style="padding: 15px; font-size: 18px;" onclick="galeriAdiniKaydet()">🚀 Maceraya Başla</button>
         </div>
     </div>
 
@@ -214,37 +190,111 @@
             <span class="kapat-btn" onclick="modaliKapat('ilan-detay-modal')">&times;</span>
             <div class="ilan-detay-grid">
                 <div class="ilan-sol">
-                    <img id="detay-foto" src="" style="width:100%; height:230px; object-fit:cover; border-radius:12px; box-shadow:0 5px 15px rgba(0,0,0,0.1);">
-                    <div class="ilan-aciklama" style="margin-top:20px; background:#f0f4f8; padding:15px; border-radius:12px;">
-                        <h3 style="margin-top:0; color:#d63031; font-size:15px;">Satıcının Açıklaması</h3>
-                        <p id="detay-aciklama" style="font-size: 13px; line-height: 1.6; color: #334e68; margin:0;"></p>
+                    <img id="detay-foto" src="" alt="Araba Görseli" style="width:100%; height:230px; object-fit:cover; border-radius:8px;">
+                    <div class="ilan-aciklama">
+                        <h3 style="margin-top:0; color:#d63031; font-size:16px;">Satıcının Açıklaması</h3>
+                        <p id="detay-aciklama" style="font-size: 13px; line-height: 1.5; color: #636e72;"></p>
                     </div>
                 </div>
                 <div class="ilan-sag">
-                    <h2 id="detay-baslik" style="margin-top:0; color:#102a43; font-size:22px;"></h2>
-                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 5px 0 20px 0; font-size: 30px;"></h1>
-                    <ul class="detay-liste" style="list-style:none; padding:0; margin:0 0 20px 0; border-top:1px solid #eee;">
-                        <li style="padding:10px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; font-size:14px;"><strong>Marka:</strong> <span id="detay-marka"></span></li>
-                        <li style="padding:10px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; font-size:14px;"><strong>Seri:</strong> <span id="detay-model"></span></li>
-                        <li style="padding:10px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; font-size:14px;"><strong>Yıl:</strong> <span id="detay-yil"></span></li>
-                        <li style="padding:10px 0; border-bottom:1px solid #eee; display:flex; justify-content:space-between; font-size:14px;"><strong>Kilometre:</strong> <span id="detay-km"></span></li>
+                    <h2 id="detay-baslik" style="margin-top:0; color:#2d3436; font-size:20px;"></h2>
+                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 5px 0 15px 0; font-size: 28px;"></h1>
+                    <ul class="detay-liste">
+                        <li><strong>Marka:</strong> <span id="detay-marka"></span></li>
+                        <li><strong>Seri:</strong> <span id="detay-model"></span></li>
+                        <li><strong>Yıl:</strong> <span id="detay-yil"></span></li>
+                        <li><strong>Kilometre:</strong> <span id="detay-km"></span></li>
                     </ul>
-                    <div style="display: flex; flex-direction: column; gap: 12px;">
-                        <button id="detay-tramer-btn" class="btn" style="background:#243b53; color:white;">💬 5664 Tramer Sorgusu (150 ₺)</button>
-                        <button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:16px; padding:15px;">📞 Satıcıyı Ara (<span id="detay-telefon"></span>)</button>
-                        <button id="detay-hakan-abi-btn" class="btn" style="background:#102a43; color:#f1c40f;">👑 Hakan Abi'ye Çöktürt</button>
+                    <h3 style="margin-bottom: 10px; font-size:16px;">🛠️ Oto Rapor Ekspertiz</h3>
+                    <div class="ekspertiz-arabasi">
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çam.</div>
+                            <div class="eks-parca" id="eks-kaput">Kaput</div>
+                            <div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çam.</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solOnKapi">Sol Ön Kapı</div>
+                            <div class="eks-parca" id="eks-tavan">Tavan</div>
+                            <div class="eks-parca" id="eks-sagOnKapi">Sağ Ön Kapı</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solArkaKapi">Sol Arka Kapı</div>
+                            <div class="eks-parca" id="eks-bagaj">Bagaj</div>
+                            <div class="eks-parca" id="eks-sagArkaKapi">Sağ Arka Kapı</div>
+                        </div>
+                        <div class="eks-row">
+                            <div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Ç.</div>
+                            <div class="eks-parca" style="visibility:hidden;"></div>
+                            <div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Ç.</div>
+                        </div>
+                    </div>
+                    <div class="ekspertiz-lejant">
+                        <span style="color:#2d3436;">⚪ Orijinal</span> <span style="color:#f39c12;">🟡 Lokal</span> <span style="color:#3498db;">🔵 Boyalı</span> <span style="color:#e74c3c;">🔴 Değişen</span>
+                    </div>
+                    <div style="display: flex; flex-direction: column; gap: 10px; margin-top: 20px;">
+                        <button id="detay-tramer-btn" class="btn" style="background:#34495e; color:white; font-size:14px;">💬 5664'e Tramer SMS'i Gönder (150 ₺)</button>
+                        <button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:16px;">📞 Satıcıyı Ara (<span id="detay-telefon"></span>)</button>
+                        <button id="detay-hakan-abi-btn" class="btn" style="background:#2d3436; color:#f1c40f; font-size:14px;">👑 Hakan Abi'ye Çöktürt</button>
                     </div>
                 </div>
             </div>
         </div>
     </div>
 
-    <div id="telefon-modal" class="modal" style="z-index: 3000;"><div class="modal-icerik telefon-ekrani"><h3 id="tel-aranan-kisi">Satıcı Aranıyor...</h3><div class="pulse" style="margin:40px auto; width:80px; height:80px; background:#0984e3; border-radius:50%;"></div><p id="tel-diyalog" style="margin-bottom:20px;">Dıt... Dıt...</p><div id="tel-aksiyonlar" style="display:flex; flex-direction:column; gap:10px; display:none;"><button class="btn btn-yesil" id="tel-satin-al-btn">Satın Al</button><button class="btn btn-turuncu" id="tel-pazarlik-btn">Pazarlık Yap</button></div><button class="btn btn-kirmizi" style="margin-top:20px;" onclick="telefonuKapat()">Kapat</button></div></div>
-    <div id="teklif-modal" class="modal"><div class="modal-icerik"><span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span><h2 class="modal-baslik">Gelen Teklifler</h2><div id="teklif-listesi"></div></div></div>
-    <div id="modifiye-modal" class="modal"><div class="modal-icerik"><span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span><h2 class="modal-baslik">✨ Modifiye</h2><div id="modifiye-listesi"></div></div></div>
-    <div id="tramer-modal" class="modal" style="z-index: 3500;"><div class="modal-icerik" style="text-align:center;"><div id="tramer-mesaj-icerik" style="background:#f0f4f8; padding:20px; border-radius:12px; font-size:14px; text-align:left;"></div><button class="btn btn-mavi" style="margin-top:20px;" onclick="modaliKapat('tramer-modal')">Tamam</button></div></div>
-    <div id="uyari-modal" class="modal" style="z-index: 5000;"><div class="modal-icerik" style="text-align:center;"><h2 id="uyari-baslik">Bilgi</h2><p id="uyari-mesaj" style="margin:20px 0;"></p><button class="btn btn-mavi" onclick="uyariyiKapat()">Tamam</button></div></div>
-    <div id="ayarlar-modal" class="modal"><div class="modal-icerik" style="text-align:center;"><h2 class="modal-baslik">Ayarlar</h2><button class="btn btn-kirmizi" onclick="oyunuSifirlaEkrani()">Tüm İlerlemeyi Sil</button></div></div>
+    <div id="telefon-modal" class="modal" style="z-index: 3000;">
+        <div class="modal-icerik telefon-ekrani">
+            <h3 id="tel-aranan-kisi" style="margin-top: 10px; color: #bdc3c7; font-weight: 400; font-size: 16px;">Satıcı Aranıyor...</h3>
+            <div class="tel-profil-resmi">👤</div>
+            <div id="tel-bekleme-animasyonu" class="pulse"></div>
+            <p id="tel-diyalog" style="font-size: 15px; line-height: 1.6; min-height: 80px; margin-bottom: 25px; padding: 0 10px;">Dıt... Dıt... Dıt...</p>
+            <div id="tel-aksiyonlar" style="display: flex; flex-direction: column; gap: 10px; display: none;">
+                <button class="btn btn-yesil" id="tel-satin-al-btn" style="padding: 15px; font-size: 16px;">Satın Al (Noterde)</button>
+                <button class="btn btn-turuncu" id="tel-pazarlik-btn" style="padding: 15px; font-size: 16px;">Pazarlık Yap</button>
+            </div>
+            <button class="btn btn-kirmizi" style="margin-top: 20px; border-radius: 30px; padding: 12px; font-size: 16px;" onclick="telefonuKapat()">📞 Kapat</button>
+        </div>
+    </div>
+
+    <div id="teklif-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('teklif-modal')">&times;</span>
+            <h2 class="modal-baslik">Müşteri Teklifleri</h2>
+            <div id="teklif-listesi"></div>
+        </div>
+    </div>
+
+    <div id="modifiye-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('modifiye-modal')">&times;</span>
+            <h2 class="modal-baslik">✨ Modifiye Atölyesi</h2>
+            <div id="modifiye-listesi"></div>
+        </div>
+    </div>
+
+    <div id="tramer-modal" class="modal" style="z-index: 3500;">
+        <div class="modal-icerik" style="max-width: 350px; background: #f1f2f6; border-radius: 20px; padding: 20px;">
+            <div id="tramer-mesaj-icerik" style="background: white; padding: 15px; border-radius: 12px; font-size: 14px; color: #2d3436; line-height: 1.6;"></div>
+            <button class="btn btn-mavi" style="margin-top: 20px;" onclick="modaliKapat('tramer-modal')">Kapat</button>
+        </div>
+    </div>
+
+    <div id="uyari-modal" class="modal uyari-modal" style="z-index: 4000;">
+        <div class="modal-icerik uyari-icerik">
+            <div id="uyari-ikon" class="uyari-ikon"></div>
+            <h2 id="uyari-baslik" class="modal-baslik" style="border:none; padding-bottom:5px; margin-bottom:5px;">Bilgi</h2>
+            <p id="uyari-mesaj" style="font-size: 16px; color: #636e72; margin-bottom: 25px;">Uyarı mesajı.</p>
+            <button class="btn btn-mavi" style="width: 50%; padding: 12px; font-size: 16px;" onclick="uyariyiKapat()">Tamam</button>
+        </div>
+    </div>
+
+    <div id="ayarlar-modal" class="modal">
+        <div class="modal-icerik" style="text-align: center; max-width: 400px;">
+            <span class="kapat-btn" onclick="modaliKapat('ayarlar-modal')">&times;</span>
+            <h2 class="modal-baslik">⚙️ Oyun Ayarları</h2>
+            <p style="color: #636e72; margin-bottom: 25px;">Buradan galerini sıfırlayabilir ve oyuna baştan başlayabilirsin.</p>
+            <button class="btn btn-kirmizi" style="font-size: 16px; padding: 15px;" onclick="oyunuSifirlaEkrani()">🔄 Tüm İlerlemeyi Sil ve Baştan Başla</button>
+        </div>
+    </div>
 
     <script src="app.js"></script>
 </body>
