@@ -602,6 +602,9 @@ function oyunuBaslat() {
     } else {
         document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
         ekraniGuncelle();
+        // ÇÖZÜM: Oyuna girildiğinde eğer piyasa boşsa yenile ve direkt pazar menüsünü zorla aç!
+        if (arabalar.length === 0) { piyasayiYenile(); }
+        menuDegistir('pazar'); 
     }
 }
 
@@ -612,6 +615,7 @@ function galeriAdiniKaydet() {
     document.getElementById('baslangic-modal').style.display = 'none';
     document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
     piyasayiYenile(); oyunuKaydet(); ekraniGuncelle();
+    menuDegistir('pazar'); // Başlangıçta pazar sekmesini tetikle
 }
 
 oyunuBaslat();
