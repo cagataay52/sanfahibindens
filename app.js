@@ -42,13 +42,15 @@ let arabalar = [];
 let hakanAbiSonKullanim = -15; 
 const noterUcreti = 2500; 
 
-// EKONOMİ DEĞİŞKENLERİ
+// EKONOMİ VE YENİ İTİBAR DEĞİŞKENLERİ
 let piyasaDurumu = "Normal"; 
 let piyasaCarpani = 1.0;
 let aylikFaturalar = 4500;
 let sigortaVeMtvUcreti = 4000;
+let haritaPuani = 5.0; // V2.0 İtibar Puanı
+let gizliKusurluAraclar = []; // V2.0 Sabıkalı Araçlar Listesi
 
-// YENİ: SOSYAL MEDYA DEĞİŞKENLERİ (Mavi Tik ve Linç Eklendi)
+// SOSYAL MEDYA DEĞİŞKENLERİ
 let sosyalMedya = { aktif: false, platform: "", kullaniciAdi: "", takipci: 0, populerlik: 0, maviTik: false, lincKalanGun: 0 };
 let dmKutusu = [];
 
@@ -82,7 +84,7 @@ function oyunuKaydet() {
     const kayitData = { 
         galeriAdi, paramiz, bankaBorcu, garaj, gun, dukkanSeviyesi, aracKapasitesi, 
         toplamSatilanArac, toplamGelir, toplamGider, arabalar, idSayaci, hakanAbiSonKullanim, 
-        piyasaDurumu, piyasaCarpani, sosyalMedya, dmKutusu 
+        piyasaDurumu, piyasaCarpani, sosyalMedya, dmKutusu, haritaPuani, gizliKusurluAraclar
     };
     localStorage.setItem('sahibindenMotorsKayit', JSON.stringify(kayitData));
 }
@@ -98,7 +100,9 @@ function oyunuYukle() {
         piyasaDurumu = eskiKayit.piyasaDurumu || "Normal";
         piyasaCarpani = eskiKayit.piyasaCarpani || 1.0;
         
-        // Eski kayıtlarda sosyal medya yoksa patlamaması için:
+        haritaPuani = eskiKayit.haritaPuani || 5.0;
+        gizliKusurluAraclar = eskiKayit.gizliKusurluAraclar || [];
+
         sosyalMedya = eskiKayit.sosyalMedya || { aktif: false, platform: "", kullaniciAdi: "", takipci: 0, populerlik: 0, maviTik: false, lincKalanGun: 0 };
         if (typeof sosyalMedya.maviTik === 'undefined') sosyalMedya.maviTik = false;
         if (typeof sosyalMedya.lincKalanGun === 'undefined') sosyalMedya.lincKalanGun = 0;
@@ -261,11 +265,14 @@ function sonrakiGun() {
                 }
             }
         } else {
-            // MÜŞTERİ PSİKOLOJİSİ
+            // MÜŞTERİ PSİKOLOJİSİ VE İTİBAR ETKİSİ
             if (!araba.teklifler) araba.teklifler = [];
             araba.teklifler = araba.teklifler.filter(t => (gun - t.gelisGunu) < 3);
 
-            let teklifIhtimali = piyasaDurumu === "Canli" ? 0.6 : (piyasaDurumu === "Kriz" ? 0.1 : 0.3);
+            let temelIhtimal = piyasaDurumu === "Canli" ? 0.6 : (piyasaDurumu === "Kriz" ? 0.1 : 0.3);
+            let itibarEtkisi = (haritaPuani - 3.0) * 0.1; // Puan 5 ise +0.2 ihtimal, Puan 1 ise -0.2 ihtimal
+            let teklifIhtimali = temelIhtimal + itibarEtkisi;
+            if(teklifIhtimali < 0.05) teklifIhtimali = 0.05; // En kötü ihtimalle nadiren müşteri gelir
 
             if (Math.random() < teklifIhtimali) {
                 let yeniTeklifSayisi = Math.floor(Math.random() * 2) + 1;
@@ -315,7 +322,7 @@ function sonrakiGun() {
         }
     });
 
-    // YENİ: SOSYAL MEDYA DM DÖNGÜSÜ
+    // SOSYAL MEDYA DM DÖNGÜSÜ
     if (sosyalMedya.aktif && garaj.length > 0) {
         if (sosyalMedya.lincKalanGun > 0) {
             sosyalMedya.lincKalanGun--;
@@ -328,7 +335,6 @@ function sonrakiGun() {
                 let minF = sansliAraba.fiyat * 0.95; let maxF = sansliAraba.fiyat * 1.15;
                 let teklif = Math.floor(Math.random() * (maxF - minF + 1)) + minF;
                 
-                // MAVİ TİK VARSA TEKLİF %10 DAHA FAZLA GELİR!
                 if(sosyalMedya.maviTik) teklif = Math.floor(teklif * 1.10);
 
                 dmKutusu.push({
@@ -386,6 +392,11 @@ function ekraniGuncelle() {
     let kapasiteYazisi = aracKapasitesi === 999 ? "Sınırsız" : aracKapasitesi;
     document.getElementById('kapasite-bilgi').innerText = garaj.length + " / " + kapasiteYazisi;
     if (garaj.length >= aracKapasitesi && aracKapasitesi !== 999) { document.getElementById('kapasite-bilgi').style.color = '#e74c3c'; } else { document.getElementById('kapasite-bilgi').style.color = '#0984e3'; }
+    
+    // YENİ: Harita Puanını Ekrana Basma
+    if (document.getElementById('harita-puan')) {
+        document.getElementById('harita-puan').innerText = haritaPuani.toFixed(1);
+    }
 }
 
 function arabalariEkranaGetir() {
@@ -572,6 +583,9 @@ function garajiEkranaGetir() {
                 let modifiyeEtiketleri = '';
                 araba.modifiyeler.forEach(mod => { modifiyeEtiketleri += `<span class="etiket" style="background:#2d3436; margin-right:5px;">${mod}</span>`; });
 
+                // YENİ: KM Düşür Butonu
+                let kmDusurButonu = `<button class="btn" style="background:#2c3e50; color:#f1c40f; margin-bottom:5px;" onclick="kilometreDusur(${araba.id})">🤫 KM Düşür (35.000 ₺)</button>`;
+
                 garajListesi.innerHTML += `
                     <div class="ilan-karti">
                         <div class="araba-foto"><img src="${araba.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div>
@@ -584,6 +598,7 @@ function garajiEkranaGetir() {
                         </div>
                         <div class="ilan-sag-taraf">
                             ${tamirButonuKodu}
+                            ${kmDusurButonu}
                             <button class="btn btn-mor" style="background:#6c5ce7; color:white; margin-bottom:5px;" onclick="modifiyeEkraniAc(${araba.id})">✨ Modifiye Et</button>
                             <button class="btn btn-kirmizi" onclick="araciSat(${araba.id})">🤝 Teklifleri Gör</button>
                         </div>
@@ -591,6 +606,32 @@ function garajiEkranaGetir() {
             }
         });
     }
+}
+
+// YENİ: KM Düşürme (Karanlık İş) Mekaniği
+function kilometreDusur(arabaId) {
+    const araba = garaj.find(a => a.id === arabaId);
+    if (paramiz < 35000) { oyunSesi('hata'); ozelUyari("Merdiven altı ustaya verecek 35.000 TL paran yok!", "hata"); return; }
+    if (araba.km < 80000) { ozelUyari("Bu arabanın kilometresi zaten düşük, daha fazla düşürürsek çok belli olur usta!", "bilgi"); return; }
+    
+    // Risk zarını at (%15 ihtimalle işlem sırasında beyni yanar)
+    if (Math.random() < 0.15) {
+        paramiz -= 35000; toplamGider += 35000;
+        araba.fiyat = Math.floor(araba.fiyat * 0.7); // Değeri çakıldı
+        oyunSesi('hata'); ekraniGuncelle(); oyunuKaydet();
+        ozelUyari("🚨 FELAKET! Usta kilometreyi çekerken arabanın beynini (ECU) yaktı! Masraf çok büyük, arabanın değeri düştü.", "hata");
+        return;
+    }
+
+    paramiz -= 35000; toplamGider += 35000;
+    let dusulecekMiktar = Math.floor(araba.km * (Math.random() * 0.3 + 0.3)); // %30 ile %60 arası KM düşür
+    araba.km -= dusulecekMiktar;
+    araba.fiyat += Math.floor(dusulecekMiktar * 1.5); // Fiyatı yapay olarak artır
+    
+    gizliKusurluAraclar.push(araba.id); // Sabıkalandı
+    
+    oyunSesi('tamir'); ekraniGuncelle(); garajiEkranaGetir(); oyunuKaydet();
+    ozelUyari(`🤫 İşlem tamam patron... Ekrandaki KM artık ${araba.km.toLocaleString('tr-TR')}. Fiyatını da şişirdik. Çaktırma!`, "basari");
 }
 
 function tamirEt(arabaId) {
@@ -740,6 +781,25 @@ function teklifiKabulEt(arabaId, teklifId) {
         ozelUyari(`Araç Satıldı!\nNet Kasa Girişi: ${netKazanc.toLocaleString('tr-TR')} TL.`, "basari");
     }
 
+    // YENİ: SATIŞ SONRASI GOOGLE HARİTALAR VE YAKALANMA RİSKİ
+    if (gizliKusurluAraclar.includes(arabaId)) {
+        // Müşterinin KM düşürüldüğünü anlama ihtimali (%40)
+        if (Math.random() < 0.40) {
+            let tazminat = Math.floor(netKazanc * 1.5);
+            paramiz -= tazminat; toplamGider += tazminat;
+            haritaPuani -= 1.5; if (haritaPuani < 1.0) haritaPuani = 1.0;
+            oyunSesi('hata');
+            ozelUyari(`🚨 REZALET! Müşteri aracı yetkili servise soktu ve KM'nin düşürüldüğünü anladı! Dava açmamak için adama ${tazminat.toLocaleString('tr-TR')} ₺ sus payı ödedin. Google Haritalar'da sana 1 yıldız verip dolandırıcı yazdı! (Puanın: ${haritaPuani.toFixed(1)})`, "hata");
+        } else {
+            // Anlamadıysa başarılı satış, ufak itibar artışı
+            haritaPuani += 0.1; if (haritaPuani > 5.0) haritaPuani = 5.0;
+        }
+        gizliKusurluAraclar = gizliKusurluAraclar.filter(id => id !== arabaId); // Listeden temizle
+    } else {
+        // Normal, dürüst satış
+        haritaPuani += 0.2; if (haritaPuani > 5.0) haritaPuani = 5.0;
+    }
+
     ekraniGuncelle(); garajiEkranaGetir(); oyunuKaydet();
 }
 
@@ -776,7 +836,7 @@ function istatistikleriGuncelle() {
     if (netKar < 0) { netGosterge.style.color = '#d63031'; } else { netGosterge.style.color = '#00b894'; }
 }
 
-// YENİ: SOSYAL MEDYA FONKSİYONLARI VE LİNÇ MEKANİĞİ
+// SOSYAL MEDYA FONKSİYONLARI VE LİNÇ MEKANİĞİ
 function sosyalEkraniGuncelle() {
     if (!sosyalMedya.aktif) {
         document.getElementById('sosyal-kurulum').style.display = 'block';
@@ -833,7 +893,7 @@ function cekilisYap() {
 
     paramiz -= 80000; toplamGider += 80000;
     
-    let lincYediMi = Math.random() < 0.15; // %15 Linç İhtimali
+    let lincYediMi = Math.random() < 0.15; 
 
     if (lincYediMi) {
         oyunSesi('hata');
