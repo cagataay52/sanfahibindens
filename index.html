@@ -23,13 +23,14 @@
                 <button>Ara</button>
             </div>
 
-            <div class="kullanici-bilgi">
-                <div class="bilgi-kutu kapasite-kutu">🚗 <span id="kapasite-bilgi">0/2</span></div>
-                <div class="bilgi-kutu gun-kutu">📅 <span class="masaustu-goster-inline">Gün: </span><span id="gun">1</span></div>
-                <div class="bilgi-kutu" style="color: #f39c12; border: 2px solid #f39c12; background: #fffdf0;">⭐ <span id="harita-puan">5.0</span>/5</div>
-                <div class="bilgi-kutu bakiye">💰 <span id="paramiz">15.000.000</span> ₺</div>
-                <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-goster" title="Ayarlar">⚙️</div>
-            </div>
+         <div class="kullanici-bilgi">
+    <div class="bilgi-kutu kapasite-kutu">🚗 <span id="kapasite-bilgi">0/2</span></div>
+    <div class="bilgi-kutu gun-kutu">📅 <span class="masaustu-goster-inline">Gün: </span><span id="gun">1</span></div>
+    <div class="bilgi-kutu" style="color: #f39c12; border: 2px solid #f39c12; background: #fffdf0;">⭐ <span id="harita-puan">5.0</span>/5</div>
+    <div class="bilgi-kutu" style="color: #2980b9; border: 2px solid #3498db; background: #ebf5fb;">💶 <span id="euro-bakiye">0</span> €</div>
+    <div class="bilgi-kutu bakiye">💰 <span id="paramiz">15.000.000</span> ₺</div>
+    <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-goster" title="Ayarlar">⚙️</div>
+</div>
         </div>
     </header>
 
@@ -75,15 +76,36 @@
             </div>
 
             <div id="banka-ekrani" class="sayfa" style="display: none;">
-                <h2 class="sayfa-basligi">Banka İşlemleri</h2>
-                <div class="modern-kutu">
-                    <h3>Güncel Borç: <span id="borc-miktari" style="color: #e74c3c;">0</span> TL</h3>
-                    <p class="alt-bilgi">* Uyarı: Banka, her gece borcunuza %5 gecikme faizi uygular.</p>
-                    <button class="btn btn-yesil" onclick="krediCek(500000)">500.000 TL Kredi Çek</button>
-                    <button class="btn btn-turuncu" onclick="borcOde(500000)">500.000 TL Borç Öde</button>
-                    <button class="btn btn-kirmizi" onclick="borcuKapat()">Tüm Borcu Kapat</button>
-                </div>
+    <h2 class="sayfa-basligi">Banka & Finans Merkezi</h2>
+    
+    <div style="display: flex; gap: 20px; flex-wrap: wrap;">
+        <div class="modern-kutu" style="flex: 1; min-width: 300px;">
+            <h3>💳 Kredi İşlemleri</h3>
+            <p>Güncel Borç: <strong id="borc-miktari" style="color: #e74c3c; font-size: 20px;">0</strong> TL</p>
+            <p class="alt-bilgi">* Banka her gece %5 gecikme faizi uygular.</p>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn btn-yesil" onclick="krediCek(500000)">500.000 TL Çek</button>
+                <button class="btn btn-turuncu" onclick="borcOde(500000)">500.000 TL Öde</button>
             </div>
+            <button class="btn btn-kirmizi" style="margin-top: 10px;" onclick="borcuKapat()">Tüm Borcu Kapat</button>
+        </div>
+
+        <div class="modern-kutu" style="flex: 1; min-width: 300px; background: linear-gradient(135deg, #f1f2f6, #dfe6e9);">
+            <h3>💱 Döviz Bürosu</h3>
+            <p style="font-size: 18px;">Güncel Kur: <strong style="color: #0984e3;">1 € = <span id="euro-kur-ekran">38.50</span> ₺</strong></p>
+            <div style="display: flex; gap: 10px; margin-top: 15px;">
+                <button class="btn" style="background: #2980b9; color: white;" onclick="euroAl(10000)">10.000 € Satın Al</button>
+                <button class="btn" style="background: #27ae60; color: white;" onclick="euroBozdur(10000)">10.000 € Bozdur</button>
+            </div>
+            <button class="btn btn-mavi" style="margin-top: 10px;" onclick="tumEurouBozdur()">Tüm Euro'yu Bozdur</button>
+        </div>
+    </div>
+
+    <h3 style="margin-top: 30px;">📝 Açık Senetler (Müşteri Alacakları)</h3>
+    <div id="senet-listesi" class="ilan-listesi">
+        <div class="uyari-mesaji">Şu an aktif bir senet alacağın bulunmuyor.</div>
+    </div>
+</div>
 
             <div id="istatistik-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">Galeri İstatistikleri</h2>
