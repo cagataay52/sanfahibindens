@@ -213,6 +213,11 @@
                             <p style="font-size: 12px; color: #636e72;">Ünlüleri dükkana çağır, garantili büyük kitle çek. (50.000 ₺)</p>
                             <button class="btn btn-mor" style="background: #9b59b6; color: white;" onclick="influencerReklamVer()">Reklam Ver</button>
                         </div>
+                        <div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center; border: 2px solid #ff7675; box-shadow: 0 0 15px rgba(214, 48, 49, 0.2);">
+                            <h3 style="color:#d63031;">🔴 Canlı Mezat</h3>
+                            <p style="font-size: 12px; color: #636e72;">Arabanı canlı yayına çıkar. Açık artırmada en yüksek teklifi verene sat!</p>
+                            <button class="btn btn-kirmizi" onclick="canliYayinIcinArabaSec()">Yayını Başlat</button>
+                        </div>
                     </div>
 
                     <h3 style="margin-top: 25px;">💬 DM Kutusu (Gelen Teklifler)</h3>
@@ -358,6 +363,47 @@
             <h2 class="modal-baslik">⚙️ Oyun Ayarları</h2>
             <p style="color: #636e72; margin-bottom: 25px;">Buradan galerini sıfırlayabilir ve oyuna baştan başlayabilirsin.</p>
             <button class="btn btn-kirmizi" style="font-size: 16px; padding: 15px;" onclick="oyunuSifirlaEkrani()">🔄 Tüm İlerlemeyi Sil ve Baştan Başla</button>
+        </div>
+    </div>
+
+    <div id="yayin-secim-modal" class="modal">
+        <div class="modal-icerik">
+            <span class="kapat-btn" onclick="modaliKapat('yayin-secim-modal')">&times;</span>
+            <h2 class="modal-baslik">🔴 Yayına Çıkarılacak Aracı Seç</h2>
+            <div id="yayin-araba-listesi" class="ilan-listesi"></div>
+        </div>
+    </div>
+
+    <div id="canli-yayin-modal" class="modal" style="z-index: 3500; background: rgba(0,0,0,0.95);">
+        <div class="modal-icerik" style="max-width: 400px; height: 80vh; background: #1e272e; color: white; display: flex; flex-direction: column; padding: 0; overflow: hidden; border-radius: 20px; border: 2px solid #ff7675;">
+            
+            <div style="padding: 15px; display: flex; justify-content: space-between; align-items: center; border-bottom: 1px solid #2d3436; background: rgba(0,0,0,0.3);">
+                <div style="display: flex; align-items: center; gap: 10px;">
+                    <span style="background: #d63031; padding: 5px 10px; border-radius: 5px; font-weight: bold; font-size: 12px; animation: pulse 1.5s infinite;">CANLI</span>
+                    <span style="font-size: 14px;">👁️ <span id="yayin-izleyici">0</span></span>
+                </div>
+                <span style="cursor: pointer; font-size: 24px; color: #ff7675;" onclick="yayiniBitir()">&times;</span>
+            </div>
+
+            <div style="text-align: center; padding: 15px; background: #2d3436;">
+                <img id="yayin-araba-foto" src="" style="width: 100%; height: 160px; object-fit: cover; border-radius: 10px; box-shadow: 0 5px 15px rgba(0,0,0,0.5);">
+                <h3 id="yayin-araba-baslik" style="margin: 10px 0 5px 0; font-size: 18px;">Araç Adı</h3>
+                <div style="font-size: 13px; color: #b2bec3; margin-bottom: 10px;">Piyasa Değeri: <span id="yayin-araba-deger">0</span> ₺</div>
+                
+                <div style="background: #00b894; color: #fff; padding: 10px; border-radius: 8px; font-size: 22px; font-weight: bold; box-shadow: 0 0 10px #00b894;">
+                    🔥 En Yüksek Teklif: <br><span id="yayin-en-yuksek-teklif">0</span> ₺
+                </div>
+                <div id="yayin-teklif-veren" style="font-size: 12px; margin-top: 5px; color: #ffeaa7;">Teklif Bekleniyor...</div>
+            </div>
+
+            <div id="yayin-chat" style="flex: 1; overflow-y: auto; padding: 15px; font-size: 13px; display: flex; flex-direction: column; gap: 8px;">
+                <div style="color: #0984e3; text-align: center; font-style: italic;">Yayın başladı, izleyiciler bekleniyor...</div>
+            </div>
+
+            <div style="padding: 15px; background: #111; display: flex; gap: 10px;">
+                <button class="btn btn-turuncu" style="margin: 0; flex: 1; font-size: 14px;" onclick="yayinGazaGetir()">📣 Gaza Getir!</button>
+                <button class="btn btn-yesil" style="margin: 0; flex: 1; font-size: 14px;" onclick="yayindaSat()">🔨 SATTIM!</button>
+            </div>
         </div>
     </div>
 
