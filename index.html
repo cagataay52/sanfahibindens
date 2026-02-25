@@ -395,6 +395,29 @@
         </div>
     </div>
 
+    <div id="ihale-modal" class="modal" style="z-index: 4500; background: rgba(0,0,0,0.9);">
+        <div class="modal-icerik" style="max-width: 450px; border: 3px solid #f39c12; background: #1e272e; color: white; border-radius: 20px;">
+            <h2 style="color: #f39c12; text-align: center; margin-top: 0;">⚖️ Yediemin İhalesi</h2>
+            <p style="text-align: center; color: #bdc3c7; font-size: 13px;">Hacizli ve kapalı kutu araç. Ekspertiz yok, garanti yok. Tüm risk sana ait!</p>
+            
+            <div style="background: #2d3436; padding: 20px; border-radius: 10px; margin-bottom: 20px; text-align: center; box-shadow: inset 0 0 15px rgba(0,0,0,0.5);">
+                <div style="font-size: 50px; margin-bottom: 10px;">📦</div>
+                <h3 id="ihale-araba-isim" style="margin: 0; font-size: 22px; color: #fff;">Gizli Araç</h3>
+                <div style="font-size: 14px; color: #f39c12; margin-top: 5px;">Kilometre: ??? | Hasar: ???</div>
+            </div>
+
+            <div style="text-align: center; font-size: 32px; font-weight: bold; color: #00b894; margin-bottom: 5px; text-shadow: 0 0 10px rgba(0,184,148,0.5);">
+                <span id="ihale-guncel-teklif">0</span> ₺
+            </div>
+            <div id="ihale-teklif-sahibi" style="text-align: center; font-size: 15px; color: #ff7675; margin-bottom: 25px; font-weight: bold;">Teklif Bekleniyor...</div>
+
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <button id="ihale-teklif-btn" class="btn btn-turuncu" style="padding: 15px; font-size: 18px; box-shadow: 0 5px 15px rgba(243, 156, 18, 0.4);" onclick="ihaleTeklifVer()">Benden +25.000 ₺</button>
+                <button class="btn btn-kirmizi" style="padding: 12px; font-size: 15px; background: transparent; border: 1px solid #d63031; color: #d63031;" onclick="ihaledenCekil()">İhaleden Çekil</button>
+            </div>
+        </div>
+    </div>
+
     <script src="app.js"></script>
 </body>
 </html>
