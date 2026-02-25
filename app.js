@@ -602,8 +602,11 @@ function oyunuBaslat() {
     } else {
         document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
         ekraniGuncelle();
-        // ÇÖZÜM: Oyuna girildiğinde eğer piyasa boşsa yenile ve direkt pazar menüsünü zorla aç!
+        
+        // ÇÖZÜM: Eğer piyasada araba yoksa zorla üret!
         if (arabalar.length === 0) { piyasayiYenile(); }
+        
+        // ÇÖZÜM: Oyuna girer girmez Pazar ekranını görünür yap
         menuDegistir('pazar'); 
     }
 }
@@ -614,8 +617,12 @@ function galeriAdiniKaydet() {
     galeriAdi = girilenAd;
     document.getElementById('baslangic-modal').style.display = 'none';
     document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
-    piyasayiYenile(); oyunuKaydet(); ekraniGuncelle();
-    menuDegistir('pazar'); // Başlangıçta pazar sekmesini tetikle
+    
+    // ÇÖZÜM: İsim kaydedilip başlandığında arabaları üret ve pazarı aç
+    piyasayiYenile(); 
+    oyunuKaydet(); 
+    ekraniGuncelle();
+    menuDegistir('pazar'); 
 }
 
 oyunuBaslat();
