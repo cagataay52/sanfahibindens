@@ -94,8 +94,7 @@
                 </div>
 
                 <h3 style="margin-top: 30px; color: #2c3e50; border-bottom: 2px solid #0984e3; padding-bottom: 5px;">📈 Canlı Borsa İşlemleri (Otomotiv Endeksi)</h3>
-                <div id="borsa-alani" class="ilan-listesi">
-                    </div>
+                <div id="borsa-alani" class="ilan-listesi"></div>
 
                 <div style="display: flex; gap: 20px; flex-wrap: wrap; margin-top: 30px;">
                     <div class="modern-kutu" style="flex: 1.5; min-width: 300px;">
@@ -110,8 +109,8 @@
                     </div>
 
                     <div class="modern-kutu" style="flex: 1; min-width: 250px; background: linear-gradient(135deg, #f1f2f6, #dfe6e9);">
-                        <h3 style="color:#27ae60;">💰 Vadeli Mevduat Hesabı</h3>
-                        <p style="font-size: 13px; color: #636e72;">Boşta duran paranı faize yatır, para parayı çeksin.</p>
+                        <h3 style="color:#27ae60;">💰 Vadeli Mevduat</h3>
+                        <p style="font-size: 13px; color: #636e72;">Boşta duran paranı faize yatır.</p>
                         <div id="vadeli-hesap-durum" style="margin-bottom: 15px; font-weight:bold; color:#2d3436;">Aktif hesabınız yok.</div>
                         <button class="btn btn-yesil" onclick="vadeliyeYatir()">Parayı Faiz'e Bağla (%15 Getiri / 10 Gün)</button>
                     </div>
@@ -190,11 +189,36 @@
         </main>
     </div>
 
+    <div id="hisse-islem-modal" class="modal" style="z-index: 4600;">
+        <div class="modal-icerik" style="max-width: 400px; text-align: center;">
+            <span class="kapat-btn" onclick="modaliKapat('hisse-islem-modal')">&times;</span>
+            <h2 class="modal-baslik" id="hisse-modal-baslik">Hisse İşlemi</h2>
+            <div style="background: #f8f9fa; padding: 15px; border-radius: 10px; margin-bottom: 20px;">
+                <div style="font-size: 24px; font-weight: bold; color: #2d3436;" id="hisse-modal-kod">KOD</div>
+                <div style="color: #636e72; font-size: 14px;" id="hisse-modal-isim">İsim</div>
+                <div style="margin-top: 10px; font-size: 24px; font-weight: bold; color: #0984e3;" id="hisse-modal-fiyat">0.00 ₺</div>
+            </div>
+            
+            <div style="text-align: left; margin-bottom: 15px;">
+                <label style="font-size: 13px; font-weight: bold; color: #2d3436;">İşlem Adedi (Lot):</label>
+                <input type="number" id="hisse-modal-adet" oninput="hisseModalHesapla()" style="width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; outline: none; box-sizing:border-box;" value="100">
+                <div id="hisse-modal-bilgi" style="font-size: 12px; color: #636e72; margin-top: 5px;">Maksimum: 0 Lot</div>
+            </div>
+
+            <div style="background: #2d3436; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;">
+                <div style="font-size: 13px; color: #bdc3c7;">Toplam İşlem Tutarı:</div>
+                <div style="font-size: 28px; font-weight: bold; color:#00b894;" id="hisse-modal-tutar">0 ₺</div>
+            </div>
+
+            <button class="btn btn-mavi" id="hisse-modal-onay-btn" style="padding: 15px; font-size: 18px;" onclick="hisseIslemOnayla()">Onayla</button>
+        </div>
+    </div>
+
     <div id="baslangic-modal" class="modal" style="display: none; background: rgba(0,0,0,0.9);">
         <div class="modal-icerik" style="text-align: center; max-width: 450px; padding: 40px; margin-top: 10%;">
             <h1 style="color: #0984e3; margin-top:0;">SahibindenMotors</h1>
             <h2 style="color: #2d3436; font-size: 20px;">Kendi Galerini Kur!</h2>
-            <input type="text" id="galeri-adi-input" placeholder="İsmini buraya yaz..." style="width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; margin-bottom: 20px; outline: none;">
+            <input type="text" id="galeri-adi-input" placeholder="İsmini buraya yaz..." style="width: 100%; padding: 15px; border: 2px solid #dfe6e9; border-radius: 8px; font-size: 16px; margin-bottom: 20px; outline: none; box-sizing:border-box;">
             <button class="btn btn-mavi" style="padding: 15px; font-size: 18px;" onclick="galeriAdiniKaydet()">🚀 Maceraya Başla</button>
         </div>
     </div>
