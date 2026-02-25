@@ -38,11 +38,13 @@
         <aside class="sol-menu">
             <h3 class="masaustu-goster">Kategoriler</h3>
             <h2 class="masaustu-gizle" style="color:#0984e3; margin-top:0; border-bottom:1px solid #eee; padding-bottom:10px;">Menü</h2>
-            <ul>
+           <ul>
                 <li onclick="menuDegistir('pazar')" class="aktif" id="menu-pazar">🚗 Vasıta İlanları</li>
                 <li onclick="menuDegistir('garaj')" id="menu-garaj">🏠 Kendi Garajım</li>
+                <li onclick="menuDegistir('rentacar')" id="menu-rentacar" style="color: #d35400; font-weight: bold;">🔑 Rent A Car</li>
                 <li onclick="menuDegistir('dukkan')" id="menu-dukkan">🏢 Dükkan Yönetimi</li>
-                <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka İşlemleri</li>
+                <li onclick="menuDegistir('banka')" id="menu-banka">🏦 Banka & Finans</li>
+                <li onclick="menuDegistir('personel')" id="menu-personel" style="color: #27ae60; font-weight: bold;">👔 Personel Yönetimi</li>
                 <li onclick="menuDegistir('istatistik')" id="menu-istatistik">📊 İstatistikler</li>
                 <li onclick="menuDegistir('sosyal')" id="menu-sosyal" style="background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%);">📱 Sosyal Medya</li>
             </ul>
@@ -53,6 +55,46 @@
             <div id="pazar-ekrani" class="sayfa">
                 <h2 class="sayfa-basligi">Piyasadaki Araçlar</h2>
                 <div id="araba-listesi" class="ilan-listesi"></div>
+            </div>
+
+            <div id="rentacar-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">🔑 Rent A Car Filom (Pasif Gelir)</h2>
+                <div class="modern-kutu" style="margin-bottom: 20px; background: #fff3cd; border-left: 5px solid #f39c12;">
+                    <p style="margin: 0; font-size: 14px; color: #d35400;"><strong>Bilgi:</strong> Araçları kiraya vererek günlük düzenli gelir elde edebilirsin. Ancak araç kiraladığında kaza, hırsızlık veya arıza risklerini de göze almış olursun!</p>
+                </div>
+                <div class="uyari-mesaji" id="rentacar-bilgi">Şu an kirada hiç aracın yok. Garajdan araçları kiraya verebilirsin.</div>
+                <div id="rentacar-listesi" class="ilan-listesi"></div>
+            </div>
+
+            <div id="personel-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">👔 Personel Yönetimi</h2>
+                <div style="display: flex; gap: 15px; flex-wrap: wrap;">
+                    
+                    <div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">
+                        <div style="font-size: 40px;">👨‍🔧</div>
+                        <h3 style="color: #2d3436;">Usta Başı</h3>
+                        <p style="font-size: 13px; color: #636e72;">Sanayideki tüm tamir ve modifiye işlemlerinde sana <strong>%30 indirim</strong> sağlar.</p>
+                        <p style="color: #d63031; font-weight: bold;">Maaş: 25.000 ₺ / Ay</p>
+                        <div id="btn-personel-usta"></div>
+                    </div>
+
+                    <div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">
+                        <div style="font-size: 40px;">👩‍💻</div>
+                        <h3 style="color: #0984e3;">Sosyal Medya Uzmanı</h3>
+                        <p style="font-size: 13px; color: #636e72;">Sana her gün pasif takipçi kazandırır ve DM'den gelen teklif oranını artırır.</p>
+                        <p style="color: #d63031; font-weight: bold;">Maaş: 15.000 ₺ / Ay</p>
+                        <div id="btn-personel-sm"></div>
+                    </div>
+
+                    <div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">
+                        <div style="font-size: 40px;">🕵️‍♂️</div>
+                        <h3 style="color: #27ae60;">Satış Temsilcisi</h3>
+                        <p style="font-size: 13px; color: #636e72;">Kapıdan giren <strong>Ölücü</strong> müşterileri kovar. Sadece ciddi müşterilerle muhatap olursun.</p>
+                        <p style="color: #d63031; font-weight: bold;">Maaş: 30.000 ₺ / Ay</p>
+                        <div id="btn-personel-satis"></div>
+                    </div>
+
+                </div>
             </div>
 
             <div id="garaj-ekrani" class="sayfa" style="display: none;">
