@@ -468,3 +468,75 @@ body {
     .telefon-ekrani::before, #karar-modal .modal-icerik::before { display: none; }
     @keyframes fadeIn { from { opacity:0; transform: translateY(-40%); } to { opacity:1; transform: translateY(-50%); } }
 }
+
+/* =========================================================
+   V3.0 PREMIUM MOBİL YAMASI (GECE MODU & FAB & PTR)
+========================================================= */
+
+/* Gece Modu (Dark Mode) Renk Değişkenleri */
+body.dark-mode {
+    --bg-color: #121212;
+    --card-bg: #1e1e1e;
+    --sidebar-bg: #2d3436;
+    --text-main: #f5f6fa;
+    --text-muted: #b2bec3;
+    --primary: #74b9ff;
+    --shadow-sm: 0 4px 6px rgba(255,255,255,0.02);
+}
+body.dark-mode .sari-baslik { background: rgba(30, 30, 30, 0.85); border-bottom: 1px solid #333; }
+body.dark-mode .modern-kutu, body.dark-mode .ilan-karti, body.dark-mode .modal-icerik { border-color: #333; background: #1e1e1e; }
+body.dark-mode #mobile-bottom-nav { background: rgba(30, 30, 30, 0.95); border-top: 1px solid #333; }
+body.dark-mode .bilgi-kutu { background: #2d3436; border-color: #636e72; color: #dfe6e9; }
+body.dark-mode .sayfa-basligi { color: #f5f6fa; }
+body.dark-mode .sm-profil-ust { background: linear-gradient(135deg, #1e1e1e 0%, #2d3436 100%); border-color: #444;}
+body.dark-mode .sm-grafik-alani { background: #1e1e1e; border-color: #444; }
+body.dark-mode .grafik-kapsayici { border-bottom-color: #444; }
+body.dark-mode .toast-mesaj { background: rgba(30,30,30,0.95); color: #f5f6fa; }
+
+/* FAB - Kayan Aksiyon Butonu (Günü Atla) */
+#fab-gun-atla {
+    position: fixed;
+    bottom: 85px; /* Alt menünün üstünde durur */
+    right: 20px;
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #a29bfe, #6c5ce7);
+    color: white;
+    border: none;
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.5);
+    font-size: 10px;
+    font-weight: 800;
+    z-index: 3500;
+    cursor: pointer;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    line-height: 1.1;
+    transition: 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+    font-family: 'Poppins', sans-serif;
+}
+#fab-gun-atla:active { transform: scale(0.85); }
+@media (min-width: 769px) { #fab-gun-atla { display: none; } } /* Masaüstünde gizle */
+
+/* Aşağı Çekerek Yenileme (Pull to Refresh) Animasyonu */
+#ptr-spinner {
+    text-align: center;
+    font-weight: bold;
+    color: var(--primary);
+    height: 0;
+    overflow: hidden;
+    transition: height 0.3s ease, margin 0.3s ease;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: #e0eaf5;
+    border-radius: 10px;
+    font-size: 14px;
+}
+body.dark-mode #ptr-spinner { background: #2d3436; color: #74b9ff; }
+#ptr-spinner.aktif { height: 50px; margin-bottom: 20px; }
+#ptr-spinner span { animation: spin 1s linear infinite; display: inline-block; }
+@keyframes spin { 100% { transform: rotate(360deg); } }

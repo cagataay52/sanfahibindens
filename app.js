@@ -1052,6 +1052,96 @@ menuDegistir = function(menu) {
 uyariyiKapat = function() {};
 
 // ==========================================
+// V6.5 MOBİL PREMIUM YAMASI (GECE MODU, PTR VE BİLDİRİMLER)
+// ==========================================
+
+// 1. GECE MODU (DARK MODE) SİSTEMİ
+function geceModuGecis() {
+    document.body.classList.toggle('dark-mode');
+    let karanlikMi = document.body.classList.contains('dark-mode');
+    localStorage.setItem('sm_gece_modu', karanlikMi ? 'aktif' : 'pasif');
+    document.getElementById('btn-gece-modu').innerText = karanlikMi ? '☀️' : '🌙';
+    oyunSesi('dokun');
+}
+
+// Oyuna girişte Gece modunu hatırla
+if(localStorage.getItem('sm_gece_modu') === 'aktif') {
+    document.body.classList.add('dark-mode');
+    let btn = document.getElementById('btn-gece-modu');
+    if(btn) btn.innerText = '☀️';
+}
+
+// 2. PUSH NOTIFICATIONS (ARKAPLAN BİLDİRİMLERİ)
+function bildirimIzniIste() {
+    if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") {
+        Notification.requestPermission();
+    }
+}
+// Oyuncu sayfaya ilk tıkladığında izin iste
+document.addEventListener('click', bildirimIzniIste, { once: true });
+
+// Eski ozelUyari fonksiyonunu kancalıyoruz. Eğer oyuncu oyunu alta atıp Instagram'a girdiyse bildirim olarak yolla!
+const eskiToastUyari = ozelUyari;
+ozelUyari = function(mesaj, tip = 'bilgi') {
+    eskiToastUyari(mesaj, tip); // Uygulama içindeyken toast çıkar
+    
+    // Eğer oyuncu başka sekmedeyse veya uygulamayı arka plana attıysa (document.hidden)
+    if (document.hidden && "Notification" in window && Notification.permission === "granted") {
+        // İçindeki HTML etiketlerini (<b> vs.) temizleyip saf metin olarak bildirim at
+        let temizMesaj = mesaj.replace(/<[^>]*>?/gm, '');
+        let ikon = tip === 'hata' ? '🚨' : '✅';
+        new Notification(`SahibindenMotors ${ikon}`, { 
+            body: temizMesaj,
+            icon: "https://cdn-icons-png.flaticon.com/512/3202/3202926.png" 
+        });
+    }
+};
+
+// 3. AŞAĞI ÇEKEREK YENİLEME (PULL-TO-REFRESH) MANTIĞI
+let ptrBaslangicY = 0;
+let ptrCekiliyor = false;
+const ptrAlan = document.getElementById('ptr-spinner');
+
+document.addEventListener('touchstart', function(e) {
+    // Sadece ekranın en üstündeysek ve Pazar sayfasındaysak algıla
+    if(window.scrollY === 0 && document.getElementById('pazar-ekrani').style.display === 'block') {
+        ptrBaslangicY = e.touches[0].screenY;
+        ptrCekiliyor = true;
+    }
+}, {passive: true});
+
+document.addEventListener('touchmove', function(e) {
+    if(!ptrCekiliyor || !ptrAlan) return;
+    let cekmeMesafesi = e.touches[0].screenY - ptrBaslangicY;
+    
+    // Eğer oyuncu 60 pixelden fazla aşağı çekerse animasyonu göster
+    if(cekmeMesafesi > 60) {
+        ptrAlan.classList.add('aktif');
+    } else {
+        ptrAlan.classList.remove('aktif');
+    }
+}, {passive: true});
+
+document.addEventListener('touchend', function(e) {
+    if(!ptrCekiliyor || !ptrAlan) return;
+    
+    // Eğer spinner aktif hale geldiyse işlemi tetikle
+    if(ptrAlan.classList.contains('aktif')) {
+        if(bakiyeYeterliMi(500) && !eHacizAktif) {
+            f5At(); // F5 fonksiyonunu çalıştır
+            oyunSesi('dokun');
+        } else {
+            ozelUyari("Limit yetersiz veya E-Haciz var!", "hata");
+        }
+        // Yarım saniye sonra spinner'ı kapat
+        setTimeout(() => { ptrAlan.classList.remove('aktif'); }, 500);
+    }
+    
+    ptrCekiliyor = false;
+    ptrBaslangicY = 0;
+});
+
+// ==========================================
 // BAŞLANGIÇ
 // ==========================================
 function oyunuBaslat() {
