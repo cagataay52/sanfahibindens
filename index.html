@@ -118,9 +118,64 @@
             <div id="personel-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">👔 Personel Yönetimi</h2><div style="display: flex; gap: 15px; flex-wrap: wrap;"><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">👨‍🔧<h3 style="color: #2d3436;">Usta Başı</h3><div id="btn-personel-usta"></div></div><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">👩‍💻<h3 style="color: #0984e3;">Sosyal Medya Uzmanı</h3><div id="btn-personel-sm"></div></div><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;">🕵️‍♂️<h3 style="color: #27ae60;">Satış Temsilcisi</h3><div id="btn-personel-satis"></div></div></div></div>
 
             <div id="sosyal-ekrani" class="sayfa" style="display: none;">
-                <h2 class="sayfa-basligi">📱 Sosyal Medya</h2>
-                <div id="sosyal-kurulum" class="modern-kutu" style="text-align: center;"><h3 style="color: #0984e3;">Hesap Aç</h3><div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;"><select id="sm-platform" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9;"><option value="Instagram">Instagram</option><option value="TikTok">TikTok</option></select><input type="text" id="sm-kullanici-adi" placeholder="@kullaniciadi belirle" style="padding: 10px; border-radius: 8px; border: 1px solid #dfe6e9; outline: none; width: 50%;"></div><button class="btn btn-mavi" style="width: auto; padding: 10px 30px;" onclick="sosyalHesapAc()">Hesabı Oluştur</button></div>
-                <div id="sosyal-yonetim" style="display: none;"><div class="modern-kutu" style="display: flex; justify-content: space-between; align-items: center; background: linear-gradient(135deg, #74b9ff, #0984e3); color: white;"><div><h2 style="margin: 0; display:flex; align-items:center; gap:5px;" id="profil-ad">@kullanici <span id="mavi-tik-ikon" style="display:none; color:#00d2d3; background:white; border-radius:50%; font-size:16px; padding:2px;">☑️</span></h2><span id="profil-platform" style="background: rgba(255,255,255,0.2); padding: 3px 8px; border-radius: 5px; font-size: 12px;">Instagram</span></div><div style="text-align: right;"><div style="font-size: 24px; font-weight: bold;" id="profil-takipci">0</div><div style="font-size: 12px; opacity: 0.8;">Takipçi</div></div></div><div id="sosyal-linc-uyari" style="display:none; background:#ff7675; color:white; padding:10px; border-radius:8px; margin-top:10px; text-align:center; font-weight:bold;">🚨 Hesabın Linç Yiyor! DM'ler kapandı. Bitiş: <span id="linc-kalan"></span> Gün.</div><div style="display: flex; gap: 15px; margin-top: 15px; flex-wrap: wrap;"><div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;"><button class="btn btn-yesil" onclick="postIcinArabaSec()">📸 Gönderi Paylaş</button></div><div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;"><button class="btn" style="background:#00d2d3; color: white;" onclick="maviTikAl()">✨ Mavi Tik Al</button></div><div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;"><button class="btn btn-turuncu" onclick="cekilisYap()">🎁 Çekiliş Başlat</button></div><div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center;"><button class="btn btn-mor" style="background: #9b59b6; color: white;" onclick="influencerReklamVer()">💸 Fenomen Reklamı</button></div><div class="modern-kutu" style="flex: 1; min-width: 45%; text-align: center; border: 2px solid #ff7675;"><button class="btn btn-kirmizi" onclick="canliYayinIcinArabaSec()">🔴 Canlı Mezat</button></div></div><h3 style="margin-top: 25px;">💬 DM Kutusu (Gelen Teklifler)</h3><div id="dm-kutusu" class="ilan-listesi"></div></div>
+                <h2 class="sayfa-basligi">📱 Sosyal Medya Yönetimi</h2>
+                
+                <div id="sosyal-kurulum" class="modern-kutu" style="text-align: center;">
+                    <h3 style="color: #0984e3;">Dijital Varlığını Başlat</h3>
+                    <p style="color:#636e72; font-size:14px; margin-bottom:20px;">Araçlarını milyonlara ulaştırmak için bir profil oluştur.</p>
+                    <div style="display: flex; gap: 10px; justify-content: center; margin-bottom: 20px;">
+                        <select id="sm-platform" style="padding: 12px; border-radius: 8px; border: 2px solid #dfe6e9; outline:none;">
+                            <option value="Instagram">Instagram</option>
+                            <option value="TikTok">TikTok</option>
+                        </select>
+                        <input type="text" id="sm-kullanici-adi" placeholder="@kullaniciadi belirle" style="padding: 12px; border-radius: 8px; border: 2px solid #dfe6e9; outline: none; width: 50%;">
+                    </div>
+                    <button class="btn btn-mavi" style="width: auto; padding: 12px 40px; font-size:16px;" onclick="sosyalHesapAc()">Hesabı Oluştur</button>
+                </div>
+                
+                <div id="sosyal-yonetim" style="display: none;">
+                    <div class="sm-profil-ust">
+                        <div class="sm-avatar"><div class="sm-avatar-ic" id="sm-avatar-harf">A</div></div>
+                        <div style="flex:1;">
+                            <div style="display:flex; align-items:center; gap:5px; margin-bottom:10px;">
+                                <h2 style="margin: 0; font-size: 20px; color:#2d3436;" id="profil-ad">@kullanici</h2>
+                                <span id="mavi-tik-ikon" style="display:none; color:#0984e3; font-size:18px;" title="Doğrulanmış Hesap">☑️</span>
+                                <span id="profil-platform" style="background: #2d3436; color:white; padding: 2px 8px; border-radius: 5px; font-size: 10px; margin-left:auto;">Instagram</span>
+                            </div>
+                            <div class="sm-istatistikler">
+                                <div class="sm-ist-kutu"><span class="sm-ist-rakam" id="profil-gonderi-sayisi">0</span><span class="sm-ist-etiket">Gönderi</span></div>
+                                <div class="sm-ist-kutu"><span class="sm-ist-rakam" id="profil-takipci">0</span><span class="sm-ist-etiket">Takipçi</span></div>
+                                <div class="sm-ist-kutu"><span class="sm-ist-rakam" id="profil-etkilesim">%0</span><span class="sm-ist-etiket">Etkileşim</span></div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="sm-grafik-alani">
+                        <div style="display:flex; justify-content:space-between; align-items:center;">
+                            <h3 style="margin:0; font-size: 15px; color: #0984e3;">📈 Son 7 Günlük Büyüme</h3>
+                            <span style="font-size:11px; color:#b2bec3;">(Canlı Veri)</span>
+                        </div>
+                        <div class="grafik-kapsayici" id="sm-grafik">
+                            </div>
+                    </div>
+
+                    <div id="sosyal-linc-uyari" style="display:none; background:#ff7675; color:white; padding:12px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:bold; box-shadow:0 4px 10px rgba(255, 118, 117, 0.4); animation: pulse 1s infinite;">🚨 Hesabın Linç Yiyor! Gönderi ve DM kapandı. Bitiş: <span id="linc-kalan"></span> Gün.</div>
+                    
+                    <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+                        <button class="btn btn-yesil" style="flex:1; min-width:120px;" onclick="postIcinArabaSec()">📸 Gönderi Paylaş</button>
+                        <button class="btn" style="flex:1; min-width:120px; background:#0984e3; color: white;" onclick="maviTikAl()">✨ Mavi Tik Al</button>
+                        <button class="btn btn-turuncu" style="flex:1; min-width:120px;" onclick="cekilisYap()">🎁 Çekiliş Başlat</button>
+                        <button class="btn btn-mor" style="flex:1; min-width:120px;" onclick="influencerReklamVer()">💸 Reklam Ver</button>
+                        <button class="btn btn-kirmizi" style="flex:1; min-width:120px; border: 2px solid #ff7675;" onclick="canliYayinIcinArabaSec()">🔴 Canlı Mezat</button>
+                    </div>
+
+                    <h3 style="margin-top: 30px; font-size: 16px; color:#2d3436;">📸 Vitrin (Gönderiler)</h3>
+                    <div class="sm-post-grid" id="sm-post-grid">
+                        </div>
+
+                    <h3 style="margin-top: 30px; font-size: 16px; color:#2d3436;">💬 Gelen Kutusu (DM Teklifleri)</h3>
+                    <div id="dm-kutusu" class="ilan-listesi"></div>
+                </div>
             </div>
 
             <div id="ihale-ekrani" class="sayfa" style="display: none;">

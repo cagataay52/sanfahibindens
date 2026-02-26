@@ -869,6 +869,131 @@ function ihaleBitir() {
 }
 
 // ==========================================
+// V6.3 SOSYAL MEDYA GÖRSELLEŞTİRME YAMASI
+// ==========================================
+
+// Kayıt sistemine yeni dizileri ekleyelim (Eski kayıtlarda hata vermemesi için)
+if (!sosyalMedya.gonderiler) sosyalMedya.gonderiler = [];
+if (!sosyalMedya.takipciGecmisi) sosyalMedya.takipciGecmisi = [0, 0, 0, 0, 0, 0, 0];
+
+// Her gün atladığında grafiği kaydırmak için sonrakiGun fonksiyonuna ek
+const eskiSosyalMedyaGunAtla = sonrakiGun;
+sonrakiGun = function() {
+    eskiSosyalMedyaGunAtla(); // Önceki tüm gün atlama olaylarını çalıştır
+    
+    // Grafiği 1 gün kaydır
+    if (sosyalMedya.aktif) {
+        sosyalMedya.takipciGecmisi.shift(); // En eski günü sil
+        sosyalMedya.takipciGecmisi.push(sosyalMedya.takipci); // Bugünü ekle
+    }
+    if (document.getElementById('sosyal-ekrani') && document.getElementById('sosyal-ekrani').style.display === 'block') {
+        sosyalEkraniGuncelle();
+    }
+};
+
+// Sosyal Ekranını yepyeni bir görsel mimariyle güncelliyoruz
+sosyalEkraniGuncelle = function() { 
+    let k = document.getElementById('sosyal-kurulum'); 
+    let y = document.getElementById('sosyal-yonetim'); 
+    
+    if (!sosyalMedya.aktif) { 
+        if(k) k.style.display = 'block'; 
+        if(y) y.style.display = 'none'; 
+    } else { 
+        if(k) k.style.display = 'none'; 
+        if(y) y.style.display = 'block'; 
+        
+        // Header (Profil Üstü)
+        let isim = sosyalMedya.kullaniciAdi.replace('@', '');
+        document.getElementById('profil-ad').innerHTML = `@${isim}`;
+        document.getElementById('sm-avatar-harf').innerText = isim.charAt(0).toUpperCase();
+        document.getElementById('profil-platform').innerText = sosyalMedya.platform;
+        document.getElementById('mavi-tik-ikon').style.display = sosyalMedya.maviTik ? 'inline' : 'none';
+        
+        // İstatistikler
+        document.getElementById('profil-takipci').innerText = Math.floor(sosyalMedya.takipci).toLocaleString('tr-TR');
+        document.getElementById('profil-gonderi-sayisi').innerText = sosyalMedya.gonderiler.length;
+        let etkilesim = sosyalMedya.maviTik ? 18.5 : (sosyalMedya.gonderiler.length * 1.2 + 2.4);
+        if (sosyalMedya.lincKalanGun > 0) etkilesim = 0.1;
+        document.getElementById('profil-etkilesim').innerText = "%" + etkilesim.toFixed(1);
+
+        // Dinamik Bar Grafiği Çizimi
+        let grafikAlan = document.getElementById('sm-grafik');
+        grafikAlan.innerHTML = '';
+        let maxTakipci = Math.max(...sosyalMedya.takipciGecmisi, 100); // 0'a bölme hatasını önle
+        
+        sosyalMedya.takipciGecmisi.forEach((deger, index) => {
+            let yukseklik = (deger / maxTakipci) * 100;
+            if(yukseklik < 5) yukseklik = 5; // Göze görünmesi için minimum %5 yükseklik
+            let kMetin = deger > 1000 ? (deger/1000).toFixed(1) + "k" : Math.floor(deger);
+            grafikAlan.innerHTML += `
+                <div class="grafik-sutun" style="height: ${yukseklik}%;">
+                    <span class="grafik-deger">${kMetin}</span>
+                    <span class="grafik-gun">G${gun - (6 - index)}</span>
+                </div>`;
+        });
+
+        // Gönderi Grid Izgarası
+        let grid = document.getElementById('sm-post-grid');
+        grid.innerHTML = '';
+        if (sosyalMedya.gonderiler.length === 0) {
+            grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; color:#b2bec3; padding: 30px; background:#f8f9fa; border-radius:10px;">Henüz hiç gönderi paylaşmadın. Garajdan bir araba seç ve ilk postunu at!</div>`;
+        } else {
+            sosyalMedya.gonderiler.forEach(p => {
+                grid.innerHTML += `
+                <div class="sm-post-item">
+                    <img src="${p.gorsel}">
+                    <div class="sm-post-overlay">
+                        <span>❤️ ${p.begeni.toLocaleString('tr-TR')}</span>
+                        <span>💬 ${p.yorum.toLocaleString('tr-TR')}</span>
+                    </div>
+                </div>`;
+            });
+        }
+
+        // Linç Uyarısı
+        let lu = document.getElementById('sosyal-linc-uyari'); 
+        let lk = document.getElementById('linc-kalan'); 
+        if (sosyalMedya.lincKalanGun > 0) { if(lu) lu.style.display = "block"; if(lk) lk.innerText = sosyalMedya.lincKalanGun; } 
+        else { if(lu) lu.style.display = "none"; } 
+        
+        dmKutusunuEkranaBas(); 
+    } 
+};
+
+// Gönderi paylaşıldığında ızgaraya ekleme (Modifiye edilmiş fonksiyon)
+videoCekVePaylas = function(id) { 
+    const a = garaj.find(x => x.id === id);
+    if (!a) return;
+    modaliKapat('post-secim-modal'); 
+    
+    paramiz -= 1500; 
+    let kazanilanTakipci = Math.floor(Math.random() * 1000) + 1000;
+    if(sosyalMedya.maviTik) kazanilanTakipci *= 2;
+    sosyalMedya.takipci += kazanilanTakipci; 
+    
+    // Beğeni ve yorum hesaplama motoru
+    let begeni = Math.floor(sosyalMedya.takipci * (Math.random() * 0.15 + 0.05));
+    let yorum = Math.floor(begeni * (Math.random() * 0.1 + 0.02));
+    
+    // Postu en başa ekle (unshift) ve 9'dan fazlaysa sil (pop)
+    sosyalMedya.gonderiler.unshift({ gorsel: a.gorsel, begeni: begeni, yorum: yorum });
+    if (sosyalMedya.gonderiler.length > 9) sosyalMedya.gonderiler.pop();
+
+    document.getElementById('post-sonuc-takipci').innerText = `+${kazanilanTakipci} Takipçi`; 
+    document.getElementById('post-yorumlar').innerHTML = `
+        <div style="margin-bottom:5px;"><b>@sokak_tayfasi:</b> Ateş ediyor 🔥</div>
+        <div style="margin-bottom:5px;"><b>@otomanyak:</b> Fiyat nedir usta?</div>
+        <div><b>@${sosyalMedya.kullaniciAdi.replace('@','')}_fan:</b> Kral yine piyasayı belirlemişsin.</div>
+    `; 
+    
+    oyunSesi('kasa'); 
+    aktifEkraniYenile(); 
+    oyunuKaydet(); 
+    document.getElementById('post-sonuc-modal').style.display = "block"; 
+};
+
+// ==========================================
 // BAŞLANGIÇ
 // ==========================================
 function oyunuBaslat() {
