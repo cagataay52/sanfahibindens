@@ -41,6 +41,7 @@
                 <li onclick="menuDegistir('banka')" id="menu-banka" style="color: #00b894; font-weight: bold;">🏦 Finans & Borsa</li>
                 <li onclick="menuDegistir('personel')" id="menu-personel">👔 Personel</li>
                 <li onclick="menuDegistir('istatistik')" id="menu-istatistik">📊 İstatistikler</li>
+                <li onclick="menuDegistir('ihale')" id="menu-ihale" style="color: #e74c3c; font-weight: bold;">⚖️ Yediemin İhalesi</li>
                 <li onclick="menuDegistir('sosyal')" id="menu-sosyal" style="background: linear-gradient(90deg, #ff9a9e 0%, #fecfef 99%, #fecfef 100%); color:#2d3436;">📱 Sosyal Medya</li>
             </ul>
             <button class="gun-atla-btn" onclick="sonrakiGun()">🌙 Uykuya Yat (Sonraki Gün)</button>
@@ -50,6 +51,16 @@
             <div id="pazar-ekrani" class="sayfa"><h2 class="sayfa-basligi">Piyasadaki Araçlar</h2><div id="araba-listesi" class="ilan-listesi"></div></div>
             <div id="garaj-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">Garajımdaki Araçlar</h2><div class="uyari-mesaji" id="garaj-bilgi">Garajında henüz araba yok patron.</div><div id="garaj-listesi" class="ilan-listesi"></div></div>
             <div id="dukkan-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">Dükkan Seviyesi ve Kapasite</h2><div class="modern-kutu dukkan-kutusu"><h3 id="dukkan-isim" style="color: #0984e3; font-size: 24px; margin-top: 0;"></h3><p>Şu anki kapasiten: <strong id="dukkan-kapasite" style="font-size: 18px;"></strong></p><hr><div id="yukseltme-alani"><p style="color: #636e72;">Bir sonraki seviye: <strong id="yeni-seviye-isim" style="color: #2d3436;"></strong></p><p style="font-size: 20px;">Gereken Yatırım: <strong id="yeni-seviye-fiyat" style="color: #d63031;"></strong></p><button class="btn btn-yesil" style="font-size: 16px; padding: 15px;" onclick="dukkaniYukselt()">🚀 Dükkanı Büyüt!</button></div></div></div>
+
+<div id="ihale-ekrani" class="sayfa" style="display: none;">
+    <h2 class="sayfa-basligi">⚖️ Yediemin İhalesi</h2>
+    <div class="modern-kutu" style="text-align: center;">
+        <h3 style="color: #e74c3c;">Devlet Destekli Hacizli Araç İhaleleri</h3>
+        <p style="color: #636e72;">Kapalı kutu, sürpriz araçlar. Piyasanın çok altına alma şansı veya büyük bir hurdayla karşılaşma riski!</p>
+        <div id="ihale-durum-alani" style="margin: 20px 0;">
+            </div>
+    </div>
+</div>
 
             <div id="banka-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">🏦 Finans Merkezi & Borsa (BİST)</h2>

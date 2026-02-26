@@ -1,5 +1,5 @@
 // ==========================================
-// 1. GENEL AYARLAR VE DEĞİŞKENLER (V6.0)
+// 1. GENEL AYARLAR VE DEĞİŞKENLER (V6.1)
 // ==========================================
 let galeriAdi = "Benim"; let paramiz = 15000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
 let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0; let dukkanSeviyesi = 1; let aracKapasitesi = 2;
@@ -95,6 +95,7 @@ function aktifEkraniYenile() {
         let sos = document.getElementById('sosyal-ekrani'); if(sos && sos.style.display === 'block') sosyalEkraniGuncelle();
         let rnt = document.getElementById('rentacar-ekrani'); if(rnt && rnt.style.display === 'block') rentACarEkraniGuncelle();
         let prs = document.getElementById('personel-ekrani'); if(prs && prs.style.display === 'block') personelEkraniGuncelle();
+        let ihl = document.getElementById('ihale-ekrani'); if(ihl && ihl.style.display === 'block') ihaleEkraniniGuncelle();
     } catch(e) { console.error("Yenileme hatası:", e); }
 }
 
@@ -237,7 +238,6 @@ function davaKriziBaslat(index) {
 function sonrakiGun() {
     try {
         gun++; let g = document.getElementById('gun'); if(g) g.innerText = gun;
-        if (gun > 1 && gun % 7 === 0) { setTimeout(() => { ihaleHazirla(); }, 500); }
         
         // V6.0 DAVA TETİKLEYİCİSİ
         let davaTetiklendi = false;
@@ -359,7 +359,6 @@ function bankaEkraniniGuncelle() {
     let skorDiv = document.getElementById('findeks-skor'); if(skorDiv) { skorDiv.innerText = krediNotu; skorDiv.style.color = krediNotu > 1400 ? '#00b894' : (krediNotu < 1000 ? '#e74c3c' : '#f1c40f'); }
     let limitDiv = document.getElementById('kmh-limit'); if(limitDiv) limitDiv.innerText = getKmhLimiti().toLocaleString('tr-TR') + " ₺";
 
-    // V6 Vergi Guncellemesi
     let vb = document.getElementById('vergi-borcu-ekran'); if(vb) vb.innerText = vergiBorcu.toLocaleString('tr-TR');
     let hUyari = document.getElementById('e-haciz-uyari'); if(hUyari) hUyari.style.display = eHacizAktif ? 'block' : 'none';
 
@@ -528,7 +527,7 @@ function hakanAbiTahsilat(i) { let s = senetler[i]; let kalan = s.toplamBorc - s
 
 
 // ==========================================
-// 7. ARAÇ AL/SAT, PAZAR VE KRİZLER (V6.0)
+// 7. ARAÇ AL/SAT, PAZAR VE KRİZLER (V6.1)
 // ==========================================
 function arabalariEkranaGetir() { 
     const liste = document.getElementById('araba-listesi'); if(!liste) return; liste.innerHTML = ''; 
@@ -591,15 +590,37 @@ function telPazarlikYap(id) {
 }
 
 function sehirDisinaGit(id) {
+    if(eHacizAktif) { ozelUyari("e-Haciz var! İşlem yapılamaz.", "hata"); return; }
     if (!bakiyeYeterliMi(2500)) { ozelUyari("Uçak bileti alacak limitin yok!", "hata"); return; }
     paramiz -= 2500; toplamGider += 2500; aktifEkraniYenile();
-    const a = arabalar.find(x => x.id === id); document.getElementById('tel-aksiyonlar').style.display = 'none'; document.getElementById('tel-aranan-kisi').innerText = `✈️ ${a.sehir}'a Gidiliyor...`; document.getElementById('tel-diyalog').innerText = "Araç ekspere sokuluyor..."; document.querySelector('.telefon-ekrani').classList.add('caliyor'); 
+    
+    const a = arabalar.find(x => x.id === id); 
+    if(!a) { ozelUyari("İlan yayından kalkmış!", "hata"); telefonuKapat(); return; }
+    
+    document.getElementById('tel-aksiyonlar').style.display = 'none'; 
+    document.getElementById('tel-aranan-kisi').innerText = `✈️ ${a.sehir}'a Gidiliyor...`; 
+    document.getElementById('tel-diyalog').innerText = "Araç ekspere sokuluyor..."; 
+    document.querySelector('.telefon-ekrani').classList.add('caliyor'); 
+    
     setTimeout(() => { 
-        document.querySelector('.telefon-ekrani').classList.remove('caliyor'); let yalanIhtimali = a.saticiTipi === "Sahibinden" ? 0.35 : 0.05; 
+        document.querySelector('.telefon-ekrani').classList.remove('caliyor'); 
+        let yalanIhtimali = a.saticiTipi === "Sahibinden" ? 0.35 : 0.05; 
         if (Math.random() < yalanIhtimali && !a.hasarli) {
-            oyunSesi('hata'); a.hasarli = true; a.tamirMasrafi = Math.floor(a.fiyat * 0.15); document.getElementById('tel-aranan-kisi').innerText = `🚨 BÜYÜK ŞOK!`; document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">Araç 3 parça değişenli çıktı! 2.500 ₺ yol masrafı çöpe gitti.</span>`; arabalar = arabalar.filter(x => x.id !== id); aktifEkraniYenile(); oyunuKaydet();
+            oyunSesi('hata'); 
+            a.hasarli = true; 
+            a.tamirMasrafi = Math.floor(a.fiyat * 0.15); 
+            document.getElementById('tel-aranan-kisi').innerText = `🚨 BÜYÜK ŞOK!`; 
+            document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">Araç ağır hasarlı çıktı! 2.500 ₺ yol masrafı çöpe gitti.</span>`; 
+            document.getElementById('tel-aksiyonlar').innerHTML = `<button class="btn btn-kirmizi" onclick="telefonuKapat()" style="padding: 15px; font-size: 16px;">Geri Dön</button>`;
+            document.getElementById('tel-aksiyonlar').style.display = 'flex';
+            arabalar = arabalar.filter(x => x.id !== id); 
+            aktifEkraniYenile(); oyunuKaydet();
         } else {
-            oyunSesi('kasa'); document.getElementById('tel-aranan-kisi').innerText = `✅ Ekspertiz Temiz`; document.getElementById('tel-diyalog').innerText = `Araç söylendiği gibi çıktı.`; document.getElementById('tel-aksiyonlar').innerHTML = `<button class="btn btn-yesil" onclick="telSatinAl(${a.id}, 0)" style="padding: 15px; font-size: 16px;">Nakit Al ve Dön</button>`; document.getElementById('tel-aksiyonlar').style.display = 'flex'; 
+            oyunSesi('kasa'); 
+            document.getElementById('tel-aranan-kisi').innerText = `✅ Ekspertiz Temiz`; 
+            document.getElementById('tel-diyalog').innerText = `Araç söylendiği gibi çıktı.`; 
+            document.getElementById('tel-aksiyonlar').innerHTML = `<button class="btn btn-yesil" onclick="telSatinAl(${a.id}, 0)" style="padding: 15px; font-size: 16px;">Nakit Al ve Dön</button>`; 
+            document.getElementById('tel-aksiyonlar').style.display = 'flex'; 
         }
     }, 3000);
 }
@@ -623,12 +644,31 @@ function takasiTamamla(bId, kId, fark) {
     oyunSesi('kasa'); modaliKapat('takas-secim-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`🔄 Takas Başarıyla Gerçekleşti!\n${karsiAraba.marka} aracını garaja çektin.`, "basari");
 }
 
-function telSatinAl(id, ekMasraf) { 
-    const a = arabalar.find(x => x.id === id); let t = a.fiyat + noterUcreti + sigortaVeMtvUcreti + ekMasraf; 
+function telSatinAl(id, ekMasraf) {
+    if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! Araç alamazsın.", "hata"); return; }
+    const a = arabalar.find(x => x.id === id); 
+    if (!a) { ozelUyari("Araç bulunamadı veya satılmış!", "hata"); telefonuKapat(); return; }
+    if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari("Garaj kapasiteniz dolu!", "hata"); telefonuKapat(); return; }
+    
+    let t = a.fiyat + noterUcreti + sigortaVeMtvUcreti + ekMasraf; 
     if (bakiyeYeterliMi(t)) { 
-        paramiz -= t; toplamGider += t; a.tamirDurumu = 0; garaj.push(a); arabalar = arabalar.filter(x => x.id !== id); oyunSesi('kasa'); telefonuKapat(); aktifEkraniYenile(); oyunuKaydet(); 
-        if(a.gumrukAraci) { ozelUyari(`🇪🇺 Gümrük Aracı Alındı!\nAraç bürokrasi için 5 gün rehin kalacak.`, "basari"); } else { ozelUyari(`Araç garaja çekildi!`, "basari"); }
-    } else { oyunSesi('hata'); document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">"Para çıkışmıyor kardeşim!"</span>`; document.getElementById('tel-aksiyonlar').style.display = 'none'; } 
+        paramiz -= t; 
+        toplamGider += t; 
+        a.tamirDurumu = 0; 
+        a.alisFiyati = t; 
+        garaj.push(a); 
+        arabalar = arabalar.filter(x => x.id !== id); 
+        oyunSesi('kasa'); 
+        telefonuKapat(); 
+        aktifEkraniYenile(); 
+        oyunuKaydet(); 
+        if(a.gumrukAraci) { ozelUyari(`🇪🇺 Gümrük Aracı Alındı!\nAraç bürokrasi için 5 gün rehin kalacak.`, "basari"); } 
+        else { ozelUyari(`Araç satın alındı ve garaja çekildi!`, "basari"); }
+    } else { 
+        oyunSesi('hata'); 
+        document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">"Kardeşim paran çıkışmıyor, beni oyalama!"</span>`; 
+        document.getElementById('tel-aksiyonlar').style.display = 'none'; 
+    } 
 }
 
 function hakanAbiAra(id) { 
@@ -748,9 +788,12 @@ function satisiTamamla(id, tId, tip, sF) {
         senetler.push({ id: 'snt-'+Math.floor(Math.random()*10000), musteri: t.musteri, arabaMarka: a.marka, toplamBorc: sF, odenen: pes, taksit: Math.floor((sF-pes)/10), kalanGun: 10, durum: 'Düzenli Ödüyor' }); ozelUyari(`Araç Senetle Satıldı!`, "basari");
     }
 
-    // V6.0 VERGİ HESAPLAMA VE SİCİL
-    let kar = netKazanc - a.fiyat;
-    if(kar > 0) vergiBorcu += Math.floor(kar * 0.20);
+    // Gerçek Net Kâr Hesabı ve Vergi Kesintisi
+    let maliyet = a.alisFiyati || Math.floor(a.fiyat * 0.85); // Alış fiyatı yoksa tahmini maliyet
+    let kar = netKazanc - maliyet;
+    if(kar > 0) {
+        vergiBorcu += Math.floor(kar * 0.20);
+    }
 
     if(gizliKusurluAraclar.includes(id)) {
         sabikaliSatislar.push({ musteri: t.musteri, satilanFiyat: netKazanc, gun: gun, id: a.id });
@@ -801,11 +844,57 @@ function yayinGazaGetir() { yayinTuruHype = 2.5; let chat = document.getElementB
 function yayindaSat() { if(anlikEnYuksekTeklif < (yayindakiAraba.fiyat * 0.5)) return ozelUyari("Çok ucuz!","hata"); clearInterval(yayinInterval); modaliKapat('canli-yayin-modal'); paramiz += anlikEnYuksekTeklif; garaj = garaj.filter(x => x.id !== yayindakiAraba.id); oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Yayında Satıldı!`, "basari"); }
 function yayiniBitir() { clearInterval(yayinInterval); modaliKapat('canli-yayin-modal'); }
 
-function ihaleHazirla() { if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) return; ihaleAraba = rastgeleArabaUret(); ihaleFiyat = Math.floor(ihaleAraba.fiyat * 0.25); ihaleBizdeMi = false; ihaleKapanmaSayaci = 0; document.getElementById('ihale-araba-isim').innerText = `${ihaleAraba.marka} ${ihaleAraba.model}`; document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Başlangıç Bedeli"; document.getElementById('ihale-modal').style.display = 'block'; if(ihaleInterval) clearInterval(ihaleInterval); ihaleInterval = setInterval(ihaleDongusu, 2000); }
+function ihaleEkraniniGuncelle() {
+    let alan = document.getElementById('ihale-durum-alani');
+    if(!alan) return;
+    
+    let ihaleGunu = gun % 3 === 0; // Her 3 günde 1 ihale çıkar
+    if (ihaleGunu && !ihaleInterval && !ihaleAraba) {
+        alan.innerHTML = `
+            <div style="background: #fff3cd; padding: 20px; border-radius: 10px; border: 2px solid #f1c40f;">
+                <h2 style="color: #d35400; margin-top: 0;">Yeni Bir İhale Başlamak Üzere!</h2>
+                <p>İhaleye giriş bedeli: <b>5.000 ₺</b></p>
+                <button class="btn btn-turuncu" style="font-size: 18px; padding: 15px;" onclick="ihaleyeGir()">🎟️ İhaleye Katıl (5.000 ₺)</button>
+            </div>
+        `;
+    } else if (ihaleInterval || ihaleAraba) {
+        alan.innerHTML = `<button class="btn btn-mavi" style="font-size: 18px; padding: 15px;" onclick="document.getElementById('ihale-modal').style.display='block'">Aktif İhaleye Dön</button>`;
+    } else {
+        let kalan = 3 - (gun % 3);
+        alan.innerHTML = `<div class="uyari-mesaji">Şu an aktif bir ihale bulunmuyor. Bir sonraki ihale <b>${kalan} gün</b> sonra.</div>`;
+    }
+}
+
+function ihaleyeGir() {
+    if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! Devlet ihalesine giremezsin.", "hata"); return; }
+    if(!bakiyeYeterliMi(5000)) { ozelUyari("Giriş bedeli için 5.000 ₺ paranız yok.", "hata"); return; }
+    paramiz -= 5000; toplamGider += 5000;
+    oyunSesi('kasa'); aktifEkraniYenile();
+    ihaleHazirla('manuel');
+}
+
+function ihaleHazirla(tetik) { 
+    if (tetik !== 'manuel') return; // Sadece manuel girişe izin ver
+    if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari("Garaj kapasiteniz dolu!", "hata"); return; }
+    ihaleAraba = rastgeleArabaUret(); ihaleFiyat = Math.floor(ihaleAraba.fiyat * 0.25); ihaleBizdeMi = false; ihaleKapanmaSayaci = 0; document.getElementById('ihale-araba-isim').innerText = `${ihaleAraba.marka} ${ihaleAraba.model}`; document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Başlangıç Bedeli"; document.getElementById('ihale-modal').style.display = 'block'; if(ihaleInterval) clearInterval(ihaleInterval); ihaleInterval = setInterval(ihaleDongusu, 2000); aktifEkraniYenile(); 
+}
 function ihaleDongusu() { if (ihaleKapanmaSayaci >= 3) { ihaleBitir(); return; } let npcMaxLimit = ihaleAraba.fiyat * 0.85; if (!ihaleBizdeMi && Math.random() < 0.65 && ihaleFiyat < npcMaxLimit) { let artis = Math.floor(Math.random() * 3) * 10000 + 10000; ihaleFiyat += artis; ihaleBizdeMi = false; ihaleKapanmaSayaci = 0; oyunSesi('hata'); document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Rakip Galeri"; } else { ihaleKapanmaSayaci++; if (ihaleKapanmaSayaci === 1) document.getElementById('ihale-teklif-sahibi').innerText += " (Satıyorum...)"; if (ihaleKapanmaSayaci === 2) document.getElementById('ihale-teklif-sahibi').innerText += " (Sattıııım...)"; } }
 function ihaleTeklifVer() { if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! İhaleye giremezsin.", "hata"); return; } if (!bakiyeYeterliMi(ihaleFiyat + 25000)) { ozelUyari("Para yok!", "hata"); return; } ihaleFiyat += 25000; ihaleBizdeMi = true; ihaleKapanmaSayaci = 0; oyunSesi('kasa'); document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Sende!"; }
 function ihaledenCekil() { clearInterval(ihaleInterval); modaliKapat('ihale-modal'); }
-function ihaleBitir() { clearInterval(ihaleInterval); modaliKapat('ihale-modal'); if (ihaleBizdeMi) { paramiz -= ihaleFiyat; toplamGider += ihaleFiyat; ihaleAraba.fiyat = ihaleFiyat; garaj.push(ihaleAraba); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`İhaleyi Kazandın!`, "basari"); } else { ozelUyari(`İhale Kapandı.`, "bilgi"); } }
+function ihaleBitir() { 
+    clearInterval(ihaleInterval); modaliKapat('ihale-modal'); 
+    if (ihaleBizdeMi) { 
+        paramiz -= ihaleFiyat; toplamGider += ihaleFiyat; 
+        ihaleAraba.fiyat = ihaleFiyat; 
+        ihaleAraba.alisFiyati = ihaleFiyat; // Vergi için eklendi
+        garaj.push(ihaleAraba); 
+        ihaleAraba = null; // İhaleyi sıfırla
+        aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`İhaleyi Kazandın!`, "basari"); 
+    } else { 
+        ihaleAraba = null; // İhaleyi sıfırla
+        aktifEkraniYenile(); ozelUyari(`İhale Kapandı. Araç başkasına satıldı.`, "bilgi"); 
+    } 
+}
 
 // ==========================================
 // BAŞLANGIÇ
