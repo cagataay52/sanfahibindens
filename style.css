@@ -411,3 +411,60 @@ body {
 .sm-post-item:hover img { transform: scale(1.1); filter: blur(2px); }
 .sm-post-overlay { position: absolute; inset: 0; background: rgba(0,0,0,0.6); display: flex; flex-direction: column; justify-content: center; align-items: center; opacity: 0; transition: 0.3s; color: white; font-weight: bold; font-size: 14px; gap: 5px; }
 .sm-post-item:hover .sm-post-overlay { opacity: 1; }
+
+/* =========================================================
+   MOBİL OPTİMİZASYON V2.0 (BOTTOM SHEET & TOAST & NAV)
+========================================================= */
+
+/* TOAST BİLDİRİMLER (Ekranı kilitlemeyen modern bildirimler) */
+#toast-container { position: fixed; top: 20px; right: 20px; z-index: 9999; display: flex; flex-direction: column; gap: 10px; pointer-events: none; }
+.toast-mesaj { background: rgba(255,255,255,0.95); backdrop-filter: blur(5px); border-left: 5px solid var(--primary); padding: 15px 20px; border-radius: 12px; box-shadow: 0 10px 30px rgba(0,0,0,0.15); color: #2d3436; font-size: 14px; font-weight: 600; animation: slideInRight 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; max-width: 320px; display: flex; align-items: center; gap: 10px; line-height: 1.4;}
+.toast-mesaj.hata { border-left-color: var(--danger); color: #c0392b; background: #fff5f5; }
+.toast-mesaj.basari { border-left-color: var(--success); color: #218c74; background: #f0fdf4; }
+@keyframes slideInRight { from { transform: translateX(100%); opacity: 0; } to { transform: translateX(0); opacity: 1; } }
+@keyframes fadeOutUp { to { opacity: 0; transform: translateY(-20px); } }
+
+#mobile-bottom-nav { display: none; } /* Masaüstünde alt menüyü gizle */
+
+@media (max-width: 768px) {
+    /* İOS/Android Tarzı Alt Menü */
+    #mobile-bottom-nav { display: flex !important; position: fixed; bottom: 0; left: 0; width: 100%; background: rgba(255,255,255,0.90); backdrop-filter: blur(15px); -webkit-backdrop-filter: blur(15px); border-top: 1px solid rgba(0,0,0,0.05); box-shadow: 0 -5px 20px rgba(0,0,0,0.05); z-index: 4000; justify-content: space-around; padding: 12px 0; padding-bottom: calc(12px + env(safe-area-inset-bottom)); }
+    .bottom-nav-item { display: flex; flex-direction: column; align-items: center; justify-content: center; font-size: 11px; color: #b2bec3; cursor: pointer; transition: 0.3s; font-weight: 600; }
+    .bottom-nav-item span { font-size: 22px; margin-bottom: 4px; transition: 0.3s; filter: grayscale(100%); opacity: 0.7; }
+    .bottom-nav-item.aktif { color: var(--primary); transform: translateY(-4px); }
+    .bottom-nav-item.aktif span { filter: grayscale(0%); opacity: 1; transform: scale(1.15); }
+    
+    .icerik-alani { padding-bottom: 90px !important; } /* Alt menü içeriği kapatmasın diye */
+    
+    /* Toast mobilde üst ortadan gelsin */
+    #toast-container { top: 70px; left: 5%; right: 5%; width: 90%; align-items: center; }
+    .toast-mesaj { width: 100%; animation: slideInDown 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275) forwards; }
+    @keyframes slideInDown { from { transform: translateY(-100%); opacity: 0; } to { transform: translateY(0); opacity: 1; } }
+
+    /* YENİ: Bottom Sheet Modallar (Aşağıdan Yukarı Kayarak Açılan Menüler) */
+    .modal { background-color: rgba(0,0,0,0.6); }
+    .modal-icerik { 
+        position: absolute; 
+        bottom: 0; 
+        left: 0; 
+        width: 100%; 
+        margin: 0; 
+        border-radius: 25px 25px 0 0; 
+        box-sizing: border-box; 
+        transform: translateY(100%); 
+        animation: slideUpSheet 0.3s cubic-bezier(0.1, 0.9, 0.2, 1) forwards; 
+        max-height: 88vh; 
+        padding-bottom: calc(30px + env(safe-area-inset-bottom)); 
+    }
+    /* Çentik görünümü (Sürükleme hissi vermek için görsel ufak çubuk) */
+    .modal-icerik::before {
+        content: ''; display: block; width: 40px; height: 5px; background: #dfe6e9; border-radius: 10px; margin: -10px auto 20px auto;
+    }
+    
+    @keyframes slideUpSheet { to { transform: translateY(0); } }
+    
+    /* Sadece Telefon/Kriz modalları ortada kalsın, onlar bottom sheet olmasın */
+    .telefon-ekrani, #karar-modal .modal-icerik { position: relative !important; bottom: auto !important; top: 50% !important; transform: translateY(-50%) !important; margin: 0 auto !important; animation: fadeIn 0.3s ease forwards !important; border-radius: 25px !important; max-width: 90%; }
+    .telefon-ekrani::before, #karar-modal .modal-icerik::before { display: none; }
+    @keyframes fadeIn { from { opacity:0; transform: translateY(-40%); } to { opacity:1; transform: translateY(-50%); } }
+}

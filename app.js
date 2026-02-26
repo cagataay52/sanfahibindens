@@ -994,6 +994,64 @@ videoCekVePaylas = function(id) {
 };
 
 // ==========================================
+// V6.4 FİZİKSEL TEPKİ (HAPTIC) VE TOAST YAMASI
+// ==========================================
+
+// Titreşim Entegrasyonu (Sadece mobil cihazlar tepki verir)
+const eskiOyunSesi = oyunSesi;
+oyunSesi = function(tip) {
+    eskiOyunSesi(tip); // Sesleri çal
+    try {
+        if (!navigator.vibrate) return;
+        if (tip === 'kasa') navigator.vibrate([30, 50, 30]); // Çift tok titreşim (Başarı)
+        else if (tip === 'hata') navigator.vibrate([50, 50, 50, 50, 50]); // Kesik uzun titreşim (Hata)
+        else if (tip === 'dokun') navigator.vibrate(10); // Hafif tık hissi (Buton basma)
+    } catch(e) {}
+};
+
+// Ekranı Kilitleyen Eski Uyarıyı Yenilikçi Toast Bildirimlere Çeviriyoruz
+ozelUyari = function(mesaj, tip = 'bilgi') {
+    let container = document.getElementById('toast-container');
+    if(!container) return; // Güvenlik
+    
+    let toast = document.createElement('div');
+    toast.className = `toast-mesaj ${tip}`;
+    
+    let ikon = tip === 'hata' ? '❌' : (tip === 'basari' ? '✅' : 'ℹ️');
+    // Mesajı şık bir HTML formatına sokuyoruz
+    toast.innerHTML = `<span style="font-size: 20px;">${ikon}</span> <div style="flex:1;">${mesaj.replace(/\n/g, '<br>')}</div>`;
+    
+    container.appendChild(toast);
+    if(tip === 'hata') oyunSesi('hata'); // Hata bildirimlerinde titreşim
+    
+    // 3.5 saniye sonra yavaşça kaybolsun
+    setTimeout(() => {
+        toast.style.animation = 'fadeOutUp 0.3s forwards';
+        setTimeout(() => toast.remove(), 300);
+    }, 3500);
+};
+
+// Menü geçişlerinde hem dokunma hissi (titreşim) hem de Alt Navigasyon senkronizasyonu
+const eskiMenuDegistir = menuDegistir;
+menuDegistir = function(menu) {
+    oyunSesi('dokun'); // Menüye basınca hafif titreşim
+    eskiMenuDegistir(menu);
+    
+    // Alt menüdeki ikonların renk/animasyon senkronizasyonunu yap
+    document.querySelectorAll('.bottom-nav-item').forEach(b => b.classList.remove('aktif'));
+    let bNavItem = document.getElementById('bnav-' + menu);
+    if(bNavItem) bNavItem.classList.add('aktif');
+    
+    // Eğer garaj/pazar açıldıysa açık olan modal varsa kapat ki UI rahatlasın
+    document.querySelectorAll('.modal').forEach(m => {
+        if(m.id !== 'karar-modal' && m.id !== 'telefon-modal') m.style.display = 'none';
+    });
+};
+
+// Eski 'Uyarıyı Kapat' fonksiyonu artık toast sisteminde kullanılmayacak ama eski kodlarda hata vermesin diye boş bırakıyoruz.
+uyariyiKapat = function() {};
+
+// ==========================================
 // BAŞLANGIÇ
 // ==========================================
 function oyunuBaslat() {
