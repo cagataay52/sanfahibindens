@@ -516,6 +516,92 @@ function ihaledenCekil() { clearInterval(ihaleInterval); modaliKapat('ihale-moda
 function ihaleBitir() { clearInterval(ihaleInterval); modaliKapat('ihale-modal'); if (ihaleBizdeMi) { paramiz -= ihaleFiyat; toplamGider += ihaleFiyat; ihaleAraba.fiyat = ihaleFiyat; ihaleAraba.alisFiyati = ihaleFiyat; ihaleAraba.rehinliMi = false; garaj.push(ihaleAraba); ihaleAraba = null; aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`İhaleyi Kazandın!`, "basari"); } else { ihaleAraba = null; aktifEkraniYenile(); ozelUyari(`İhale Kapandı. Araç başkasına satıldı.`, "bilgi"); } }
 
 // ==========================================
+// V6.6 SHOWROOM & GLASSMORPHISM YAMASI
+// ==========================================
+
+// Eski garaj fonksiyonunu kancalayıp iptal ediyoruz, yepyeni vitrini getiriyoruz
+garajiEkranaGetir = function() { 
+    const lst = document.getElementById('garaj-listesi'); 
+    const blg = document.getElementById('garaj-bilgi'); 
+    if(!lst) return; 
+    
+    lst.innerHTML = ''; 
+    // Garaj listesini yeni ızgara sistemine geçiriyoruz
+    lst.className = 'showroom-grid';
+
+    if (garaj.length === 0) { 
+        if(blg) blg.style.display = 'block'; 
+        lst.classList.remove('showroom-grid'); // Boşken gridi kapat
+    } else { 
+        if(blg) blg.style.display = 'none'; 
+        
+        garaj.forEach(a => { 
+            let aksiyonButonlari = '';
+            let ekstraBilgi = '';
+            
+            // Eğer araç gümrükteyse
+            if (a.gumrukKalanGun > 0) { 
+                ekstraBilgi = `<div style="color:#8e44ad; font-weight:bold; font-size:14px; margin-bottom:10px;"><i class='bx bx-lock-alt'></i> Gümrükte: ${a.gumrukKalanGun} Gün</div>`;
+                aksiyonButonlari = `<button class="btn btn-kirmizi" disabled style="opacity:0.5;">İşlem Yapılamaz</button>`;
+            }
+            // Eğer araç tamirde/muayenedeyse
+            else if (a.tamirDurumu > 0) { 
+                let dY = a.muayenede ? "TÜVTÜRK'te" : "Sanayide";
+                ekstraBilgi = `<div style="color:#e67e22; font-weight:bold; font-size:14px; margin-bottom:10px;"><i class='bx bx-wrench'></i> ${dY}: ${a.tamirDurumu} Gün</div>`;
+                aksiyonButonlari = `<button class="btn btn-kirmizi" disabled style="opacity:0.5;">İşlem Yapılamaz</button>`;
+            } 
+            // Normal garajdaki araba
+            else { 
+                let tek = a.teklifler ? a.teklifler.length : 0; 
+                let teklifMetni = tek > 0 ? `<span style="color:#00b894; font-weight:bold; font-size:13px;"><i class='bx bxs-hot'></i> ${tek} Yeni Teklif!</span>` : `<span style="color:var(--text-muted); font-size:12px;"><i class='bx bx-time'></i> Teklif Bekleniyor</span>`;
+                ekstraBilgi = !a.muayeneVar ? `<div style="color:#d63031; font-weight:bold; font-size:13px; margin-bottom:10px;"><i class='bx bx-error-circle'></i> Çekme Belgeli</div>` : `<div style="margin-bottom:10px;">${teklifMetni}</div>`;
+                
+                aksiyonButonlari = !a.muayeneVar ? 
+                    `<button class="btn btn-mavi" onclick="muayeneyeSok(${a.id})"><i class='bx bx-check-shield'></i> Muayene (3.5K ₺)</button>
+                     ${a.hasarli ? `<button class="btn btn-turuncu" onclick="tamirEt(${a.id})"><i class='bx bx-wrench'></i> Sanayiye Ver</button>` : ''}
+                     <button class="btn btn-mor" onclick="modifiyeEkraniAc(${a.id})"><i class='bx bx-sparkles'></i> Modifiye</button>` 
+                    : 
+                    `${a.hasarli ? `<button class="btn btn-turuncu" onclick="tamirEt(${a.id})"><i class='bx bx-wrench'></i> Sanayiye Ver</button>` : ''}
+                     <button class="btn" style="background:#2c3e50; color:#f1c40f;" onclick="kilometreDusur(${a.id})"><i class='bx bx-ghost'></i> KM Düşür</button>
+                     <button class="btn" style="background:#d35400; color:white;" onclick="kirayaVer(${a.id})"><i class='bx bx-key'></i> Kiraya Ver</button>
+                     <button class="btn btn-mor" onclick="modifiyeEkraniAc(${a.id})"><i class='bx bx-sparkles'></i> Modifiye</button>
+                     <button class="btn btn-yesil" onclick="araciSat(${a.id})" style="width:100%; font-size:15px; margin-top:5px;"><i class='bx bx-money'></i> Müşterileri Gör</button>`;
+            } 
+
+            // Showroom Kartı HTML İnşası
+            lst.innerHTML += `
+                <div class="showroom-karti">
+                    <div class="spotlight"></div>
+                    <div class="showroom-img-kutu">
+                        <img src="${a.gorsel}" style="${a.gumrukKalanGun > 0 ? 'filter: grayscale(80%);' : ''}">
+                    </div>
+                    <h3 class="showroom-baslik">${a.marka} ${a.model}</h3>
+                    <div style="font-size:12px; color:var(--text-muted); margin-bottom:5px;">🗓️ ${a.yil} | 🛣️ ${a.km.toLocaleString('tr-TR')} KM</div>
+                    <div class="showroom-fiyat">${a.fiyat.toLocaleString('tr-TR')} ₺</div>
+                    ${ekstraBilgi}
+                    <div class="showroom-aksiyonlar">
+                        ${aksiyonButonlari}
+                    </div>
+                </div>`; 
+        }); 
+    } 
+};
+
+// Alt menü mobil ikonlarını BoxIcons ile değiştir
+document.addEventListener("DOMContentLoaded", () => {
+    let bnav = document.getElementById('mobile-bottom-nav');
+    if(bnav) {
+        bnav.innerHTML = `
+            <div class="bottom-nav-item aktif" id="bnav-pazar" onclick="menuDegistir('pazar')"><i class='bx bxs-car' style="font-size:24px;"></i>Vasıta</div>
+            <div class="bottom-nav-item" id="bnav-garaj" onclick="menuDegistir('garaj')"><i class='bx bxs-car-garage' style="font-size:24px;"></i>Garaj</div>
+            <div class="bottom-nav-item" id="bnav-banka" onclick="menuDegistir('banka')"><i class='bx bxs-bank' style="font-size:24px;"></i>Banka</div>
+            <div class="bottom-nav-item" id="bnav-sosyal" onclick="menuDegistir('sosyal')"><i class='bx bxl-instagram' style="font-size:24px;"></i>Sosyal</div>
+            <div class="bottom-nav-item" onclick="mobilMenuKapatAc()"><i class='bx bx-menu' style="font-size:24px;"></i>Diğer</div>
+        `;
+    }
+});
+
+// ==========================================
 // BAŞLANGIÇ
 // ==========================================
 function oyunuBaslat() {

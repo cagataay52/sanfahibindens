@@ -202,3 +202,87 @@ body.dark-mode .teklif-karti { background-color: #2d3436; border-color: #444; bo
     .telefon-ekrani::before, #karar-modal .modal-icerik::before { display: none; }
     @keyframes fadeIn { from { opacity:0; transform: translateY(-40%); } to { opacity:1; transform: translateY(-50%); } }
 }
+
+/* =========================================================
+   V4.0 PREMIUM UI/UX (GLASSMORPHISM & SHOWROOM YAMASI)
+========================================================= */
+
+/* 1. Dinamik Gradient Arka Plan */
+body {
+    background: linear-gradient(135deg, #e0c3fc 0%, #8ec5fc 100%) !important;
+    background-attachment: fixed !important;
+}
+body.dark-mode {
+    background: linear-gradient(135deg, #0f2027 0%, #203a43 50%, #2c5364 100%) !important;
+    background-attachment: fixed !important;
+}
+
+/* 2. Glassmorphism (Buzlu Cam) Kutular */
+.sari-baslik, .modern-kutu, .ilan-karti, .modal-icerik, .sol-menu, .bilgi-kutu, #mobile-bottom-nav, .sm-profil-ust {
+    background: rgba(255, 255, 255, 0.55) !important;
+    backdrop-filter: blur(15px) !important;
+    -webkit-backdrop-filter: blur(15px) !important;
+    border: 1px solid rgba(255, 255, 255, 0.4) !important;
+    box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.07) !important;
+}
+/* Gece Modu İçin Cam Görünümü */
+body.dark-mode .sari-baslik, body.dark-mode .modern-kutu, body.dark-mode .ilan-karti, body.dark-mode .modal-icerik, body.dark-mode .sol-menu, body.dark-mode .bilgi-kutu, body.dark-mode #mobile-bottom-nav, body.dark-mode .sm-profil-ust {
+    background: rgba(20, 20, 20, 0.6) !important;
+    border: 1px solid rgba(255, 255, 255, 0.05) !important;
+    box-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4) !important;
+}
+
+/* 3. Agresif ve Kalın Yazı Tipleri (Sadece Paralar ve Başlıklar) */
+#paramiz, .ilan-fiyat, #detay-fiyat, #kmh-limit, .bakiye span, #ist-net, .grafik-deger {
+    font-family: 'Montserrat', sans-serif !important;
+    font-weight: 800 !important;
+    letter-spacing: -0.5px;
+}
+
+/* 4. GARAJ SHOWROOM VİTRİNİ (Özel Izgara Yapısı) */
+.showroom-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+    gap: 25px;
+    padding-top: 10px;
+}
+.showroom-karti {
+    position: relative;
+    background: rgba(255, 255, 255, 0.4);
+    backdrop-filter: blur(20px);
+    -webkit-backdrop-filter: blur(20px);
+    border: 1px solid rgba(255,255,255,0.6);
+    border-radius: 20px;
+    padding: 20px;
+    text-align: center;
+    box-shadow: 0 15px 35px rgba(0,0,0,0.1);
+    overflow: hidden;
+    transition: transform 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+}
+body.dark-mode .showroom-karti { background: rgba(0,0,0,0.4); border-color: rgba(255,255,255,0.1); }
+.showroom-karti:hover { transform: translateY(-10px); }
+
+/* Spot Işığı Efekti */
+.spotlight {
+    position: absolute;
+    top: -50px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 200px;
+    height: 200px;
+    background: radial-gradient(circle, rgba(255,255,255,0.8) 0%, rgba(255,255,255,0) 70%);
+    opacity: 0.6;
+    pointer-events: none;
+    z-index: 0;
+}
+body.dark-mode .spotlight { background: radial-gradient(circle, rgba(116, 185, 255, 0.3) 0%, rgba(0,0,0,0) 70%); }
+
+/* Showroom Araç Görseli 3D Hissi */
+.showroom-img-kutu { position: relative; z-index: 1; margin-bottom: 15px; }
+.showroom-img-kutu img { width: 100%; height: 160px; object-fit: cover; border-radius: 12px; box-shadow: 0 10px 20px rgba(0,0,0,0.2); transition: 0.3s; }
+.showroom-karti:hover .showroom-img-kutu img { transform: scale(1.05); }
+
+/* Showroom Araç Bilgileri */
+.showroom-baslik { font-size: 18px; font-weight: 700; margin: 0 0 5px 0; position: relative; z-index: 1; color: var(--text-main); }
+.showroom-fiyat { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 15px; position: relative; z-index: 1;}
+.showroom-aksiyonlar { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;}
