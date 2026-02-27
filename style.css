@@ -361,3 +361,74 @@ body.dark-mode .uyari-mesaji {
     color: #f1c40f !important;
     border: 1px dashed rgba(241, 196, 15, 0.4) !important;
 }
+
+/* =========================================================
+   V6.8 MOBİL MODAL (POPUP) VE Z-INDEX OPTİMİZASYONU
+   (Menü arkasında kalma ve tıklanamama sorununu çözer)
+========================================================= */
+
+/* 1. Tüm açılır pencereleri alt menünün (4000) en üstüne çıkarıyoruz */
+.modal { z-index: 9999 !important; }
+
+@media (max-width: 768px) {
+    /* 2. Küçük modalları ekranın ortasında tut (Tramer, Uyarı, Hisse, Kriz, Telefon vb.) */
+    #tramer-modal .modal-icerik,
+    #uyari-modal .modal-icerik,
+    #hisse-islem-modal .modal-icerik,
+    #ayarlar-modal .modal-icerik,
+    #baslangic-modal .modal-icerik,
+    #post-sonuc-modal .modal-icerik,
+    #ihale-modal .modal-icerik,
+    #karar-modal .modal-icerik,
+    .telefon-ekrani {
+        position: relative !important; 
+        bottom: auto !important; 
+        top: 50% !important; 
+        transform: translateY(-50%) !important; 
+        margin: 0 auto !important; 
+        animation: fadeIn 0.3s ease forwards !important; 
+        border-radius: 25px !important; 
+        max-width: 90% !important; 
+        padding-bottom: 30px !important;
+    }
+
+    /* 3. Çentik (sürükleme çubuğu) ortada duran pencerelerde görünmesin */
+    #tramer-modal .modal-icerik::before,
+    #uyari-modal .modal-icerik::before,
+    #hisse-islem-modal .modal-icerik::before,
+    #ayarlar-modal .modal-icerik::before,
+    #baslangic-modal .modal-icerik::before,
+    #post-sonuc-modal .modal-icerik::before,
+    #ihale-modal .modal-icerik::before,
+    #karar-modal .modal-icerik::before,
+    .telefon-ekrani::before {
+        display: none !important;
+    }
+
+    /* 4. Bottom Sheet (Aşağıdan Gelen) Modalları için Alt Boşluk */
+    /* Ekranın en altına yapışan yazılar veya butonlar için ekstra alan bırakıyoruz */
+    .modal-icerik {
+        padding-bottom: 50px !important; 
+    }
+    
+    /* 5. Kapat (X) Butonlarının Mobilde Kolay Basılabilir Olması */
+    .kapat-btn {
+        top: 15px !important;
+        right: 15px !important;
+        font-size: 28px !important;
+        background: rgba(0,0,0,0.05);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+        z-index: 10000;
+        text-decoration: none;
+    }
+    
+    body.dark-mode .kapat-btn {
+        background: rgba(255,255,255,0.1);
+        color: #fff;
+    }
+}
