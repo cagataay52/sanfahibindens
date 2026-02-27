@@ -286,3 +286,78 @@ body.dark-mode .spotlight { background: radial-gradient(circle, rgba(116, 185, 2
 .showroom-baslik { font-size: 18px; font-weight: 700; margin: 0 0 5px 0; position: relative; z-index: 1; color: var(--text-main); }
 .showroom-fiyat { font-family: 'Montserrat', sans-serif; font-size: 22px; font-weight: 800; color: var(--primary); margin-bottom: 15px; position: relative; z-index: 1;}
 .showroom-aksiyonlar { position: relative; z-index: 1; display: flex; flex-wrap: wrap; gap: 5px; justify-content: center;}
+
+/* =========================================================
+   V6.7 KAPSAMLI GECE MODU VE UYUŞMAZLIK DÜZELTMESİ
+   (Inline Stil Çakışmalarını ve Beyaz Kalan Kutuları Düzeltir)
+========================================================= */
+
+/* 1. Borsa (Canlı Borsa) Kartları */
+body.dark-mode .hisse-karti { 
+    background: rgba(20, 20, 20, 0.7) !important; 
+    border-color: rgba(255, 255, 255, 0.1) !important; 
+    box-shadow: 0 4px 10px rgba(0,0,0,0.5) !important;
+}
+
+/* 2. Teklif Kartları ve Modifiye/İhale Satırları */
+body.dark-mode .teklif-karti { 
+    background: rgba(30, 30, 30, 0.6) !important; 
+    border-color: #333 !important; 
+}
+
+/* 3. İncele (Detay) Modalı İçindeki Bölümler */
+body.dark-mode .detay-liste { background: rgba(0,0,0,0.3) !important; }
+body.dark-mode .detay-liste li { border-bottom-color: rgba(255,255,255,0.1) !important; }
+body.dark-mode .ekspertiz-arabasi { background: rgba(0,0,0,0.3) !important; }
+body.dark-mode .eks-parca { background: #2d3436 !important; border-color: #636e72 !important; color: #f5f6fa !important; }
+body.dark-mode .eks-parca.orijinal { background: rgba(255,255,255,0.1) !important; border-color: #636e72 !important; color: #dfe6e9 !important; }
+body.dark-mode .eks-parca.lokal { background: #b8860b !important; border-color: #f1c40f !important; color: #fff !important; }
+body.dark-mode .eks-parca.boyali { background: #2980b9 !important; border-color: #3498db !important; color: #fff !important; }
+body.dark-mode .eks-parca.degisen { background: #c0392b !important; border-color: #e74c3c !important; color: #fff !important; }
+
+/* 4. JS TARAFINDAN ATANAN SABİT RENKLERİ EZEN SİHİRLİ KODLAR */
+
+/* Koyu renkli metinleri karanlık modda beyaz yap */
+body.dark-mode [style*="color: #2d3436"], 
+body.dark-mode [style*="color:#2d3436"],
+body.dark-mode [style*="color: #2c3e50"], 
+body.dark-mode [style*="color:#2c3e50"],
+body.dark-mode [style*="color: #636e72"] {
+    color: var(--text-main) !important;
+}
+
+/* Arka planı Beyaz, Açık Gri ve Açık Sarı Olan Kutuları Gece Moduna Uyarla */
+body.dark-mode [style*="background: #f8f9fa"], 
+body.dark-mode [style*="background:#f8f9fa"],
+body.dark-mode [style*="background: #f1f2f6"], 
+body.dark-mode [style*="background:#f1f2f6"],
+body.dark-mode [style*="background: #fffdf0"],
+body.dark-mode [style*="background: #ebf5fb"],
+body.dark-mode [style*="background: #fff5f5"],
+body.dark-mode [style*="background: #ffffff"],
+body.dark-mode [style*="background: white"],
+body.dark-mode [style*="background:rgba(0,0,0,0.05)"],
+body.dark-mode [style*="background: rgba(0,0,0,0.02)"] {
+    background: rgba(255, 255, 255, 0.05) !important;
+    border-color: rgba(255, 255, 255, 0.1) !important;
+}
+
+/* 5. Girdi (Input) ve Seçim (Select) Kutuları */
+body.dark-mode input, body.dark-mode select { 
+    background: rgba(0, 0, 0, 0.3) !important; 
+    color: #fff !important; 
+    border-color: rgba(255,255,255,0.2) !important; 
+}
+body.dark-mode input::placeholder { color: #b2bec3 !important; }
+
+/* 6. Banka Kredi ve Vergi Kutuları Dış Çizgi Optimizasyonu */
+body.dark-mode .modern-kutu { border-color: rgba(255,255,255,0.1) !important; }
+body.dark-mode [style*="border: 2px solid #c0392b"] { border-color: rgba(192, 57, 43, 0.5) !important; }
+body.dark-mode [style*="border: 2px solid #3498db"] { border-color: rgba(52, 152, 219, 0.5) !important; }
+
+/* 7. Özel Bildirim ve Uyarı Alanları */
+body.dark-mode .uyari-mesaji {
+    background: rgba(243, 156, 18, 0.1) !important;
+    color: #f1c40f !important;
+    border: 1px dashed rgba(241, 196, 15, 0.4) !important;
+}
