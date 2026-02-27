@@ -11,7 +11,6 @@
     
     <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600;700&family=Montserrat:wght@700;800;900&display=swap" rel="stylesheet">
     <link href='https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css' rel='stylesheet'>
-    
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
@@ -97,20 +96,18 @@
                     </div>
                     <button class="btn btn-yesil" style="width:auto; margin:0; padding:15px; font-size:14px;" onclick="primDagit()"><i class='bx bx-money'></i> Prim Dağıt (15.000 ₺)</button>
                 </div>
-
                 <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
                     <div class="modern-kutu" style="text-align: center;"><i class='bx bx-wrench' style="font-size:40px; color:var(--text-main);"></i><h3 style="color: var(--text-main);">Usta Başı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Tamirleri ucuzlatır, sanayi kazıklarını önler.<br><b>(Aylık 25.000 ₺)</b></div><div id="btn-personel-usta"></div></div>
                     <div class="modern-kutu" style="text-align: center;"><i class='bx bx-laptop' style="font-size:40px; color:#0984e3;"></i><h3 style="color: #0984e3;">Sosyal Medya Uzm.</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Sayfayı büyütür, DM'den yüksek teklif getirir.<br><b>(Aylık 15.000 ₺)</b></div><div id="btn-personel-smUzman"></div></div>
                     <div class="modern-kutu" style="text-align: center;"><i class='bx bx-briefcase' style="font-size:40px; color:#27ae60;"></i><h3 style="color: #27ae60;">Satış Temsilcisi</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Ölücüleri dükkandan kovar, zenginleri çeker.<br><b>(Aylık 30.000 ₺)</b></div><div id="btn-personel-satisTemsilci"></div></div>
-                    
                     <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-spray-can' style="font-size:40px; color:#f39c12;"></i><h3 style="color: #f39c12;">Vale / Yıkamacı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Garajı parlatır, araçlara gelen teklifler %3 artar.<br><b>(Aylık 10.000 ₺)</b></div><div id="btn-personel-vale"></div></div>
                     <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-check-shield' style="font-size:40px; color:#8e44ad;"></i><h3 style="color: #8e44ad;">Özel Eksper</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Gizli rehin/hasarları bedavaya anında çözer.<br><b>(Aylık 20.000 ₺)</b></div><div id="btn-personel-eksper"></div></div>
-                    <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-briefcase-alt-2' style="font-size:40px; color:#c0392b;"></i><h3 style="color: #c0392b;">Şirket Avukatı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Haczi geciktirir, davaları büyük oranda kazandırır.<br><b>(Aylık 40.000 ₺)</b></div><div id="btn-personel-avukat"></div></div>
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-briefcase-alt-2' style="font-size:40px; color:#c0392b;"></i><h3 style="color: #c0392b;">Şirket Avukatı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Haczi geciktirir, İfşa ve davaları kazandırır.<br><b>(Aylık 40.000 ₺)</b></div><div id="btn-personel-avukat"></div></div>
                 </div>
             </div>
 
             <div id="sosyal-ekrani" class="sayfa" style="display: none;">
-                <h2 class="sayfa-basligi">📱 Sosyal Medya Yönetimi</h2>
+                <h2 class="sayfa-basligi">📱 Sosyal Medya & PR Yönetimi</h2>
                 <div id="sosyal-kurulum" class="modern-kutu" style="text-align: center;">
                     <h3 style="color: #0984e3;">Dijital Varlığını Başlat</h3>
                     <p style="color:var(--text-muted); font-size:14px; margin-bottom:20px;">Araçlarını milyonlara ulaştırmak için bir profil oluştur.</p>
@@ -120,6 +117,7 @@
                     </div>
                     <button class="btn btn-mavi" style="width: auto; padding: 12px 40px; font-size:16px;" onclick="sosyalHesapAc()">Hesabı Oluştur</button>
                 </div>
+                
                 <div id="sosyal-yonetim" style="display: none;">
                     <div class="sm-profil-ust">
                         <div class="sm-avatar"><div class="sm-avatar-ic" id="sm-avatar-harf">A</div></div>
@@ -132,21 +130,30 @@
                             </div>
                         </div>
                     </div>
+                    
                     <div class="sm-grafik-alani">
                         <div style="display:flex; justify-content:space-between; align-items:center;"><h3 style="margin:0; font-size: 15px; color: #0984e3;"><i class='bx bx-trending-up'></i> Son 7 Günlük Büyüme</h3><span style="font-size:11px; color:#b2bec3;">(Canlı Veri)</span></div>
                         <div class="grafik-kapsayici" id="sm-grafik"></div>
                     </div>
-                    <div id="sosyal-linc-uyari" style="display:none; background:#ff7675; color:white; padding:12px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:bold; box-shadow:0 4px 10px rgba(255, 118, 117, 0.4); animation: pulse 1s infinite;">🚨 Hesabın Linç Yiyor! Gönderi ve DM kapandı. Bitiş: <span id="linc-kalan"></span> Gün.</div>
+
+                    <div id="sosyal-linc-uyari" style="display:none; background:#ff7675; color:white; padding:12px; border-radius:8px; margin-bottom:15px; text-align:center; font-weight:bold; box-shadow:0 4px 10px rgba(255, 118, 117, 0.4); animation: pulse 1s infinite;">🚨 Hesabın Linç Yiyor! Sayfan kan kaybediyor. Bitiş: <span id="linc-kalan"></span> Gün.</div>
+                    
+                    <div id="sponsor-alani" style="margin-bottom: 15px;"></div>
+
                     <div style="display: flex; gap: 10px; flex-wrap: wrap;">
                         <button class="btn btn-yesil" style="flex:1; min-width:120px;" onclick="postIcinArabaSec()"><i class='bx bx-camera'></i> Gönderi Paylaş</button>
                         <button class="btn" style="flex:1; min-width:120px; background:#0984e3; color: white;" onclick="maviTikAl()"><i class='bx bxs-badge-check'></i> Mavi Tik Al</button>
                         <button class="btn btn-turuncu" style="flex:1; min-width:120px;" onclick="cekilisYap()"><i class='bx bx-gift'></i> Çekiliş Başlat</button>
-                        <button class="btn btn-mor" style="flex:1; min-width:120px;" onclick="influencerReklamVer()"><i class='bx bx-broadcast'></i> Reklam Ver</button>
                         <button class="btn btn-kirmizi" style="flex:1; min-width:120px; border: 2px solid #ff7675;" onclick="canliYayinIcinArabaSec()"><i class='bx bx-radio-circle-marked'></i> Canlı Mezat</button>
+                        <button class="btn" style="flex:1; min-width:100%; background: linear-gradient(90deg, #8e44ad, #9b59b6); color:white; font-size: 15px; padding: 12px;" onclick="hedefliReklamEkraniAc()"><i class='bx bx-target-lock'></i> Meta Ads (Hedefli Reklam Çık)</button>
                     </div>
+
                     <h3 style="margin-top: 30px; font-size: 16px; color:var(--text-main);"><i class='bx bx-grid-alt'></i> Vitrin (Gönderiler)</h3>
                     <div class="sm-post-grid" id="sm-post-grid"></div>
-                    <h3 style="margin-top: 30px; font-size: 16px; color:var(--text-main);"><i class='bx bx-message-square-dots'></i> Gelen Kutusu (DM Teklifleri)</h3><div id="dm-kutusu" class="ilan-listesi"></div>
+                    
+                    <h3 style="margin-top: 30px; font-size: 16px; color:var(--text-main);"><i class='bx bx-message-square-dots'></i> Gelen Kutusu (DM Teklifleri)</h3>
+                    <div id="aktif-reklam-uyarisi" style="display:none; background: rgba(142, 68, 173, 0.1); border: 1px solid #8e44ad; color: #8e44ad; padding: 8px; border-radius: 5px; font-size: 12px; margin-bottom: 10px; font-weight: bold;"><i class='bx bx-radar'></i> Aktif Meta Ads: DM Kutusuna Sadece <span id="reklam-hedef-isim">Hedef</span> Müşterileri Düşecek! (Kalan: <span id="reklam-kalan-gun"></span> Gün)</div>
+                    <div id="dm-kutusu" class="ilan-listesi"></div>
                 </div>
             </div>
 
@@ -158,6 +165,35 @@
     </div>
 
     <div id="karar-modal" class="modal" style="z-index: 5500; background: rgba(0,0,0,0.95);"><div class="modal-icerik" style="text-align: center; max-width: 400px; border: 3px solid #e74c3c;"><h2 id="karar-baslik" style="color: #e74c3c; margin-top:0;">Kriz!</h2><p id="karar-metin" style="color: var(--text-main); font-size:15px; line-height:1.6; margin-bottom: 25px;"></p><div style="display: flex; flex-direction: column; gap: 10px;"><button id="karar-btn-1" class="btn btn-yesil" style="padding: 15px; font-size:16px;">Seçenek 1</button><button id="karar-btn-2" class="btn btn-kirmizi" style="padding: 15px; font-size:16px;">Seçenek 2</button></div></div></div>
+    
+    <div id="meta-ads-modal" class="modal" style="z-index: 4500;">
+        <div class="modal-icerik" style="max-width: 400px;">
+            <span class="kapat-btn" onclick="modaliKapat('meta-ads-modal')">&times;</span>
+            <h2 class="modal-baslik" style="color:#8e44ad;"><i class='bx bx-target-lock'></i> Meta Ads Kampanyası</h2>
+            <p style="color:var(--text-muted); font-size:13px; margin-bottom:15px;">Parayı basıp sosyal medyadaki araçlarını spesifik bir kitleye (3 gün boyunca) zorla gösterebilirsin. O kitle DM kutunu işgal edecektir.</p>
+            
+            <div style="display: flex; flex-direction: column; gap: 10px;">
+                <div class="modern-kutu" style="border: 2px solid #8e44ad; cursor: pointer; padding: 10px;" onclick="reklamKampanyasiBaslat('Zengin', 75000)">
+                    <h3 style="margin:0; color:#8e44ad;">🎩 Lüks Segment (Elitler)</h3>
+                    <div style="font-size:12px; color:var(--text-muted);">Sadece iş insanları ve holding sahiplerine gösterilir. (Büyük teklifler gelir).</div>
+                    <div style="margin-top:5px; font-weight:bold; color:#d63031;">Maliyet: 75.000 ₺</div>
+                </div>
+                
+                <div class="modern-kutu" style="border: 2px solid #2c3e50; cursor: pointer; padding: 10px;" onclick="reklamKampanyasiBaslat('Tayfa', 35000)">
+                    <h3 style="margin:0; color:#2c3e50;">😎 Genç & Modifiye Tayfası</h3>
+                    <div style="font-size:12px; color:var(--text-muted);">Tofaş ve F30 gruplarına sponsorlu düşersin. Araçta modifiye varsa üstüne atlarlar.</div>
+                    <div style="margin-top:5px; font-weight:bold; color:#d63031;">Maliyet: 35.000 ₺</div>
+                </div>
+
+                <div class="modern-kutu" style="border: 2px solid #e74c3c; cursor: pointer; padding: 10px;" onclick="reklamKampanyasiBaslat('Olucu', 10000)">
+                    <h3 style="margin:0; color:#e74c3c;">🤡 Hızlı Satış (Ölücüler/Al-Satçılar)</h3>
+                    <div style="font-size:12px; color:var(--text-muted);">Arabayı acil nakite çevirmek istiyorsan galerici gruplarına at. Fiyatı öldürürler ama hemen alırlar.</div>
+                    <div style="margin-top:5px; font-weight:bold; color:#d63031;">Maliyet: 10.000 ₺</div>
+                </div>
+            </div>
+        </div>
+    </div>
+
     <div id="hisse-islem-modal" class="modal" style="z-index: 4600;"><div class="modal-icerik" style="max-width: 400px; text-align: center;"><span class="kapat-btn" onclick="modaliKapat('hisse-islem-modal')">&times;</span><h2 class="modal-baslik" id="hisse-modal-baslik">Hisse İşlemi</h2><div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;"><div style="font-size: 24px; font-weight: bold; color: var(--text-main);" id="hisse-modal-kod">KOD</div><div style="color: var(--text-muted); font-size: 14px;" id="hisse-modal-isim">İsim</div><div style="margin-top: 10px; font-size: 24px; font-weight: bold; color: #0984e3;" id="hisse-modal-fiyat">0.00 ₺</div></div><div style="text-align: left; margin-bottom: 15px;"><label style="font-size: 13px; font-weight: bold; color: var(--text-main);">İşlem Adedi (Lot):</label><input type="number" id="hisse-modal-adet" oninput="hisseModalHesapla()" style="width: 100%; padding: 12px; margin-top: 5px; border: 2px solid rgba(0,0,0,0.1); border-radius: 8px; font-size: 16px; outline: none; box-sizing:border-box; background:transparent; color:var(--text-main);" value="100"><div id="hisse-modal-bilgi" style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Maksimum: 0 Lot</div></div><div style="background: #2d3436; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;"><div style="font-size: 13px; color: #bdc3c7;">Toplam İşlem Tutarı:</div><div style="font-size: 28px; font-weight: bold; color:#00b894;" id="hisse-modal-tutar">0 ₺</div></div><button class="btn btn-mavi" id="hisse-modal-onay-btn" style="padding: 15px; font-size: 18px;" onclick="hisseIslemOnayla()">Onayla</button></div></div>
     <div id="baslangic-modal" class="modal" style="display: none; background: rgba(0,0,0,0.9);"><div class="modal-icerik" style="text-align: center; max-width: 450px; padding: 40px; margin-top: 10%;"><h1 style="color: #0984e3; margin-top:0;">SahibindenMotors</h1><h2 style="color: var(--text-main); font-size: 20px;">Kendi Galerini Kur!</h2><input type="text" id="galeri-adi-input" placeholder="İsmini buraya yaz..." style="width: 100%; padding: 15px; border: 2px solid rgba(0,0,0,0.1); border-radius: 8px; font-size: 16px; margin-bottom: 20px; outline: none; box-sizing:border-box; background:transparent; color:var(--text-main);"><button class="btn btn-mavi" style="padding: 15px; font-size: 18px;" onclick="galeriAdiniKaydet()">🚀 Maceraya Başla</button></div></div>
     
@@ -165,93 +201,13 @@
         <div class="modal-icerik" style="max-width: 400px;">
             <span class="kapat-btn" onclick="modaliKapat('ayarlar-modal')">&times;</span>
             <h2 class="modal-baslik"><i class='bx bx-cog'></i> Oyun Ayarları</h2>
-            
-            <div style="text-align: left; margin-bottom: 20px;">
-                <h3 style="font-size: 14px; color: var(--primary); border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;"><i class='bx bx-volume-full'></i> Ses ve Medya</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
-                    <span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Oyun Ses Efektleri</span>
-                    <label class="switch">
-                        <input type="checkbox" id="ayar-ses" checked onchange="ayarDegistir('ses')">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div style="text-align: left; margin-bottom: 25px;">
-                <h3 style="font-size: 14px; color: var(--primary); border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;"><i class='bx bx-slider-alt'></i> Oynanış ve Arayüz (QoL)</h3>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
-                    <span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Kompakt Para Görünümü (15M ₺)</span>
-                    <label class="switch">
-                        <input type="checkbox" id="ayar-kompakt" onchange="ayarDegistir('kompakt')">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-                <div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;">
-                    <span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Hızlı Piyasa Yenileme (Uyarısız)</span>
-                    <label class="switch">
-                        <input type="checkbox" id="ayar-hizliyenile" onchange="ayarDegistir('hizliyenile')">
-                        <span class="slider round"></span>
-                    </label>
-                </div>
-            </div>
-
-            <div style="border: 2px dashed #d63031; padding: 15px; border-radius: 10px; text-align: center; background: rgba(214, 48, 49, 0.05);">
-                <h3 style="color: #d63031; margin-top: 0; font-size: 14px;"><i class='bx bx-error'></i> Tehlikeli Bölge</h3>
-                <p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Tüm holding ilerlemeni kalıcı olarak siler.</p>
-                <button class="btn btn-kirmizi" style="margin: 0;" onclick="oyunuSifirlaEkrani()"><i class='bx bx-trash'></i> İlerlemeyi Sıfırla</button>
-            </div>
+            <div style="text-align: left; margin-bottom: 20px;"><h3 style="font-size: 14px; color: var(--primary); border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;"><i class='bx bx-volume-full'></i> Ses ve Medya</h3><div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;"><span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Oyun Ses Efektleri</span><label class="switch"><input type="checkbox" id="ayar-ses" checked onchange="ayarDegistir('ses')"><span class="slider round"></span></label></div></div>
+            <div style="text-align: left; margin-bottom: 25px;"><h3 style="font-size: 14px; color: var(--primary); border-bottom: 1px solid rgba(0,0,0,0.1); padding-bottom: 5px;"><i class='bx bx-slider-alt'></i> Oynanış ve Arayüz (QoL)</h3><div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;"><span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Kompakt Para Görünümü (15M ₺)</span><label class="switch"><input type="checkbox" id="ayar-kompakt" onchange="ayarDegistir('kompakt')"><span class="slider round"></span></label></div><div style="display: flex; justify-content: space-between; align-items: center; padding: 10px 0;"><span style="font-weight: 600; font-size: 14px; color: var(--text-main);">Hızlı Piyasa Yenileme (Uyarısız)</span><label class="switch"><input type="checkbox" id="ayar-hizliyenile" onchange="ayarDegistir('hizliyenile')"><span class="slider round"></span></label></div></div>
+            <div style="border: 2px dashed #d63031; padding: 15px; border-radius: 10px; text-align: center; background: rgba(214, 48, 49, 0.05);"><h3 style="color: #d63031; margin-top: 0; font-size: 14px;"><i class='bx bx-error'></i> Tehlikeli Bölge</h3><p style="font-size: 12px; color: var(--text-muted); margin-bottom: 10px;">Tüm holding ilerlemeni kalıcı olarak siler.</p><button class="btn btn-kirmizi" style="margin: 0;" onclick="oyunuSifirlaEkrani()"><i class='bx bx-trash'></i> İlerlemeyi Sıfırla</button></div>
         </div>
     </div>
     
-    <div id="ilan-detay-modal" class="modal">
-        <div class="modal-icerik ilan-detay-icerik">
-            <span class="kapat-btn" onclick="modaliKapat('ilan-detay-modal')">&times;</span>
-            <div class="ilan-detay-grid">
-                <div class="ilan-sol">
-                    <img id="detay-foto" src="" style="width:100%; height:250px; object-fit:cover; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);">
-                    <div style="margin-top: 15px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05);">
-                        <h3 style="margin-top:0; font-size:15px; color:var(--text-main);"><i class='bx bx-slider'></i> Teknik & Donanım Opsiyonları</h3>
-                        <div id="detay-donanim" style="display: flex; flex-wrap: wrap; gap: 6px;"></div>
-                    </div>
-                    <div class="ilan-aciklama" style="margin-top: 15px;">
-                        <h3 style="margin-top:0; color:#d63031; font-size:16px;">Satıcının Açıklaması</h3>
-                        <p id="detay-aciklama" style="font-size: 13px; line-height: 1.6; color: var(--text-muted);"></p>
-                    </div>
-                </div>
-                <div class="ilan-sag">
-                    <h2 id="detay-baslik" style="margin-top:0; color:var(--text-main); font-size:22px;"></h2>
-                    <h1 id="detay-fiyat" style="color: #0984e3; margin: 5px 0 15px 0; font-size: 28px;"></h1>
-                    <ul class="detay-liste" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 15px; margin-bottom: 15px;">
-                        <li><span style="color:#b2bec3; font-size:11px;">Marka</span><br><strong id="detay-marka" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Seri</span><br><strong id="detay-model" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Yıl</span><br><strong id="detay-yil" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Kilometre</span><br><strong id="detay-km" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Vites</span><br><strong id="detay-vites" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Yakıt</span><br><strong id="detay-yakit" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Motor</span><br><strong id="detay-motor" style="color:var(--text-main);"></strong></li>
-                        <li><span style="color:#b2bec3; font-size:11px;">Güç</span><br><strong id="detay-hp" style="color:var(--text-main);"></strong></li>
-                    </ul>
-                    <div style="background: linear-gradient(135deg, rgba(241,242,246,0.5), rgba(223,230,233,0.5)); padding: 12px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #0984e3;">
-                        <div style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">🏦 Banka Finansman Uygunluğu</div>
-                        <div style="display: flex; justify-content: space-between; align-items: center;"><div><strong style="color: var(--text-main); font-size: 14px;">12 Ay Taksit İmkanı</strong></div><div id="detay-kredi-taksit" style="font-size: 16px; font-weight: bold; color: #0984e3;">0 ₺ / Ay</div></div>
-                    </div>
-                    <h3 style="margin-bottom: 10px; font-size:15px; color:var(--text-main);"><i class='bx bx-search-alt-2'></i> Oto Rapor Ekspertiz</h3>
-                    <div class="ekspertiz-arabasi">
-                        <div class="eks-row"><div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çam.</div><div class="eks-parca" id="eks-kaput">Kaput</div><div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çam.</div></div>
-                        <div class="eks-row"><div class="eks-parca" id="eks-solOnKapi">Sol Ön Kapı</div><div class="eks-parca" id="eks-tavan">Tavan</div><div class="eks-parca" id="eks-sagOnKapi">Sağ Ön Kapı</div></div>
-                        <div class="eks-row"><div class="eks-parca" id="eks-solArkaKapi">Sol Arka Kapı</div><div class="eks-parca" id="eks-bagaj">Bagaj</div><div class="eks-parca" id="eks-sagArkaKapi">Sağ Arka Kapı</div></div>
-                        <div class="eks-row"><div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Ç.</div><div class="eks-parca" style="visibility:hidden;"></div><div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Ç.</div></div>
-                    </div>
-                    <div class="ekspertiz-lejant" style="margin-bottom: 15px;"><span style="color:var(--text-main);">⚪ Orijinal</span> <span style="color:#f39c12;">🟡 Lokal</span> <span style="color:#3498db;">🔵 Boyalı</span> <span style="color:#e74c3c;">🔴 Değişen</span></div>
-                    <div style="display: flex; flex-direction: column; gap: 8px;">
-                        <div style="display: flex; gap: 8px;"><button id="detay-tramer-btn" class="btn" style="flex: 1; background:#34495e; color:white; font-size:13px; margin:0;"><i class='bx bx-message-rounded-dots'></i> Tramer (150 ₺)</button><button id="detay-edevlet-btn" class="btn" style="flex: 1; background:#c0392b; color:white; font-size:13px; margin:0;"><i class='bx bxs-institution'></i> e-Devlet (250 ₺)</button></div>
-                        <button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:15px; margin:0;"><i class='bx bxs-phone-call'></i> Satıcıyla Pazarlığa Otur</button>
-                        <button id="detay-hakan-abi-btn" class="btn" style="background:#2d3436; color:#f1c40f; font-size:14px; margin:0;"><i class='bx bxs-crown'></i> Hakan Abi'ye Çöktürt</button>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
+    <div id="ilan-detay-modal" class="modal"><div class="modal-icerik ilan-detay-icerik"><span class="kapat-btn" onclick="modaliKapat('ilan-detay-modal')">&times;</span><div class="ilan-detay-grid"><div class="ilan-sol"><img id="detay-foto" src="" style="width:100%; height:250px; object-fit:cover; border-radius:12px; box-shadow: 0 4px 10px rgba(0,0,0,0.1);"><div style="margin-top: 15px; background: rgba(0,0,0,0.02); padding: 15px; border-radius: 10px; border: 1px solid rgba(0,0,0,0.05);"><h3 style="margin-top:0; font-size:15px; color:var(--text-main);"><i class='bx bx-slider'></i> Teknik & Donanım Opsiyonları</h3><div id="detay-donanim" style="display: flex; flex-wrap: wrap; gap: 6px;"></div></div><div class="ilan-aciklama" style="margin-top: 15px;"><h3 style="margin-top:0; color:#d63031; font-size:16px;">Satıcının Açıklaması</h3><p id="detay-aciklama" style="font-size: 13px; line-height: 1.6; color: var(--text-muted);"></p></div></div><div class="ilan-sag"><h2 id="detay-baslik" style="margin-top:0; color:var(--text-main); font-size:22px;"></h2><h1 id="detay-fiyat" style="color: #0984e3; margin: 5px 0 15px 0; font-size: 28px;"></h1><ul class="detay-liste" style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 15px; margin-bottom: 15px;"><li><span style="color:#b2bec3; font-size:11px;">Marka</span><br><strong id="detay-marka" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Seri</span><br><strong id="detay-model" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Yıl</span><br><strong id="detay-yil" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Kilometre</span><br><strong id="detay-km" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Vites</span><br><strong id="detay-vites" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Yakıt</span><br><strong id="detay-yakit" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Motor</span><br><strong id="detay-motor" style="color:var(--text-main);"></strong></li><li><span style="color:#b2bec3; font-size:11px;">Güç</span><br><strong id="detay-hp" style="color:var(--text-main);"></strong></li></ul><div style="background: linear-gradient(135deg, rgba(241,242,246,0.5), rgba(223,230,233,0.5)); padding: 12px; border-radius: 10px; margin-bottom: 15px; border-left: 4px solid #0984e3;"><div style="font-size: 11px; color: var(--text-muted); margin-bottom: 5px; text-transform: uppercase; letter-spacing: 1px;">🏦 Banka Finansman Uygunluğu</div><div style="display: flex; justify-content: space-between; align-items: center;"><div><strong style="color: var(--text-main); font-size: 14px;">12 Ay Taksit İmkanı</strong></div><div id="detay-kredi-taksit" style="font-size: 16px; font-weight: bold; color: #0984e3;">0 ₺ / Ay</div></div></div><h3 style="margin-bottom: 10px; font-size:15px; color:var(--text-main);"><i class='bx bx-search-alt-2'></i> Oto Rapor Ekspertiz</h3><div class="ekspertiz-arabasi"><div class="eks-row"><div class="eks-parca" id="eks-solOnCamurluk">Sol Ön Çam.</div><div class="eks-parca" id="eks-kaput">Kaput</div><div class="eks-parca" id="eks-sagOnCamurluk">Sağ Ön Çam.</div></div><div class="eks-row"><div class="eks-parca" id="eks-solOnKapi">Sol Ön Kapı</div><div class="eks-parca" id="eks-tavan">Tavan</div><div class="eks-parca" id="eks-sagOnKapi">Sağ Ön Kapı</div></div><div class="eks-row"><div class="eks-parca" id="eks-solArkaKapi">Sol Arka Kapı</div><div class="eks-parca" id="eks-bagaj">Bagaj</div><div class="eks-parca" id="eks-sagArkaKapi">Sağ Arka Kapı</div></div><div class="eks-row"><div class="eks-parca" id="eks-solArkaCamurluk">Sol Arka Ç.</div><div class="eks-parca" style="visibility:hidden;"></div><div class="eks-parca" id="eks-sagArkaCamurluk">Sağ Arka Ç.</div></div></div><div class="ekspertiz-lejant" style="margin-bottom: 15px;"><span style="color:var(--text-main);">⚪ Orijinal</span> <span style="color:#f39c12;">🟡 Lokal</span> <span style="color:#3498db;">🔵 Boyalı</span> <span style="color:#e74c3c;">🔴 Değişen</span></div><div style="display: flex; flex-direction: column; gap: 8px;"><div style="display: flex; gap: 8px;"><button id="detay-tramer-btn" class="btn" style="flex: 1; background:#34495e; color:white; font-size:13px; margin:0;"><i class='bx bx-message-rounded-dots'></i> Tramer (150 ₺)</button><button id="detay-edevlet-btn" class="btn" style="flex: 1; background:#c0392b; color:white; font-size:13px; margin:0;"><i class='bx bxs-institution'></i> e-Devlet (250 ₺)</button></div><button id="detay-satici-ara-btn" class="btn btn-yesil" style="font-size:15px; margin:0;"><i class='bx bxs-phone-call'></i> Satıcıyla Pazarlığa Otur</button><button id="detay-hakan-abi-btn" class="btn" style="background:#2d3436; color:#f1c40f; font-size:14px; margin:0;"><i class='bx bxs-crown'></i> Hakan Abi'ye Çöktürt</button></div></div></div></div></div>
 
     <div id="telefon-modal" class="modal" style="z-index: 3000;"><div class="modal-icerik telefon-ekrani"><h3 id="tel-aranan-kisi" style="margin-top: 10px; color: #bdc3c7; font-weight: 400; font-size: 16px;">Aranıyor...</h3><div class="tel-profil-resmi"><i class='bx bxs-user'></i></div><div id="tel-bekleme-animasyonu" class="pulse"></div><p id="tel-diyalog" style="font-size: 15px; line-height: 1.6; min-height: 80px; margin-bottom: 25px; padding: 0 10px;">Dıt... Dıt... Dıt...</p><div id="tel-aksiyonlar" style="display: flex; flex-direction: column; gap: 10px; display: none;"></div><button class="btn btn-kirmizi" style="margin-top: 20px; border-radius: 30px; padding: 12px; font-size: 16px;" onclick="telefonuKapat()"><i class='bx bxs-phone-off'></i> Kapat</button></div></div>
     <div id="takas-secim-modal" class="modal" style="z-index: 4000;"><div class="modal-icerik"><span class="kapat-btn" onclick="modaliKapat('takas-secim-modal')">&times;</span><h2 class="modal-baslik"><i class='bx bx-transfer'></i> Takasa Vereceğin Aracı Seç</h2><div id="takas-araba-listesi" class="ilan-listesi"></div></div></div>
