@@ -37,7 +37,7 @@ const modifiyePaketleri = [ { id: 1, isim: "Cam Filmi & Seramik Boya", ikon: "�
 const aracSablonlari = [ { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "img/bmw-320i.jpg" }, { marka: "Mercedes", model: "C200", tabanFiyat: 4100000, gorsel: "img/mercedes-c200.jpg" }, { marka: "Audi", model: "A3", tabanFiyat: 2400000, gorsel: "img/audi-a3.jpg" }, { marka: "Volkswagen", model: "Golf", tabanFiyat: 1850000, gorsel: "img/golf.jpg" }, { marka: "Renault", model: "Megane", tabanFiyat: 1400000, gorsel: "img/megane.jpg" }, { marka: "Fiat", model: "Egea", tabanFiyat: 1100000, gorsel: "img/egea.jpg" }, { marka: "Toyota", model: "Corolla", tabanFiyat: 1550000, gorsel: "img/corolla.jpg" }, { marka: "Honda", model: "Civic", tabanFiyat: 1750000, gorsel: "img/civic.jpg" }, { marka: "Citroën", model: "C3 Aircross 1.2 Hybrid", tabanFiyat: 1650000, gorsel: "img/c3-aircross.jpg" } ];
 
 // YENİ: Eşsiz İsim Üretme Motoru
-const isimler Havuzu = ["Ahmet", "Mehmet", "Can", "Burak", "Kemal", "Mert", "Mahmut", "Şahin", "Oğuz", "Cengiz", "Kadir", "Cem", "Orhan", "Hasan", "Hüseyin", "Emre", "Volkan", "Serkan", "Yasin", "Ali", "Veli", "Baturalp", "Muhammed", "Çağatay", "Asel", "Zeynep", "Selin", "Elif"];
+const isimlerHavuzu = ["Ahmet", "Mehmet", "Can", "Burak", "Kemal", "Mert", "Mahmut", "Şahin", "Oğuz", "Cengiz", "Kadir", "Cem", "Orhan", "Hasan", "Hüseyin", "Emre", "Volkan", "Serkan", "Yasin", "Ali", "Veli", "Baturalp", "Muhammed", "Çağatay", "Asel", "Zeynep", "Selin", "Elif"];
 const soyisimlerHavuzu = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Öztürk", "Kılıç", "Arslan", "Aydın", "Yıldız", "Erdoğan", "Can", "Polat", "Olça", "Koç", "Bulut", "Turan", "Yavuz", "Güler"];
 
 function musteriIsmiUret(araba) {
