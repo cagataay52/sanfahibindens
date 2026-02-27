@@ -14,6 +14,12 @@
     --shadow-hover: 0 15px 30px rgba(0,0,0,0.12);
     --radius: 14px;
     --transition: all 0.3s ease;
+    /* =========================================================
+   MOBİL ÇİFT TIKLAMA VE YAKINLAŞTIRMA ENGELLEYİCİ
+========================================================= */
+html, body, button, input, select, .btn, .bottom-nav-item, .ilan-karti, .kapat-btn, .ayarlar-btn {
+    touch-action: manipulation !important;
+}
 }
 
 body { background-color: var(--bg-color); color: var(--text-main); font-family: 'Poppins', sans-serif; margin: 0; padding: 0; overflow-x: hidden; transition: background-color 0.3s, color 0.3s; }
