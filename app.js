@@ -614,16 +614,80 @@ function ihaleBitir() { if(ihaleInterval) clearInterval(ihaleInterval); modaliKa
 function ihaledenCekil() { if(ihaleInterval) clearInterval(ihaleInterval); ihaleAraba = null; ihaleInterval = null; modaliKapat('ihale-modal'); aktifEkraniYenile(); }
 
 // ==========================================
-// BAŞLANGIÇ
+// 12. ANA MENÜ VE BAŞLANGIÇ SİSTEMİ
 // ==========================================
 function oyunuBaslat() {
-    if (!oyunuYukle()) { document.getElementById('baslangic-modal').style.display = 'block'; } 
-    else { document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`; if (arabalar.length === 0) piyasayiYenile(); borsaBaslat(); aktifEkraniYenile(); menuDegistir('pazar'); }
-}
-function galeriAdiniKaydet() {
-    let ad = document.getElementById('galeri-adi-input').value; if (ad.trim() === "") return; galeriAdi = ad;
-    document.getElementById('baslangic-modal').style.display = 'none'; document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
-    piyasayiYenile(); oyunuKaydet(); borsaBaslat(); aktifEkraniYenile(); menuDegistir('pazar'); 
+    // Tarayıcıda kayıt var mı kontrol et
+    const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
+    
+    // Eğer kayıt varsa "Devam Et" butonunu göster
+    if (eskiKayit && eskiKayit.galeriAdi) {
+        document.getElementById('btn-devam-et').style.display = 'block';
+    }
 }
 
+function oyunaDevamEt() {
+    oyunSesi('dokun');
+    oyunuYukle(); 
+    document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`; 
+    if (arabalar.length === 0) piyasayiYenile(); 
+    borsaBaslat(); aktifEkraniYenile(); menuDegistir('pazar');
+    
+    // Ana menüyü havalı bir animasyonla gizle
+    let menu = document.getElementById('ana-menu-ekrani');
+    menu.style.opacity = '0';
+    menu.style.transform = 'scale(1.1)';
+    setTimeout(() => { menu.style.display = 'none'; }, 600);
+}
+
+function yeniOyunKurulumAc() {
+    oyunSesi('dokun');
+    const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
+    if(eskiKayit && eskiKayit.galeriAdi) {
+        if(!window.confirm("DİKKAT! Yeni kariyere başlarsan mevcut holdingin kalıcı olarak SİLİNECEK. Emin misin?")) return;
+    }
+    document.getElementById('ana-menu-butonlar').style.display = 'none';
+    document.getElementById('ana-menu-yeni-oyun').style.display = 'block';
+}
+
+function yeniOyunIptal() {
+    oyunSesi('dokun');
+    document.getElementById('ana-menu-yeni-oyun').style.display = 'none';
+    document.getElementById('ana-menu-butonlar').style.display = 'flex';
+}
+
+function yeniKariyerBaslat() {
+    let ad = document.getElementById('yeni-galeri-adi').value; 
+    if (ad.trim() === "") { ozelUyari("Galerin için bir isim bulmalısın!", "hata"); return; } 
+    
+    oyunSesi('kasa');
+    
+    // Tüm verileri tertemiz sıfırla
+    window.localStorage.removeItem('sahibindenMotorsKayit');
+    galeriAdi = ad; 
+    paramiz = 15000000; bankaBorcu = 0; garaj = []; gun = 1; idSayaci = 1; 
+    toplamSatilanArac = 0; toplamGelir = 0; toplamGider = 0; dukkanSeviyesi = 1; aracKapasitesi = 2;
+    arabalar = []; hakanAbiSonKullanim = -15; piyasaDurumu = "Normal"; piyasaCarpani = 1.0; 
+    haritaPuani = 5.0; gizliKusurluAraclar = []; euroKuru = 38.50; euroBakiye = 0; senetler = []; rentACarFilosu = []; 
+    personeller = { usta: false, smUzman: false, satisTemsilci: false, vale: false, eksper: false, avukat: false }; personelMorali = 100;
+    sosyalMedya = { aktif: false, platform: "", kullaniciAdi: "", takipci: 0, populerlik: 0, maviTik: false, lincKalanGun: 0, gonderiler: [], takipciGecmisi: [0,0,0,0,0,0,0] }; dmKutusu = [];
+    aktifReklam = { aktif: false, kitle: "", kalanGun: 0 }; aktifSponsor = { aktif: false, isim: "", gunlukGetiri: 0, kalanGun: 0 }; sponsorlukTeklifleri = [];
+    krediNotu = 900; eksiBakiyeGun = 0; krediler = []; mevduat = {aktif: false, anapara: 0, kalanGun: 0, faizOrani: 0.15};
+    vergiBorcu = 0; gecikmisVergiGun = 0; eHacizAktif = false; sabikaliSatislar = []; 
+    ayarlar = { sesAcik: true, kompaktPara: false, hizliYenile: false };
+    
+    borsa = [ {kod: 'TOASO', isim: 'Tofaş Oto Fab.', fiyat: 250.00, eskiFiyat: 250.00, degisim: 0, portfoyAdet: 0, maliyet: 0}, {kod: 'FROTO', isim: 'Ford Otosan', fiyat: 950.00, eskiFiyat: 950.00, degisim: 0, portfoyAdet: 0, maliyet: 0}, {kod: 'DOAS', isim: 'Doğuş Otomotiv', fiyat: 280.00, eskiFiyat: 280.00, degisim: 0, portfoyAdet: 0, maliyet: 0}, {kod: 'SASA', isim: 'Sasa Polyester', fiyat: 45.00, eskiFiyat: 45.00, degisim: 0, portfoyAdet: 0, maliyet: 0} ];
+
+    document.getElementById('header-logo').innerHTML = `${galeriAdi}<span>Motors</span>`;
+    
+    piyasayiYenile(); oyunuKaydet(); borsaBaslat(); aktifEkraniYenile(); menuDegistir('pazar');
+    
+    // Ana menüyü kapat
+    let menu = document.getElementById('ana-menu-ekrani');
+    menu.style.opacity = '0';
+    menu.style.transform = 'scale(1.1)';
+    setTimeout(() => { menu.style.display = 'none'; }, 600);
+}
+
+// Oyunu çalıştıran ilk tetikleme
 oyunuBaslat();
