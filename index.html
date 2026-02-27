@@ -82,7 +82,30 @@
 
             <div id="istatistik-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">Galeri İstatistikleri</h2><div class="modern-kutu"><p>Satılan Toplam Araç: <b id="ist-satilan" style="color:#3498db; font-size: 20px;">0</b></p><p>Toplam Gelir: <b id="ist-gelir" style="color:#27ae60;">0</b> TL</p><p>Toplam Gider: <b id="ist-gider" style="color:#e74c3c;">0</b> TL</p><hr><h3 style="font-size: 26px;">Net Kâr: <span id="ist-net">0</span> TL</h3></div></div>
             <div id="rentacar-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">🔑 Rent A Car Filom</h2><div class="uyari-mesaji" id="rentacar-bilgi">Şu an kirada hiç aracın yok.</div><div id="rentacar-listesi" class="ilan-listesi"></div></div>
-            <div id="personel-ekrani" class="sayfa" style="display: none;"><h2 class="sayfa-basligi">👔 Personel Yönetimi</h2><div style="display: flex; gap: 15px; flex-wrap: wrap;"><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;"><i class='bx bx-wrench' style="font-size:40px; color:#2d3436;"></i><h3 style="color: var(--text-main);">Usta Başı</h3><div id="btn-personel-usta"></div></div><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;"><i class='bx bx-laptop' style="font-size:40px; color:#0984e3;"></i><h3 style="color: #0984e3;">Sosyal Medya Uzmanı</h3><div id="btn-personel-sm"></div></div><div class="modern-kutu" style="flex: 1; min-width: 250px; text-align: center;"><i class='bx bx-briefcase' style="font-size:40px; color:#27ae60;"></i><h3 style="color: #27ae60;">Satış Temsilcisi</h3><div id="btn-personel-satis"></div></div></div></div>
+           <div id="personel-ekrani" class="sayfa" style="display: none;">
+                <h2 class="sayfa-basligi">👔 Personel & İK Yönetimi</h2>
+                
+                <div class="modern-kutu" style="display:flex; justify-content:space-between; align-items:center; background: linear-gradient(135deg, rgba(45, 52, 54, 0.8), rgba(30, 39, 46, 0.8)); color: white; border: 1px solid rgba(255,255,255,0.2);">
+                    <div style="flex:1;">
+                        <h3 style="margin: 0 0 5px 0;"><i class='bx bx-smile'></i> Şirket Genel Morali</h3>
+                        <div style="width: 100%; max-width:300px; height: 12px; background: rgba(255,255,255,0.2); border-radius: 6px; overflow: hidden; margin-top:10px;">
+                            <div id="moral-bar" style="width: 100%; height: 100%; background: #00b894; transition: width 0.5s, background-color 0.5s;"></div>
+                        </div>
+                        <div id="moral-text" style="font-size: 13px; margin-top: 5px; color: #dfe6e9;">Durum: Mükemmel (%100)</div>
+                    </div>
+                    <button class="btn btn-yesil" style="width:auto; margin:0; padding:15px; font-size:14px;" onclick="primDagit()"><i class='bx bx-money'></i> Prim Dağıt (15.000 ₺)</button>
+                </div>
+
+                <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(220px, 1fr)); gap: 15px;">
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bx-wrench' style="font-size:40px; color:var(--text-main);"></i><h3 style="color: var(--text-main);">Usta Başı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Tamirleri ucuzlatır, sanayi kazıklarını önler.<br><b>(Aylık 25.000 ₺)</b></div><div id="btn-personel-usta"></div></div>
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bx-laptop' style="font-size:40px; color:#0984e3;"></i><h3 style="color: #0984e3;">Sosyal Medya Uzm.</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Sayfayı büyütür, DM'den yüksek teklif getirir.<br><b>(Aylık 15.000 ₺)</b></div><div id="btn-personel-sm"></div></div>
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bx-briefcase' style="font-size:40px; color:#27ae60;"></i><h3 style="color: #27ae60;">Satış Temsilcisi</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Ölücüleri dükkandan kovar, zenginleri çeker.<br><b>(Aylık 30.000 ₺)</b></div><div id="btn-personel-satis"></div></div>
+                    
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-spray-can' style="font-size:40px; color:#f39c12;"></i><h3 style="color: #f39c12;">Vale / Yıkamacı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Garajı parlatır, araçlara gelen teklifler %3 artar.<br><b>(Aylık 10.000 ₺)</b></div><div id="btn-personel-vale"></div></div>
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-check-shield' style="font-size:40px; color:#8e44ad;"></i><h3 style="color: #8e44ad;">Özel Eksper</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Gizli rehin/hasarları bedavaya anında çözer.<br><b>(Aylık 20.000 ₺)</b></div><div id="btn-personel-eksper"></div></div>
+                    <div class="modern-kutu" style="text-align: center;"><i class='bx bxs-briefcase-alt-2' style="font-size:40px; color:#c0392b;"></i><h3 style="color: #c0392b;">Şirket Avukatı</h3><div style="font-size:11px; color:var(--text-muted); margin-bottom:15px; min-height:35px;">Haczi geciktirir, davaları %85 oranında kazandırır.<br><b>(Aylık 40.000 ₺)</b></div><div id="btn-personel-avukat"></div></div>
+                </div>
+            </div>
 
             <div id="sosyal-ekrani" class="sayfa" style="display: none;">
                 <h2 class="sayfa-basligi">📱 Sosyal Medya Yönetimi</h2>
