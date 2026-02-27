@@ -16,22 +16,24 @@
 <body>
     <div id="mobil-menu-overlay" onclick="mobilMenuKapatAc()"></div>
 
-    <header class="sari-baslik">
+<header class="sari-baslik">
         <div class="header-icerik">
             <div class="mobil-ust-satir">
-                <div class="hamburger-btn" onclick="mobilMenuKapatAc()"><i class='bx bx-menu'></i></div>
+                <div class="hamburger-btn" onclick="mobilMenuKapatAc()"><i class='bx bx-menu-alt-left' style="font-size: 28px;"></i></div>
                 <h1 class="logo" id="header-logo">Yükleniyor<span>...</span></h1>
-                <div onclick="geceModuGecis()" class="ayarlar-btn" title="Gece/Gündüz Modu" id="btn-gece-modu">🌙</div>
-                <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-gizle" title="Ayarlar"><i class='bx bx-cog'></i></div>
+                <div class="mobil-ust-sag" style="display: flex; gap: 8px;">
+                    <div onclick="geceModuGecis()" class="ayarlar-btn" title="Gece/Gündüz Modu" id="btn-gece-modu">🌙</div>
+                    <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-gizle" title="Ayarlar"><i class='bx bx-cog'></i></div>
+                </div>
             </div>
             <div class="arama-cubugu masaustu-goster"><input type="text" placeholder="Kelime veya ilan no ile ara..." disabled><button>Ara</button></div>
             
             <div class="kullanici-bilgi">
+                <div class="bilgi-kutu bakiye"><i class='bx bx-wallet' style="font-size:18px;"></i> <span id="paramiz" style="transition: color 0.3s;">15.000.000</span> ₺</div>
+                <div class="bilgi-kutu" style="color: #2980b9; border: 1px solid rgba(255,255,255,0.4);"><i class='bx bx-euro' style="font-size:18px;"></i> <span id="euro-bakiye">0</span></div>
+                <div class="bilgi-kutu" style="color: #f39c12; border: 1px solid rgba(255,255,255,0.4);"><i class='bx bxs-star' style="font-size:18px;"></i> <span id="harita-puan">5.0</span></div>
                 <div class="bilgi-kutu kapasite-kutu"><i class='bx bxs-car-garage' style="font-size:18px; color:var(--primary);"></i> <span id="kapasite-bilgi">0/2</span></div>
                 <div class="bilgi-kutu gun-kutu"><i class='bx bx-calendar' style="font-size:18px; color:var(--text-main);"></i> <span class="masaustu-goster-inline">Gün: </span><span id="gun">1</span></div>
-                <div class="bilgi-kutu" style="color: #f39c12; border: 1px solid rgba(255,255,255,0.4);"><i class='bx bxs-star' style="font-size:18px;"></i> <span id="harita-puan">5.0</span></div>
-                <div class="bilgi-kutu" style="color: #2980b9; border: 1px solid rgba(255,255,255,0.4);"><i class='bx bx-euro' style="font-size:18px;"></i> <span id="euro-bakiye">0</span></div>
-                <div class="bilgi-kutu bakiye"><i class='bx bx-wallet' style="font-size:18px;"></i> <span id="paramiz" style="transition: color 0.3s;">15.000.000</span> ₺</div>
                 <div onclick="ayarlarModalAc()" class="ayarlar-btn masaustu-goster" title="Ayarlar"><i class='bx bx-cog'></i></div>
             </div>
         </div>

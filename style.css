@@ -438,3 +438,70 @@ body.dark-mode .uyari-mesaji {
         color: #fff;
     }
 }
+
+/* =========================================================
+   V7.2 MOBİL NATIVE HEADER TASARIMI (SWIPEABLE PILLS)
+========================================================= */
+@media (max-width: 768px) {
+    /* Header'ı biraz incelt ve iç boşlukları ayarla */
+    .sari-baslik {
+        padding: 10px 15px !important;
+    }
+    
+    /* Logo ortada, butonlar kenarlarda kalsın */
+    .mobil-ust-satir {
+        position: relative;
+        display: flex;
+        justify-content: space-between !important;
+        align-items: center;
+        border-bottom: none !important;
+        padding-bottom: 5px !important;
+        margin-bottom: 10px;
+    }
+    
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px !important;
+        white-space: nowrap;
+    }
+
+    /* BİLGİ KUTULARI (Yatay Kaydırılabilir Ekran) */
+    .kullanici-bilgi {
+        display: flex;
+        flex-wrap: nowrap !important; /* Alt satıra inmesini engeller */
+        overflow-x: auto; /* Yatay kaydırma açar */
+        overflow-y: hidden;
+        -webkit-overflow-scrolling: touch; /* Mobilde yağ gibi kaysın diye */
+        scrollbar-width: none; /* Firefox için scrollbar gizleme */
+        gap: 10px !important;
+        justify-content: flex-start !important;
+        padding-bottom: 5px; /* Gölgenin kesilmemesi için */
+        width: 100%;
+    }
+    
+    /* Chrome/Safari için scrollbar gizleme */
+    .kullanici-bilgi::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Kapsül Tasarımları (Küçültüldü ve Yatay Hale Getirildi) */
+    .bilgi-kutu {
+        flex: 0 0 auto !important; /* Kutuların sıkışıp daralmasını engeller */
+        flex-direction: row !important; /* İçeriği yan yana dizer */
+        padding: 8px 16px !important;
+        border-radius: 20px !important;
+        font-size: 13px !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
+    }
+
+    .bilgi-kutu.bakiye {
+        font-size: 15px !important;
+    }
+    
+    /* İçeriklerin üstten fazla boşluk bırakmasını engelleme */
+    .ana-konteyner {
+        margin-top: 5px !important;
+    }
+}
