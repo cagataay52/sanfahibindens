@@ -1,5 +1,5 @@
 // ==========================================
-// 1. GENEL AYARLAR VE DEĞİŞKENLER (V6.9 PREMIUM)
+// 1. GENEL AYARLAR VE DEĞİŞKENLER (V7.0 BUG FIX & PREMIUM)
 // ==========================================
 let galeriAdi = "Benim"; let paramiz = 15000000; let bankaBorcu = 0; let garaj = []; let gun = 1; let idSayaci = 1; 
 let toplamSatilanArac = 0; let toplamGelir = 0; let toplamGider = 0; let dukkanSeviyesi = 1; let aracKapasitesi = 2;
@@ -8,9 +8,9 @@ let arabalar = []; let hakanAbiSonKullanim = -15; const noterUcreti = 2500;
 let piyasaDurumu = "Normal"; let piyasaCarpani = 1.0; let aylikFaturalar = 4500; let sigortaVeMtvUcreti = 4000;
 let haritaPuani = 5.0; let gizliKusurluAraclar = []; 
 let euroKuru = 38.50; let euroBakiye = 0; let senetler = [];
-
-// YENİ: Personeller ve Moral Sistemi Eklendi
 let rentACarFilosu = []; 
+
+// Personel ve Moral Sistemi
 let personeller = { usta: false, smUzman: false, satisTemsilci: false, vale: false, eksper: false, avukat: false };
 let personelMorali = 100;
 
@@ -36,14 +36,14 @@ const seviyeler = [ { seviye: 1, isim: "Sokak Arası Galeri", kapasite: 2, fiyat
 const modifiyePaketleri = [ { id: 1, isim: "Cam Filmi & Seramik Boya", ikon: "✨", maliyet: 25000, degerArtisi: 60000 }, { id: 2, isim: "Spor Çelik Jant & Lastik", ikon: "🛞", maliyet: 55000, degerArtisi: 130000 }, { id: 3, isim: "Stage 1 Yazılım & Egzoz", ikon: "💻", maliyet: 90000, degerArtisi: 220000 } ];
 const aracSablonlari = [ { marka: "BMW", model: "320i", tabanFiyat: 3800000, gorsel: "img/bmw-320i.jpg" }, { marka: "Mercedes", model: "C200", tabanFiyat: 4100000, gorsel: "img/mercedes-c200.jpg" }, { marka: "Audi", model: "A3", tabanFiyat: 2400000, gorsel: "img/audi-a3.jpg" }, { marka: "Volkswagen", model: "Golf", tabanFiyat: 1850000, gorsel: "img/golf.jpg" }, { marka: "Renault", model: "Megane", tabanFiyat: 1400000, gorsel: "img/megane.jpg" }, { marka: "Fiat", model: "Egea", tabanFiyat: 1100000, gorsel: "img/egea.jpg" }, { marka: "Toyota", model: "Corolla", tabanFiyat: 1550000, gorsel: "img/corolla.jpg" }, { marka: "Honda", model: "Civic", tabanFiyat: 1750000, gorsel: "img/civic.jpg" }, { marka: "Citroën", model: "C3 Aircross 1.2 Hybrid", tabanFiyat: 1650000, gorsel: "img/c3-aircross.jpg" } ];
 
-// YENİ: Eşsiz İsim Üretme Motoru
+// İSİM BOŞLUK BUGU GİDERİLDİ
 const isimlerHavuzu = ["Ahmet", "Mehmet", "Can", "Burak", "Kemal", "Mert", "Mahmut", "Şahin", "Oğuz", "Cengiz", "Kadir", "Cem", "Orhan", "Hasan", "Hüseyin", "Emre", "Volkan", "Serkan", "Yasin", "Ali", "Veli", "Baturalp", "Muhammed", "Çağatay", "Asel", "Zeynep", "Selin", "Elif"];
 const soyisimlerHavuzu = ["Yılmaz", "Kaya", "Demir", "Çelik", "Şahin", "Öztürk", "Kılıç", "Arslan", "Aydın", "Yıldız", "Erdoğan", "Can", "Polat", "Olça", "Koç", "Bulut", "Turan", "Yavuz", "Güler"];
 
 function musteriIsmiUret(araba) {
     let mevcutIsimler = araba && araba.teklifler ? araba.teklifler.map(t => t.musteri) : [];
     let isim = "";
-    for(let i=0; i<50; i++) { // Aynı kişiden iki teklif gelmemesi için kontrol eder
+    for(let i=0; i<50; i++) {
         isim = isimlerHavuzu[Math.floor(Math.random() * isimlerHavuzu.length)] + " " + soyisimlerHavuzu[Math.floor(Math.random() * soyisimlerHavuzu.length)];
         if(!mevcutIsimler.includes(isim)) break;
     }
@@ -94,10 +94,14 @@ if(localStorage.getItem('sm_gece_modu') === 'aktif') { document.body.classList.a
 document.addEventListener('click', () => { if ("Notification" in window && Notification.permission !== "granted" && Notification.permission !== "denied") Notification.requestPermission(); }, { once: true });
 
 function ekraniGuncelle() {
+    // YENİ: VİRGÜLLÜ KÜSÜRAT BUGU BURADA TAMAMEN YOK EDİLİR (Math.round)
+    paramiz = Math.round(paramiz);
+    euroBakiye = Math.round(euroBakiye);
+    
     let prm = document.getElementById('paramiz'); if(prm) { prm.innerText = paramiz.toLocaleString('tr-TR'); prm.style.color = paramiz < 0 ? '#e74c3c' : '#00b894'; }
     let kps = document.getElementById('kapasite-bilgi'); if(kps) { let toplam = garaj.length + rentACarFilosu.length; kps.innerText = toplam + " / " + (aracKapasitesi === 999 ? "Sınırsız" : aracKapasitesi); kps.style.color = (toplam >= aracKapasitesi && aracKapasitesi !== 999) ? '#e74c3c' : '#0984e3'; }
     let hp = document.getElementById('harita-puan'); if(hp) hp.innerText = haritaPuani.toFixed(1);
-    let eb = document.getElementById('euro-bakiye'); if(eb) eb.innerText = Math.floor(euroBakiye).toLocaleString('tr-TR');
+    let eb = document.getElementById('euro-bakiye'); if(eb) eb.innerText = euroBakiye.toLocaleString('tr-TR');
 }
 
 function aktifEkraniYenile() {
@@ -137,14 +141,14 @@ function oyunuKaydet() {
 function oyunuYukle() {
     const eskiKayit = JSON.parse(localStorage.getItem('sahibindenMotorsKayit'));
     if (eskiKayit && eskiKayit.galeriAdi) {
-        galeriAdi = eskiKayit.galeriAdi; paramiz = eskiKayit.paramiz || 0; bankaBorcu = eskiKayit.bankaBorcu || 0; 
+        galeriAdi = eskiKayit.galeriAdi; paramiz = Math.round(eskiKayit.paramiz) || 0; bankaBorcu = eskiKayit.bankaBorcu || 0; 
         garaj = eskiKayit.garaj || []; gun = eskiKayit.gun || 1; dukkanSeviyesi = eskiKayit.dukkanSeviyesi || 1; 
         aracKapasitesi = eskiKayit.aracKapasitesi || 2; toplamSatilanArac = eskiKayit.toplamSatilanArac || 0; 
         toplamGelir = eskiKayit.toplamGelir || 0; toplamGider = eskiKayit.toplamGider || 0; arabalar = eskiKayit.arabalar || []; 
         idSayaci = eskiKayit.idSayaci || 1; hakanAbiSonKullanim = eskiKayit.hakanAbiSonKullanim || -15; 
         piyasaDurumu = eskiKayit.piyasaDurumu || "Normal"; piyasaCarpani = eskiKayit.piyasaCarpani || 1.0; 
         haritaPuani = eskiKayit.haritaPuani || 5.0; gizliKusurluAraclar = eskiKayit.gizliKusurluAraclar || []; 
-        euroKuru = eskiKayit.euroKuru || 38.50; euroBakiye = eskiKayit.euroBakiye || 0; senetler = eskiKayit.senetler || []; 
+        euroKuru = eskiKayit.euroKuru || 38.50; euroBakiye = Math.round(eskiKayit.euroBakiye) || 0; senetler = eskiKayit.senetler || []; 
         rentACarFilosu = eskiKayit.rentACarFilosu || []; 
         
         personeller = eskiKayit.personeller || { usta: false, smUzman: false, satisTemsilci: false, vale: false, eksper: false, avukat: false }; 
@@ -195,14 +199,14 @@ function rastgeleArabaUret() {
     const sablon = aracSablonlari[Math.floor(Math.random() * aracSablonlari.length)];
     const yil = Math.floor(Math.random() * (2026 - 2020 + 1)) + 2020; const km = ((2026 - yil) * Math.floor(Math.random() * 20000 + 10000)) + Math.floor(Math.random() * 15000);
     let degerKaybiOrani = ((2026 - yil) * 0.03) + ((km / 10000) * 0.015); if (degerKaybiOrani > 0.40) degerKaybiOrani = 0.40; let tabanHesap = sablon.tabanFiyat * (1 - degerKaybiOrani);
-    let ekspertizVerisi = ekspertizUret(); let hasarIndirimi = ekspertizVerisi.puan * 0.015; if (hasarIndirimi > 0.50) hasarIndirimi = 0.50; let fiyat = (tabanHesap * (1 - hasarIndirimi)) * piyasaCarpani;
+    let ekspertizVerisi = ekspertizUret(); let hasarIndirimi = ekspertizVerisi.puan * 0.015; if (hasarIndirimi > 0.50) hasarIndirimi = 0.50; let fiyat = Math.round((tabanHesap * (1 - hasarIndirimi)) * piyasaCarpani);
     let agirHasarliMi = ekspertizVerisi.agirHasarSebebi !== "" || ekspertizVerisi.puan > 15; let muayeneDurumu = Math.random() > 0.20; 
     let saticiTipi = Math.random() > 0.5 ? "Sahibinden" : "Galeri"; let sehir = sehirler[Math.floor(Math.random() * sehirler.length)];
     let gumrukAraci = false; let gumrukKalanGun = 0;
 
-    if (Math.random() < 0.10) { gumrukAraci = true; saticiTipi = "Gümrük Bakanlığı"; sehir = "Edirne (Gümrük)"; fiyat = Math.floor(fiyat * 0.65); gumrukKalanGun = 5; }
-    if (saticiTipi === "Galeri") fiyat = Math.floor(fiyat * 1.05); if (saticiTipi === "Sahibinden") fiyat = Math.floor(fiyat * 0.95);
-    let takasFiyati = Math.floor(fiyat * 1.08);
+    if (Math.random() < 0.10) { gumrukAraci = true; saticiTipi = "Gümrük Bakanlığı"; sehir = "Edirne (Gümrük)"; fiyat = Math.round(fiyat * 0.65); gumrukKalanGun = 5; }
+    if (saticiTipi === "Galeri") fiyat = Math.round(fiyat * 1.05); if (saticiTipi === "Sahibinden") fiyat = Math.round(fiyat * 0.95);
+    let takasFiyati = Math.round(fiyat * 1.08);
 
     let vitesler = ["Otomatik", "Manuel"]; let vites = vitesler[Math.floor(Math.random() * vitesler.length)];
     let yakitTipleri = ["Benzin", "Dizel"]; if (sablon.marka === "Toyota" || sablon.marka === "Citroën") yakitTipleri.push("Hibrit");
@@ -214,14 +218,14 @@ function rastgeleArabaUret() {
     let donanimlar = donanimHavuzu.sort(() => 0.5 - Math.random()).slice(0, Math.floor(Math.random() * 4) + 2);
 
     let rehinliMi = Math.random() < 0.15 && saticiTipi === "Sahibinden"; 
-    let rehinBedeli = rehinliMi ? Math.floor(fiyat * (Math.random() * 0.25 + 0.05)) : 0; 
+    let rehinBedeli = rehinliMi ? Math.round(fiyat * (Math.random() * 0.25 + 0.05)) : 0; 
 
-    return { id: idSayaci++, marka: sablon.marka, model: sablon.model, yil: yil, km: Math.floor(km), fiyat: Math.floor(fiyat), takasFiyati: takasFiyati, hasarli: agirHasarliMi, tamirMasrafi: agirHasarliMi ? Math.floor(fiyat * 0.1) : 0, saticiTipi: saticiTipi, sehir: sehir, gumrukAraci: gumrukAraci, gumrukKalanGun: gumrukKalanGun, agirHasarSebebi: ekspertizVerisi.agirHasarSebebi, modifiyeler: [], gorsel: sablon.gorsel, ekspertiz: ekspertizVerisi.detay, ilanAciklamasi: aciklamaUret(ekspertizVerisi.puan, km, sablon.marka, saticiTipi, ekspertizVerisi.agirHasarSebebi), teklifler: [], telefon: '05' + Math.floor(Math.random() * 90000000 + 10000000), tramer: tramerUret(ekspertizVerisi.puan, ekspertizVerisi.agirHasarSebebi), tamirDurumu: 0, muayeneVar: muayeneDurumu, muayenede: false, kaskolu: false, vites: vites, yakit: yakit, motor: motor, hp: hp, donanimlar: donanimlar, rehinliMi: rehinliMi, rehinBedeli: rehinBedeli, rehinSorgulandiMi: false };
+    return { id: idSayaci++, marka: sablon.marka, model: sablon.model, yil: yil, km: Math.floor(km), fiyat: fiyat, takasFiyati: takasFiyati, hasarli: agirHasarliMi, tamirMasrafi: agirHasarliMi ? Math.round(fiyat * 0.1) : 0, saticiTipi: saticiTipi, sehir: sehir, gumrukAraci: gumrukAraci, gumrukKalanGun: gumrukKalanGun, agirHasarSebebi: ekspertizVerisi.agirHasarSebebi, modifiyeler: [], gorsel: sablon.gorsel, ekspertiz: ekspertizVerisi.detay, ilanAciklamasi: aciklamaUret(ekspertizVerisi.puan, km, sablon.marka, saticiTipi, ekspertizVerisi.agirHasarSebebi), teklifler: [], telefon: '05' + Math.floor(Math.random() * 90000000 + 10000000), tramer: tramerUret(ekspertizVerisi.puan, ekspertizVerisi.agirHasarSebebi), tamirDurumu: 0, muayeneVar: muayeneDurumu, muayenede: false, kaskolu: false, vites: vites, yakit: yakit, motor: motor, hp: hp, donanimlar: donanimlar, rehinliMi: rehinliMi, rehinBedeli: rehinBedeli, rehinSorgulandiMi: false };
 }
 function piyasayiYenile() { arabalar = []; for(let i = 0; i < 6; i++) { arabalar.push(rastgeleArabaUret()); } aktifEkraniYenile(); }
 
 // ==========================================
-// 5. PULL-TO-REFRESH VE GÜNLÜK DÖNGÜ (MORAL ENTEGRELİ)
+// 5. PULL-TO-REFRESH VE GÜNLÜK DÖNGÜ
 // ==========================================
 let ptrBaslangicY = 0; let ptrCekiliyor = false; const ptrAlan = document.getElementById('ptr-spinner');
 document.addEventListener('touchstart', function(e) { if(window.scrollY === 0 && document.getElementById('pazar-ekrani').style.display === 'block') { ptrBaslangicY = e.touches[0].screenY; ptrCekiliyor = true; } }, {passive: true});
@@ -233,11 +237,10 @@ function ekonomiOlayiTetikle() {
     if (sans < 0.05 && piyasaDurumu !== "Kriz") { piyasaDurumu = "Kriz"; piyasaCarpani = 0.85; euroKuru *= 1.10; borsa.forEach(h => h.fiyat *= 0.80); oyunSesi('hata'); ozelUyari("📉 KRİZ! Piyasa kilitlendi, Borsa Çöktü!", "hata"); } 
     else if (sans > 0.95 && piyasaDurumu !== "Canli") { piyasaDurumu = "Canli"; piyasaCarpani = 1.20; euroKuru *= 0.95; borsa.forEach(h => h.fiyat *= 1.20); oyunSesi('kasa'); ozelUyari("📈 BOOM! Kredi kampanyası! Piyasa Uçuyor!", "basari"); } 
     else if (sans > 0.40 && sans < 0.45 && piyasaDurumu !== "Normal") { piyasaDurumu = "Normal"; piyasaCarpani = 1.0; } 
-    if (eskiCarpan !== piyasaCarpani) { let degisimOrani = piyasaCarpani / eskiCarpan; garaj.forEach(araba => { araba.fiyat = Math.floor(araba.fiyat * degisimOrani); araba.teklifler = []; }); } 
+    if (eskiCarpan !== piyasaCarpani) { let degisimOrani = piyasaCarpani / eskiCarpan; garaj.forEach(araba => { araba.fiyat = Math.round(araba.fiyat * degisimOrani); araba.teklifler = []; }); } 
 }
 
 function davaKriziBaslat(index) {
-    // YENİ: Avukat Koruması
     if(personeller.avukat && Math.random() < 0.85) {
         oyunSesi('kasa'); ozelUyari(`⚖️ Şirket avukatın, ${sabikaliSatislar[index].musteri} tarafından açılan dolandırıcılık davasını daha başlamadan iptal ettirdi!`, "basari");
         sabikaliSatislar.splice(index, 1); return; 
@@ -258,14 +261,12 @@ function sonrakiGun() {
         gun++; let g = document.getElementById('gun'); if(g) g.innerText = gun; oyunSesi('dokun');
         if (sosyalMedya.aktif) { sosyalMedya.takipciGecmisi.shift(); sosyalMedya.takipciGecmisi.push(sosyalMedya.takipci); }
         
-        // Moral Hesaplaması
         if (paramiz < 0) { personelMorali -= 8; } else { personelMorali += 3; }
         if (personelMorali > 100) personelMorali = 100; if (personelMorali < 0) personelMorali = 0;
 
         let davaTetiklendi = false;
         if(sabikaliSatislar.length > 0) { for (let i = 0; i < sabikaliSatislar.length; i++) { if(!davaTetiklendi && gun - sabikaliSatislar[i].gun > 5 && Math.random() < 0.10) { davaTetiklendi = true; setTimeout(() => { davaKriziBaslat(i); }, 1000); break; } } }
         
-        // Ay Sonu Giderler ve Maaşlar
         if (gun % 30 === 0) { 
             let guncelKira = seviyeler[dukkanSeviyesi - 1].kira; 
             let maaslar = (personeller.usta ? 25000 : 0) + (personeller.smUzman ? 15000 : 0) + (personeller.satisTemsilci ? 30000 : 0) + (personeller.vale ? 10000 : 0) + (personeller.eksper ? 20000 : 0) + (personeller.avukat ? 40000 : 0);
@@ -273,11 +274,9 @@ function sonrakiGun() {
             paramiz -= toplamAylikGider; toplamGider += toplamAylikGider; 
             oyunSesi('hata'); ozelUyari(`📅 Ay sonu! Maaşlar ve Giderler (${toplamAylikGider.toLocaleString('tr-TR')} ₺) kesildi.`, "bilgi"); 
             
-            // Eğer kasada para kalmadıysa büyük moral çöküşü
             if(paramiz < 0) { personelMorali -= 40; setTimeout(()=> {ozelUyari("🚨 MAAŞLAR ÖDENEMEDİ! Personelin morali dibe vurdu, isyan edebilirler!", "hata");}, 2000); }
         }
 
-        // YENİ: Personel İsyanı ve Sabotajlar
         if (personelMorali < 30 && Math.random() < 0.20) {
             let isyanlar = [];
             if(personeller.usta) isyanlar.push(() => { paramiz -= 15000; ozelUyari("🚨 SABOTAJ! Usta Başı maaşını alamadığı için dükkandaki takımları satıp kaçtı! (15.000 ₺ Zarar)", "hata"); personeller.usta = false; });
@@ -288,7 +287,6 @@ function sonrakiGun() {
             else { personeller = { usta: false, smUzman: false, satisTemsilci: false, vale: false, eksper: false, avukat: false }; ozelUyari("🚨 İSTİFA! Kasada para olmadığı için tüm personel istifa etti!", "hata"); }
         }
 
-        // e-Haciz Gecikmesi (Avukat varsa 5 gün yerine 8 gün tolerans)
         if (vergiBorcu > 0) { 
             gecikmisVergiGun++; 
             let hacizLimiti = personeller.avukat ? 8 : 5;
@@ -296,16 +294,33 @@ function sonrakiGun() {
         } else { gecikmisVergiGun = 0; eHacizAktif = false; }
 
         if (sosyalMedya.aktif) {
-            if (sosyalMedya.lincKalanGun > 0) { sosyalMedya.lincKalanGun--; } else if (garaj.length > 0) { let dmIhtimali = (sosyalMedya.takipci / 50000) + (personeller.smUzman ? 0.25 : 0.10); if (dmIhtimali > 0.85) dmIhtimali = 0.85; if (Math.random() < dmIhtimali) { let sansliAraba = garaj[Math.floor(Math.random() * garaj.length)]; let teklif = Math.floor(Math.random() * ((sansliAraba.fiyat * 1.15) - (sansliAraba.fiyat * 0.95) + 1)) + (sansliAraba.fiyat * 0.95); if(sosyalMedya.maviTik) teklif = Math.floor(teklif * 1.10); dmKutusu.push({ gonderen: "@" + isimlerHavuzu[Math.floor(Math.random()*isimlerHavuzu.length)].toLowerCase() + Math.floor(Math.random()*99), metin: `Araba duruyor mu? Gelip alayım.`, teklifFiyat: teklif, arabaId: sansliAraba.id }); } }
+            if (sosyalMedya.lincKalanGun > 0) { sosyalMedya.lincKalanGun--; } else if (garaj.length > 0) { let dmIhtimali = (sosyalMedya.takipci / 50000) + (personeller.smUzman ? 0.25 : 0.10); if (dmIhtimali > 0.85) dmIhtimali = 0.85; if (Math.random() < dmIhtimali) { let sansliAraba = garaj[Math.floor(Math.random() * garaj.length)]; let teklif = Math.floor(Math.random() * ((sansliAraba.fiyat * 1.15) - (sansliAraba.fiyat * 0.95) + 1)) + (sansliAraba.fiyat * 0.95); if(sosyalMedya.maviTik) teklif = Math.floor(teklif * 1.10); dmKutusu.push({ gonderen: "@" + isimlerHavuzu[Math.floor(Math.random()*isimlerHavuzu.length)].toLowerCase() + Math.floor(Math.random()*99), metin: `Araba duruyor mu? Gelip alayım.`, teklifFiyat: Math.round(teklif), arabaId: sansliAraba.id }); } }
             if (personeller.smUzman) { sosyalMedya.takipci += Math.floor(Math.random() * 150) + 50; }
         }
         if (mevduat.aktif) { mevduat.kalanGun--; if (mevduat.kalanGun <= 0) { let getiri = Math.floor(mevduat.anapara * mevduat.faizOrani); paramiz += (mevduat.anapara + getiri); toplamGelir += getiri; mevduat.aktif = false; ozelUyari(`💰 Vadeli Hesabın Doldu!\nFaiziyle ${getiri.toLocaleString('tr-TR')} ₺ aldın.`, "basari"); } }
-        if (krediler.length > 0) { krediler.forEach(k => { paramiz -= k.taksit; toplamGider += k.taksit; k.kalanGun--; krediNotu += 1; }); krediler = krediler.filter(k => k.kalanGun > 0); }
+        
+        // KREDİ FİXİ: Her gün ödediğinde +2 puan, bittiğinde +50 bonus
+        if (krediler.length > 0) { 
+            krediler = krediler.filter(k => { 
+                paramiz -= k.taksit; 
+                toplamGider += k.taksit; 
+                k.kalanGun--; 
+                krediNotu += 2; 
+                if (k.kalanGun <= 0) {
+                    krediNotu += 50; 
+                    ozelUyari("🎉 Bir kredinin ödemesi bitti! Findeks notun fırladı.", "basari");
+                    return false;
+                }
+                return true;
+            }); 
+        }
+
         if (paramiz < 0) {
             let cezaFaizi = Math.floor(Math.abs(paramiz) * 0.05); paramiz -= cezaFaizi; toplamGider += cezaFaizi; eksiBakiyeGun++; krediNotu -= 20;
             if (eksiBakiyeGun >= 3) { if (garaj.length > 0) { garaj.sort((a,b) => b.fiyat - a.fiyat); let h = garaj.shift(); paramiz += Math.floor(h.fiyat * 0.50); eksiBakiyeGun = 0; krediNotu -= 300; oyunSesi('hata'); ozelUyari(`🚨 BANKA HACZİ!\nBanka garajındaki ${h.marka} aracına el koyup sattı!`, "hata"); } else if (rentACarFilosu.length > 0) { let h = rentACarFilosu.shift(); paramiz += Math.floor(h.fiyat * 0.50); eksiBakiyeGun = 0; krediNotu -= 300; oyunSesi('hata'); ozelUyari(`🚨 BANKA HACZİ!\nBanka Rent A Car filondaki ${h.marka} aracına el koyup sattı!`, "hata"); } }
         } else { eksiBakiyeGun = 0; } 
         if(krediNotu > 1900) krediNotu = 1900; if(krediNotu < 0) krediNotu = 0;
+        
         ekonomiOlayiTetikle(); senetTahsilatiYap(); rentACarGelirVeRiskYonetimi();
         garaj.forEach(araba => {
             if (araba.gumrukKalanGun > 0) { araba.gumrukKalanGun--; }
@@ -324,13 +339,11 @@ function sonrakiGun() {
                         else if (musteriTipiRnd < 0.45) { musteriTipi = "Takas"; takasArabasi = rastgeleArabaUret(); if (takasArabasi.fiyat >= araba.fiyat) takasArabasi.fiyat = Math.floor(araba.fiyat * 0.6); teklifTutari = Math.floor((araba.fiyat - takasArabasi.fiyat) * (Math.random() * 0.2 + 0.9)); } 
                         else { let maxFiyat = araba.hasarli ? araba.fiyat * 0.95 : araba.fiyat * 1.20; teklifTutari = Math.floor(Math.random() * (maxFiyat - (araba.fiyat * 0.90) + 1)) + (araba.fiyat * 0.90); } 
                         
-                        // YENİ: Vale / Yıkamacı Etkisi (+%3 Teklif Fiyatı)
-                        if(personeller.vale) { teklifTutari = Math.floor(teklifTutari * 1.03); }
-
+                        if(personeller.vale) { teklifTutari = Math.round(teklifTutari * 1.03); }
                         if (personeller.satisTemsilci && musteriTipi === "Olucu") continue; 
                         if (teklifTutari > 2500000 && musteriTipi === "Normal") musteriTipi = "Zengin"; 
                         
-                        araba.teklifler.push({ id: 'tklf-' + Math.floor(Math.random() * 1000000), musteri: musteriIsmiUret(araba), fiyat: teklifTutari, gelisGunu: gun, tip: musteriTipi, takasArac: takasArabasi }); 
+                        araba.teklifler.push({ id: 'tklf-' + Math.floor(Math.random() * 1000000), musteri: musteriIsmiUret(araba), fiyat: Math.round(teklifTutari), gelisGunu: gun, tip: musteriTipi, takasArac: takasArabasi }); 
                     } 
                 }
             }
@@ -339,26 +352,44 @@ function sonrakiGun() {
 }
 
 // ==========================================
-// 6. BANKA, FİNANS VE BORSALAR
+// 6. BANKA, FİNANS VE BORSALAR (KÜSÜRATLAR SİLİNDİ)
 // ==========================================
 function bankaEkraniniGuncelle() {
     let skorDiv = document.getElementById('findeks-skor'); if(skorDiv) { skorDiv.innerText = krediNotu; skorDiv.style.color = krediNotu > 1400 ? '#00b894' : (krediNotu < 1000 ? '#e74c3c' : '#f1c40f'); }
     let limitDiv = document.getElementById('kmh-limit'); if(limitDiv) limitDiv.innerText = getKmhLimiti().toLocaleString('tr-TR') + " ₺";
-    let vb = document.getElementById('vergi-borcu-ekran'); if(vb) vb.innerText = vergiBorcu.toLocaleString('tr-TR'); let hUyari = document.getElementById('e-haciz-uyari'); if(hUyari) hUyari.style.display = eHacizAktif ? 'block' : 'none';
+    let vb = document.getElementById('vergi-borcu-ekran'); if(vb) vb.innerText = Math.round(vergiBorcu).toLocaleString('tr-TR'); let hUyari = document.getElementById('e-haciz-uyari'); if(hUyari) hUyari.style.display = eHacizAktif ? 'block' : 'none';
     let krediAlani = document.getElementById('aktif-krediler-alani'); if(krediAlani) { krediAlani.innerHTML = ''; if(krediler.length > 0) { krediler.forEach(k => { krediAlani.innerHTML += `<div style="background:rgba(241, 196, 15, 0.1); color:#f39c12; padding:10px; border-radius:5px; margin-bottom:5px; font-size:13px; font-weight:bold; border:1px solid rgba(241, 196, 15, 0.4);">📌 Kredi: Günlük ${k.taksit.toLocaleString('tr-TR')} ₺ (Kalan: ${k.kalanGun} Gün)</div>`; }); } }
     let vadeliDurum = document.getElementById('vadeli-hesap-durum'); if(vadeliDurum) { if(mevduat.aktif) { vadeliDurum.innerHTML = `💸 Kilitli: ${mevduat.anapara.toLocaleString('tr-TR')} ₺<br>⏳ Kalan: ${mevduat.kalanGun} Gün<br><span style="color:#27ae60;">Getiri: +${Math.floor(mevduat.anapara * mevduat.faizOrani).toLocaleString('tr-TR')} ₺</span>`; } else { vadeliDurum.innerText = "Aktif hesabınız yok."; } }
     let kur = document.getElementById('euro-kur-ekran'); if(kur) kur.innerText = euroKuru.toFixed(2); borsaArayuzGuncelle(); senetleriEkranaBas();
 }
-function vergiOde() { if(vergiBorcu === 0) { ozelUyari("Vergi borcunuz bulunmuyor.", "bilgi"); return; } if(!bakiyeYeterliMi(vergiBorcu)) { ozelUyari("Vergiyi ödeyecek limitin yok!", "hata"); return; } paramiz -= vergiBorcu; toplamGider += vergiBorcu; vergiBorcu = 0; gecikmisVergiGun = 0; eHacizAktif = false; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("Devlete olan tüm vergi borcunu ödedin.", "basari"); }
+function vergiOde() { if(vergiBorcu === 0) { ozelUyari("Vergi borcunuz bulunmuyor.", "bilgi"); return; } if(!bakiyeYeterliMi(vergiBorcu)) { ozelUyari("Vergiyi ödeyecek limitin yok!", "hata"); return; } paramiz -= Math.round(vergiBorcu); toplamGider += Math.round(vergiBorcu); vergiBorcu = 0; gecikmisVergiGun = 0; eHacizAktif = false; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("Devlete olan tüm vergi borcunu ödedin.", "basari"); }
 function borsaBaslat() { if(borsaInterval) clearInterval(borsaInterval); borsaInterval = setInterval(() => { borsa.forEach(h => { let volatilite = h.kod === 'SASA' ? 0.05 : 0.015; let yon = Math.random() > 0.5 ? 1 : -1; if (h.fiyat < 5) yon = 1; if (piyasaDurumu === "Kriz") yon = Math.random() > 0.8 ? 1 : -1; if (piyasaDurumu === "Canli") yon = Math.random() > 0.2 ? 1 : -1; let degisimOrani = (Math.random() * volatilite) * yon; let degisimMiktari = h.fiyat * degisimOrani; h.eskiFiyat = h.fiyat; h.fiyat += degisimMiktari; h.degisim = (degisimMiktari / h.eskiFiyat) * 100; }); if(document.getElementById('banka-ekrani') && document.getElementById('banka-ekrani').style.display === 'block') { borsaArayuzGuncelle(); } if(document.getElementById('hisse-islem-modal') && document.getElementById('hisse-islem-modal').style.display === 'block' && aktifHisseIndex !== -1) { let h = borsa[aktifHisseIndex]; document.getElementById('hisse-modal-fiyat').innerText = h.fiyat.toFixed(2) + " ₺"; hisseModalHesapla(); } }, 3000); }
 function borsaArayuzGuncelle() { const alan = document.getElementById('borsa-alani'); if(!alan) return; let html = ''; borsa.forEach((h, index) => { let renk = h.degisim >= 0 ? '#00b894' : '#e74c3c'; let ok = h.degisim >= 0 ? '▲' : '▼'; let classAnim = h.degisim > 0 ? 'fiyat-artti' : (h.degisim < 0 ? 'fiyat-dustu' : ''); let portfoyMetin = h.portfoyAdet > 0 ? `<div style="font-size:11px; color:var(--text-main); font-weight:bold;">Sende: ${h.portfoyAdet} Lot (Ort: ${h.maliyet.toFixed(2)} ₺)</div>` : `<div style="font-size:11px; color:var(--text-muted);">Elinde yok</div>`; html += `<div class="hisse-karti ${classAnim}"><div style="flex:1;"><strong style="font-size:16px; color:var(--text-main);">${h.kod}</strong><br><span style="font-size:11px; color:var(--text-muted);">${h.isim}</span></div><div style="flex:1; text-align:center;"><span style="font-size:18px; font-weight:bold; color:${renk};">${h.fiyat.toFixed(2)} ₺</span><br><span style="font-size:12px; color:${renk};">${ok} %${Math.abs(h.degisim).toFixed(2)}</span></div><div style="flex:1.2; text-align:right;">${portfoyMetin}<div style="margin-top:5px;"><button class="btn btn-yesil" style="margin:0; padding:5px 10px; width:auto; font-size:11px;" onclick="hisseIslemEkraniAc(${index}, 'al')">Al</button> <button class="btn btn-kirmizi" style="margin:0; padding:5px 10px; width:auto; font-size:11px;" onclick="hisseIslemEkraniAc(${index}, 'sat')">Sat</button></div></div></div>`; }); alan.innerHTML = html; }
 function hisseIslemEkraniAc(index, tip) { if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var!", "hata"); return; } aktifHisseIndex = index; aktifHisseIslemTipi = tip; let h = borsa[index]; document.getElementById('hisse-modal-kod').innerText = h.kod; document.getElementById('hisse-modal-isim').innerText = h.isim; document.getElementById('hisse-modal-fiyat').innerText = h.fiyat.toFixed(2) + " ₺"; let btn = document.getElementById('hisse-modal-onay-btn'); let input = document.getElementById('hisse-modal-adet'); let bilgi = document.getElementById('hisse-modal-bilgi'); if (tip === 'al') { document.getElementById('hisse-modal-baslik').innerText = "📈 Hisse Satın Al"; document.getElementById('hisse-modal-baslik').style.color = "#00b894"; btn.style.background = "#00b894"; btn.innerText = "Satın Al"; let maxAl = Math.floor((paramiz + getKmhLimiti()) / h.fiyat); bilgi.innerText = `Maksimum: ${maxAl.toLocaleString('tr-TR')} Lot`; input.value = maxAl > 100 ? 100 : maxAl; } else { if (h.portfoyAdet <= 0) { ozelUyari("Elinde bu hisseden yok!", "hata"); return; } document.getElementById('hisse-modal-baslik').innerText = "📉 Hisse Sat"; document.getElementById('hisse-modal-baslik').style.color = "#d63031"; btn.style.background = "#d63031"; btn.innerText = "Satış Yap"; bilgi.innerText = `Elindeki lot: ${h.portfoyAdet.toLocaleString('tr-TR')}`; input.value = h.portfoyAdet; } hisseModalHesapla(); document.getElementById('hisse-islem-modal').style.display = 'block'; }
-function hisseModalHesapla() { if (aktifHisseIndex === -1) return; let h = borsa[aktifHisseIndex]; let adet = parseInt(document.getElementById('hisse-modal-adet').value) || 0; let tutar = adet * h.fiyat; document.getElementById('hisse-modal-tutar').innerText = tutar.toLocaleString('tr-TR', {minimumFractionDigits:2, maximumFractionDigits:2}) + " ₺"; }
-function hisseIslemOnayla() { if (aktifHisseIndex === -1) return; let h = borsa[aktifHisseIndex]; let adet = parseInt(document.getElementById('hisse-modal-adet').value) || 0; if (adet <= 0) { ozelUyari("Geçerli adet girin.", "hata"); return; } let tutar = adet * h.fiyat; if (aktifHisseIslemTipi === 'al') { if(bakiyeYeterliMi(tutar)) { paramiz -= tutar; toplamGider += tutar; let toplamMaliyet = (h.portfoyAdet * h.maliyet) + tutar; h.portfoyAdet += adet; h.maliyet = toplamMaliyet / h.portfoyAdet; oyunSesi('kasa'); modaliKapat('hisse-islem-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${adet} lot ${h.kod} alındı.`, "basari"); } else { ozelUyari("Limit yetersiz!", "hata"); } } else { if(adet > h.portfoyAdet) { ozelUyari("O kadar hissen yok!", "hata"); return; } paramiz += tutar; toplamGelir += tutar; h.portfoyAdet -= adet; if(h.portfoyAdet === 0) h.maliyet = 0; oyunSesi('kasa'); modaliKapat('hisse-islem-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${adet} lot ${h.kod} satıldı.`, "basari"); } }
+
+function hisseModalHesapla() { if (aktifHisseIndex === -1) return; let h = borsa[aktifHisseIndex]; let adet = parseInt(document.getElementById('hisse-modal-adet').value) || 0; let tutar = Math.round(adet * h.fiyat); document.getElementById('hisse-modal-tutar').innerText = tutar.toLocaleString('tr-TR') + " ₺"; }
+function hisseIslemOnayla() { 
+    if (aktifHisseIndex === -1) return; 
+    let h = borsa[aktifHisseIndex]; let adet = parseInt(document.getElementById('hisse-modal-adet').value) || 0; 
+    if (adet <= 0) { ozelUyari("Geçerli adet girin.", "hata"); return; } 
+    let tutar = Math.round(adet * h.fiyat); 
+    if (aktifHisseIslemTipi === 'al') { 
+        if(bakiyeYeterliMi(tutar)) { 
+            paramiz -= tutar; toplamGider += tutar; 
+            let toplamMaliyet = (h.portfoyAdet * h.maliyet) + tutar; h.portfoyAdet += adet; h.maliyet = toplamMaliyet / h.portfoyAdet; 
+            oyunSesi('kasa'); modaliKapat('hisse-islem-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${adet} lot ${h.kod} alındı.`, "basari"); 
+        } else { ozelUyari("Limit yetersiz!", "hata"); } 
+    } else { 
+        if(adet > h.portfoyAdet) { ozelUyari("O kadar hissen yok!", "hata"); return; } 
+        paramiz += tutar; toplamGelir += tutar; h.portfoyAdet -= adet; if(h.portfoyAdet === 0) h.maliyet = 0; 
+        oyunSesi('kasa'); modaliKapat('hisse-islem-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${adet} lot ${h.kod} satıldı.`, "basari"); 
+    } 
+}
+
 function krediCek(tip) { if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var!", "hata"); return; } let paketler = { 'esnaf': { miktar: 1000000, geriOdeme: 1200000, vade: 10, minNot: 500 }, 'arac': { miktar: 5000000, geriOdeme: 6500000, vade: 20, minNot: 1200 }, 'holding': { miktar: 25000000, geriOdeme: 35000000, vade: 30, minNot: 1600 } }; let p = paketler[tip]; if (krediNotu < p.minNot) { ozelUyari(`Reddedildi!\nNotunuzun en az ${p.minNot} olması gerekiyor.`, "hata"); return; } krediler.push({ tip: tip, miktar: p.miktar, toplamBorc: p.geriOdeme, taksit: Math.floor(p.geriOdeme/p.vade), kalanGun: p.vade }); paramiz += p.miktar; krediNotu -= 20; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${p.miktar.toLocaleString('tr-TR')} ₺ kredi onaylandı!`, "basari"); }
 function vadeliyeYatir() { if(eHacizAktif) { ozelUyari("e-Haciz var!", "hata"); return; } if(mevduat.aktif) { ozelUyari("Zaten aktif vadeli hesabın var!", "hata"); return; } let miktarStr = prompt(`Vadeliye kaç TL yatırmak istiyorsun?\n(10 Gün, %15 Getiri)\nNakit: ${paramiz.toLocaleString('tr-TR')} ₺`, "1000000"); let miktar = parseInt(miktarStr); if(isNaN(miktar) || miktar <= 0) return; if(paramiz < miktar) { ozelUyari("Kasanda o kadar nakit yok!", "hata"); return; } paramiz -= miktar; mevduat = { aktif: true, anapara: miktar, kalanGun: 10, faizOrani: 0.15 }; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${miktar.toLocaleString('tr-TR')} ₺ bankaya %15 faizle kilitlendi.`, "basari"); }
-function euroAl(miktar) { if(eHacizAktif) { ozelUyari("e-Haciz var!", "hata"); return; } let maliyet = miktar * euroKuru; if (bakiyeYeterliMi(maliyet)) { paramiz -= maliyet; euroBakiye += miktar; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${miktar.toLocaleString('tr-TR')} Euro alındı.`, 'basari'); } else { oyunSesi('hata'); ozelUyari("Limitiniz yetersiz!", "hata"); } } 
-function euroBozdur(miktar) { if(eHacizAktif) { ozelUyari("e-Haciz var!", "hata"); return; } if (euroBakiye >= miktar) { let gelir = miktar * euroKuru; euroBakiye -= miktar; paramiz += gelir; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${miktar.toLocaleString('tr-TR')} Euro bozduruldu.`, 'basari'); } else { oyunSesi('hata'); ozelUyari("Euro yok!", "hata"); } } 
+function euroAl(miktar) { if(eHacizAktif) { ozelUyari("e-Haciz var!", "hata"); return; } let maliyet = Math.round(miktar * euroKuru); if (bakiyeYeterliMi(maliyet)) { paramiz -= maliyet; euroBakiye += miktar; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${miktar.toLocaleString('tr-TR')} Euro alındı.`, 'basari'); } else { oyunSesi('hata'); ozelUyari("Limitiniz yetersiz!", "hata"); } } 
+function euroBozdur(miktar) { if(eHacizAktif) { ozelUyari("e-Haciz var!", "hata"); return; } if (euroBakiye >= miktar) { let gelir = Math.round(miktar * euroKuru); euroBakiye -= miktar; paramiz += gelir; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${miktar.toLocaleString('tr-TR')} Euro bozduruldu.`, 'basari'); } else { oyunSesi('hata'); ozelUyari("Euro yok!", "hata"); } } 
 function tumEurouBozdur() { if(euroBakiye > 0) euroBozdur(euroBakiye); }
 function senetTahsilatiYap() { senetler.forEach((s, i) => { if (s.durum === 'Patladi' || s.kalanGun <= 0) return; if (Math.random() < 0.10) { s.durum = 'Patladi'; oyunSesi('hata'); ozelUyari(`🚨 SENET PATLADI! ${s.musteri} ödeme yapmıyor!`, 'hata'); } else { paramiz += s.taksit; toplamGelir += s.taksit; s.odenen += s.taksit; s.kalanGun--; if (s.kalanGun <= 0) s.durum = 'Bitti'; } }); }
 function senetleriEkranaBas() { const liste = document.getElementById('senet-listesi'); if(!liste) return; liste.innerHTML = ''; if (senetler.length === 0) { liste.innerHTML = '<div class="uyari-mesaji">Senet yok.</div>'; return; } senetler.forEach((s, i) => { let renk = s.durum === 'Bitti' ? '#27ae60' : (s.durum === 'Patladi' ? '#d63031' : '#f39c12'); let btnAksiyon = s.durum === 'Patladi' ? `<button class="btn" style="background:#2d3436; color:#f1c40f; margin-top:10px;" onclick="hakanAbiTahsilat(${i})"><i class='bx bxs-crown'></i> Hakan Abi (%20 Komisyon)</button>` : (s.durum !== 'Bitti' ? `<button class="btn" style="background:#3498db; color:white; margin-top:10px;" onclick="senetKirdir(${i})">Faktoringe Kırdır (%30 Kesinti)</button>` : ''); liste.innerHTML += `<div class="ilan-karti" style="border-left: 5px solid ${renk}; flex-direction: column; align-items: flex-start;"><div style="display:flex; justify-content:space-between; width:100%;"><h3 class="ilan-baslik"><i class='bx bxs-user-circle'></i> ${s.musteri}</h3><div style="font-weight:bold; color:${renk};">${s.durum}</div></div><div style="width: 100%; display: flex; justify-content: space-between; margin-top:10px; font-size:14px;"><span>Kalan: ${s.kalanGun} Gün</span></div>${btnAksiyon}</div>`; }); }
@@ -411,7 +442,6 @@ function ilanDetayEkraniAc(arabaId) {
 
         let edevletBtn = document.getElementById('detay-edevlet-btn');
         if(edevletBtn) {
-            // YENİ: Özel Eksper varsa bedava ve kesin çözüm
             if (personeller.eksper) {
                 edevletBtn.innerHTML = "<i class='bx bx-check-shield'></i> Ücretsiz Sorgu (Eksper)";
                 edevletBtn.onclick = function() {
@@ -452,7 +482,6 @@ function saticiAra(id) {
         let baslangicDiyalog = a.sehir === "İstanbul" ? `"Alo buyur kardeşim. Fiyat nakit ${a.fiyat.toLocaleString('tr-TR')} TL."` : `"Alo buyur kardeşim. Ben ${a.sehir}'dayım. Fiyatım ${a.fiyat.toLocaleString('tr-TR')} TL."`; document.getElementById('tel-diyalog').innerText = baslangicDiyalog; let aksiyonButonlari = "";
         if (a.sehir === "İstanbul") { aksiyonButonlari = `<button class="btn btn-yesil" onclick="telSatinAl(${a.id}, 0)" style="padding: 15px; font-size: 16px;"><i class='bx bx-money'></i> Nakit Al</button><button class="btn btn-mavi" onclick="takasEkraniAc(${a.id})" style="padding: 15px; font-size: 16px;"><i class='bx bx-transfer'></i> Takas Yap</button><button class="btn btn-turuncu" id="tel-pazarlik-btn" onclick="telPazarlikYap(${a.id})" style="padding: 15px; font-size: 16px;">Pazarlık Yap</button>`; } 
         else { 
-            // YENİ: Eksper varsa şehir dışına gitmek ucuzlar
             let biletFiyat = personeller.eksper ? 1000 : 2500;
             aksiyonButonlari = `<button class="btn btn-yesil" onclick="sehirDisinaGit(${a.id})" style="padding: 15px; font-size: 16px;">✈️ Gidip Gör (${biletFiyat.toLocaleString('tr-TR')} ₺)</button><button class="btn btn-mavi" onclick="telSatinAl(${a.id}, 10000)" style="padding: 15px; font-size: 16px;">🚛 Çekici Yolla (10.000 ₺)</button><button class="btn btn-turuncu" id="tel-pazarlik-btn" onclick="telPazarlikYap(${a.id})" style="padding: 15px; font-size: 16px;">Pazarlık Yap</button>`; 
         }
@@ -471,20 +500,13 @@ function sehirDisinaGit(id) {
     
     setTimeout(() => { 
         document.querySelector('.telefon-ekrani').classList.remove('caliyor'); 
-        
-        // YENİ: Personel Eksper varsa asla yalan atamaz, tüm rehini söyler.
         if (personeller.eksper) {
-            oyunSesi('kasa'); 
-            a.rehinSorgulandiMi = true; // Otomatik çözdü
+            oyunSesi('kasa'); a.rehinSorgulandiMi = true; 
             let hasarDurumu = a.hasarli ? "🚨 AĞIR HASARLI" : "✅ Ekspertiz Temiz";
             let rehinDurumu = a.rehinliMi ? `<br><br><span style='color:#f1c40f;'>⚠️ DİKKAT: Üzerinde ${a.rehinBedeli.toLocaleString('tr-TR')} ₺ Haciz Var!</span>` : "";
             document.getElementById('tel-aranan-kisi').innerText = `Eksper Raporu Çıktı`; 
             document.getElementById('tel-diyalog').innerHTML = `<b>Durum:</b> ${hasarDurumu} ${rehinDurumu}`; 
-            
-            document.getElementById('tel-aksiyonlar').innerHTML = `
-                <button class="btn btn-yesil" onclick="telSatinAl(${a.id}, 0)" style="padding: 15px; font-size: 16px;"><i class='bx bx-money'></i> Satın Al ve Dön</button>
-                <button class="btn btn-kirmizi" onclick="telefonuKapat()" style="padding: 15px; font-size: 16px;">Vazgeç ve Dön</button>
-            `;
+            document.getElementById('tel-aksiyonlar').innerHTML = `<button class="btn btn-yesil" onclick="telSatinAl(${a.id}, 0)" style="padding: 15px; font-size: 16px;"><i class='bx bx-money'></i> Satın Al ve Dön</button><button class="btn btn-kirmizi" onclick="telefonuKapat()" style="padding: 15px; font-size: 16px;">Vazgeç ve Dön</button>`;
             document.getElementById('tel-aksiyonlar').style.display = 'flex';
         } else {
             let yalanIhtimali = a.saticiTipi === "Sahibinden" ? 0.35 : 0.05; 
@@ -501,7 +523,7 @@ function telSatinAl(id, ekMasraf) {
     if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari("Garaj kapasiteniz dolu!", "hata"); telefonuKapat(); return; }
     let rehinMasrafi = a.rehinliMi ? a.rehinBedeli : 0; let t = a.fiyat + noterUcreti + sigortaVeMtvUcreti + ekMasraf + rehinMasrafi; 
     if (bakiyeYeterliMi(t)) { 
-        paramiz -= t; toplamGider += t; a.tamirDurumu = 0; a.alisFiyati = t; a.rehinliMi = false; garaj.push(a); arabalar = arabalar.filter(x => x.id !== id); oyunSesi('kasa'); telefonuKapat(); aktifEkraniYenile(); oyunuKaydet(); 
+        paramiz -= Math.round(t); toplamGider += Math.round(t); a.tamirDurumu = 0; a.alisFiyati = t; a.rehinliMi = false; garaj.push(a); arabalar = arabalar.filter(x => x.id !== id); oyunSesi('kasa'); telefonuKapat(); aktifEkraniYenile(); oyunuKaydet(); 
         if (rehinMasrafi > 0 && !a.rehinSorgulandiMi) { setTimeout(() => { ozelUyari(`🚨 NOTERDE ŞOK!\n\nSatıcı gizlemiş! Arabanın üzerinde ${rehinMasrafi.toLocaleString('tr-TR')} ₺ haciz/rehin varmış. Arabayı üstüne almak için mecburen o borcu da ödedin!`, "hata"); }, 500); } else if (rehinMasrafi > 0 && a.rehinSorgulandiMi) { setTimeout(() => { ozelUyari(`Aracın üzerindeki ${rehinMasrafi.toLocaleString('tr-TR')} ₺ rehin bedeli ödenip haciz kaldırıldı. Araç garaja çekildi.`, "bilgi"); }, 500); } else if(a.gumrukAraci) { ozelUyari(`🇪🇺 Gümrük Aracı Alındı!\nAraç bürokrasi için 5 gün rehin kalacak.`, "basari"); } else { ozelUyari(`Araç satın alındı ve garaja çekildi!`, "basari"); }
     } else { oyunSesi('hata'); document.getElementById('tel-diyalog').innerHTML = `<span style="color:#e74c3c; font-weight:bold;">"Kardeşim paran çıkışmıyor, beni oyalama!"</span>`; document.getElementById('tel-aksiyonlar').style.display = 'none'; } 
 }
@@ -535,102 +557,11 @@ function tamirEt(id) { const a = garaj.find(x => x.id === id); let masraf = pers
 function modifiyeEkraniAc(id) { const a = garaj.find(x => x.id === id); const lst = document.getElementById('modifiye-listesi'); lst.innerHTML = ''; let varMi = false; modifiyePaketleri.forEach(p => { if (!a.modifiyeler.includes(p.isim)) { varMi = true; let c = personeller.usta ? Math.floor(p.maliyet * 0.7) : p.maliyet; lst.innerHTML += `<div class="teklif-karti"><div><span style="font-size: 20px;">${p.ikon}</span> <b>${p.isim}</b><br><span>Maliyet: ${c.toLocaleString('tr-TR')} ₺</span></div><button class="btn btn-mavi" onclick="modifiyeUygula(${a.id}, ${p.id}, ${c})">Uygula</button></div>`; } }); if (!varMi) lst.innerHTML = `<p>Gırtlak dolu!</p>`; document.getElementById('modifiye-modal').style.display = "block"; }
 function modifiyeUygula(id, pId, c) { const a = garaj.find(x => x.id === id); const p = modifiyePaketleri.find(x => x.id === pId); if (bakiyeYeterliMi(c)) { paramiz -= c; a.fiyat += p.degerArtisi; a.modifiyeler.push(p.isim); oyunSesi('tamir'); modaliKapat('modifiye-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`${p.isim} eklendi.`, "basari"); } else { ozelUyari(`Para yok.`, "hata"); } }
 function araciSat(id) { const a = garaj.find(x => x.id === id); const lst = document.getElementById('teklif-listesi'); lst.innerHTML = `<p>Maliyet: <b>${a.fiyat.toLocaleString('tr-TR')} TL</b></p>`; if (!a.teklifler || a.teklifler.length === 0) { lst.innerHTML += `<p style="text-align:center; color:#e74c3c; font-weight:bold;">Henüz teklif yok.</p>`; } else { a.teklifler.sort((a,b) => b.fiyat - a.fiyat).forEach(t => { let sF = Math.floor(t.fiyat * 1.30); let kalanGun = 3 - (gun - t.gelisGunu); let avatarEmoji = "👤"; let avatarBg = "#0984e3"; let musteriEtiketi = ""; let teklifGorunumu = `${t.fiyat.toLocaleString('tr-TR')} ₺`; if (t.tip === "Tayfa") { avatarEmoji = "😎"; avatarBg = "#2c3e50"; musteriEtiketi = `<span class="etiket" style="background: #2c3e50; color:#f1c40f;">🔊 Piyasa Tayfası</span>`; } else if (t.tip === "Olucu") { avatarEmoji = "🤡"; avatarBg = "#e74c3c"; musteriEtiketi = `<span class="etiket etiket-kirmizi">💀 Ölücü</span>`; } else if (t.tip === "Takas") { avatarEmoji = "🔄"; avatarBg = "#27ae60"; musteriEtiketi = `<span class="etiket etiket-yesil">🔄 Takasçı</span>`; teklifGorunumu = `<span style="font-size:14px; color:#636e72;">${t.takasArac.marka} +</span><br>${t.fiyat.toLocaleString('tr-TR')} ₺`; } else if (t.tip === "Zengin") { avatarEmoji = "🎩"; avatarBg = "#8e44ad"; musteriEtiketi = `<span class="etiket" style="background:#8e44ad;">💎 Elit Müşteri</span>`; } lst.innerHTML += `<div class="teklif-karti" id="${t.id}" style="align-items: flex-start;"><div style="display:flex; gap:15px; align-items:center; width: 100%;"><div style="width:55px; height:55px; min-width:55px; border-radius:50%; background:${avatarBg}; display:flex; justify-content:center; align-items:center; font-size:28px; box-shadow:0 4px 10px rgba(0,0,0,0.2);">${avatarEmoji}</div><div style="text-align: left; flex:1;"><span style="color: var(--text-main); font-weight: 700; font-size: 16px;">${t.musteri}</span> ${musteriEtiketi} <span style="font-size:11px; color:var(--text-muted);">(${kalanGun} Gün)</span><br><span style="font-size: 20px; color: #00b894; font-weight: 700;">Nakit: ${teklifGorunumu}</span></div></div><div style="display:flex; flex-direction:column; gap:5px; width:100%; margin-top:15px;"><button class="btn btn-yesil" style="margin:0;" onclick="teklifiKabulEt(${id}, '${t.id}')">Nakit Sat</button><button class="btn" style="background:#8e44ad; color:white; margin:0;" onclick="senetleSat(${id}, '${t.id}', ${sF})">📝 Senetle (${sF.toLocaleString('tr-TR')} ₺)</button><button class="btn btn-turuncu" style="margin:0;" onclick="pazarlikGarajAraci(${id}, '${t.id}')">Pazarlık Yap</button></div></div>`; }); } document.getElementById('teklif-modal').style.display = "block"; }
-function pazarlikGarajAraci(id, tId) { const a = garaj.find(x => x.id === id); const tI = a.teklifler.findIndex(x => x.id === tId); const t = a.teklifler[tI]; const k = document.getElementById(tId); if (t.tip === "Olucu") { oyunSesi('hata'); a.teklifler.splice(tI, 1); k.innerHTML = `<div style="text-align: center; color: #d63031; padding: 20px; font-weight: bold;">Müşteri küfredip gitti!</div>`; return; } if (Math.random() > 0.5) { t.fiyat = Math.floor(t.fiyat * (1 + ((Math.floor(Math.random()*8)+5)/100))); oyunSesi('kasa'); let sF = Math.floor(t.fiyat * 1.30); k.innerHTML = `<div style="display:flex; gap:15px; align-items:center; width: 100%;"><div style="width:55px; height:55px; min-width:55px; border-radius:50%; background:#27ae60; display:flex; justify-content:center; align-items:center; font-size:28px;">🤑</div><div style="text-align: left; flex:1;"><span style="color: var(--text-main); font-weight: 700; font-size: 16px;">${t.musteri} (İkna Oldu)</span><br><span style="font-size: 20px; color: #00b894; font-weight: 700;">Nakit: ${t.fiyat.toLocaleString('tr-TR')} ₺</span></div></div><div style="display:flex; flex-direction:column; gap:5px; width:100%; margin-top:15px;"><button class="btn btn-yesil" style="margin:0;" onclick="teklifiKabulEt(${id}, '${t.id}')">Nakit Sat</button><button class="btn" style="background:#8e44ad; color:white; margin:0;" onclick="senetleSat(${id}, '${t.id}', ${sF})">📝 Senetle (${sF.toLocaleString('tr-TR')} ₺)</button></div>`; } else { oyunSesi('hata'); a.teklifler.splice(tI, 1); k.innerHTML = `<div style="text-align: center; color: #d63031; padding: 20px; font-weight: bold;">Müşteri sinirlenip gitti!</div>`; } oyunuKaydet(); }
+function pazarlikGarajAraci(id, tId) { const a = garaj.find(x => x.id === id); const tI = a.teklifler.findIndex(x => x.id === tId); const t = a.teklifler[tI]; const k = document.getElementById(tId); if (t.tip === "Olucu") { oyunSesi('hata'); a.teklifler.splice(tI, 1); k.innerHTML = `<div style="text-align: center; color: #d63031; padding: 20px; font-weight: bold;">Müşteri küfredip gitti!</div>`; return; } if (Math.random() > 0.5) { t.fiyat = Math.round(t.fiyat * (1 + ((Math.floor(Math.random()*8)+5)/100))); oyunSesi('kasa'); let sF = Math.round(t.fiyat * 1.30); k.innerHTML = `<div style="display:flex; gap:15px; align-items:center; width: 100%;"><div style="width:55px; height:55px; min-width:55px; border-radius:50%; background:#27ae60; display:flex; justify-content:center; align-items:center; font-size:28px;">🤑</div><div style="text-align: left; flex:1;"><span style="color: var(--text-main); font-weight: 700; font-size: 16px;">${t.musteri} (İkna Oldu)</span><br><span style="font-size: 20px; color: #00b894; font-weight: 700;">Nakit: ${t.fiyat.toLocaleString('tr-TR')} ₺</span></div></div><div style="display:flex; flex-direction:column; gap:5px; width:100%; margin-top:15px;"><button class="btn btn-yesil" style="margin:0;" onclick="teklifiKabulEt(${id}, '${t.id}')">Nakit Sat</button><button class="btn" style="background:#8e44ad; color:white; margin:0;" onclick="senetleSat(${id}, '${t.id}', ${sF})">📝 Senetle (${sF.toLocaleString('tr-TR')} ₺)</button></div>`; } else { oyunSesi('hata'); a.teklifler.splice(tI, 1); k.innerHTML = `<div style="text-align: center; color: #d63031; padding: 20px; font-weight: bold;">Müşteri sinirlenip gitti!</div>`; } oyunuKaydet(); }
 function teklifiKabulEt(id, tId) { const a = garaj.find(x => x.id === id); const t = a.teklifler.find(x => x.id === tId); if((a.hasarli || gizliKusurluAraclar.includes(id)) && Math.random() < 0.25) { modaliKapat('teklif-modal'); eksperKriziBaslat(id, tId, "nakit", 0); return; } satisiTamamla(id, tId, "nakit", 0); }
 function senetleSat(id, tId, sF) { const a = garaj.find(x => x.id === id); const t = a.teklifler.find(x => x.id === tId); if((a.hasarli || gizliKusurluAraclar.includes(id)) && Math.random() < 0.25) { modaliKapat('teklif-modal'); eksperKriziBaslat(id, tId, "senet", sF); return; } satisiTamamla(id, tId, "senet", sF); }
 function eksperKriziBaslat(id, tId, tip, sF) { const a = garaj.find(x => x.id === id); let modal = document.getElementById('karar-modal'); document.getElementById('karar-baslik').innerText = "🚨 Oto Rapor Krizi!"; document.getElementById('karar-metin').innerHTML = `Müşteri aracı kendi eksperine soktu ve <b>gizli kusurları/hasarı</b> öğrendi! Çılgına döndü ve <i>"Benim geldiğim yol masrafını ve eksper paramı (5.000 ₺) ver, yoksa dükkanı dağıtırım!"</i> diye bağırıyor.`; let btn1 = document.getElementById('karar-btn-1'); let btn2 = document.getElementById('karar-btn-2'); btn1.innerText = "Öde ve Gönder (5.000 ₺)"; btn1.className = "btn btn-yesil"; btn1.onclick = function() { if(paramiz >= 5000) { paramiz -= 5000; toplamGider += 5000; } else { bankaBorcu += 5000; } a.teklifler = a.teklifler.filter(x => x.id !== tId); oyunSesi('hata'); modaliKapat('karar-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("Adamın parasını verip zararla gönderdin.", "bilgi"); }; btn2.innerText = "Kavga Et ve Kov"; btn2.className = "btn btn-kirmizi"; btn2.onclick = function() { haritaPuani -= 1.0; if(haritaPuani < 1.0) haritaPuani = 1.0; a.teklifler = a.teklifler.filter(x => x.id !== tId); oyunSesi('hata'); modaliKapat('karar-modal'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("Müşteriyle kavga ettin! Adam Google Haritalar'da sana 1 yıldız verdi.", "hata"); }; modal.style.display = 'block'; }
-function satisiTamamla(id, tId, tip, sF) { const a = garaj.find(x => x.id === id); const t = a.teklifler.find(x => x.id === tId); modaliKapat('teklif-modal'); let netKazanc = 0; if(tip === "nakit") { netKazanc = t.fiyat - noterUcreti; paramiz += netKazanc; toplamGelir += netKazanc; if (t.tip === "Takas") { if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari(`TAKAS edilen araca yer yok!`, "hata"); return; } garaj.push(t.takasArac); ozelUyari(`Takas Başarılı!`, "basari"); } else { ozelUyari(`Araç Nakit Satıldı!`, "basari"); } } else { let pes = Math.floor(sF * 0.20); netKazanc = sF; paramiz += pes; toplamGelir += pes; senetler.push({ id: 'snt-'+Math.floor(Math.random()*10000), musteri: t.musteri, arabaMarka: a.marka, toplamBorc: sF, odenen: pes, taksit: Math.floor((sF-pes)/10), kalanGun: 10, durum: 'Düzenli Ödüyor' }); ozelUyari(`Araç Senetle Satıldı!`, "basari"); } let maliyet = a.alisFiyati || Math.floor(a.fiyat * 0.85); let kar = netKazanc - maliyet; if(kar > 0) vergiBorcu += Math.floor(kar * 0.20); if(gizliKusurluAraclar.includes(id)) { sabikaliSatislar.push({ musteri: t.musteri, satilanFiyat: netKazanc, gun: gun, id: a.id }); gizliKusurluAraclar = gizliKusurluAraclar.filter(x => x !== id); } haritaPuani += 0.2; if(haritaPuani > 5.0) haritaPuani = 5.0; garaj = garaj.filter(x => x.id !== id); toplamSatilanArac++; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); }
-
-// ==========================================
-// 9. RENT A CAR VE PERSONEL
-// ==========================================
-function kirayaVer(arabaId) { const arabaIndex = garaj.findIndex(a => a.id === arabaId); let araba = garaj[arabaIndex]; if (!araba.muayeneVar) { ozelUyari("Muayenesiz aracı kiraya veremezsin!", "hata"); return; } if (araba.hasarli || araba.tamirDurumu > 0) { ozelUyari("Hasarlı aracı kiraya veremezsin!", "hata"); return; } araba.gunlukKiraBedeli = Math.floor(araba.fiyat * 0.005); rentACarFilosu.push(araba); garaj.splice(arabaIndex, 1); oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Araç filoya katıldı!`, "basari"); }
-function kiradanCek(arabaId) { const arabaIndex = rentACarFilosu.findIndex(a => a.id === arabaId); let araba = rentACarFilosu[arabaIndex]; garaj.push(araba); rentACarFilosu.splice(arabaIndex, 1); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Araç kiradan çekildi.`, "bilgi"); }
-function kaskoYaptir(id) { const a = rentACarFilosu.find(x => x.id === id); if(!bakiyeYeterliMi(15000)) { ozelUyari("Para yok!", "hata"); return; } paramiz -= 15000; a.kaskolu = true; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Kasko yapıldı!`, "basari"); }
-function rentACarEkraniGuncelle() { const liste = document.getElementById('rentacar-listesi'); const bilgi = document.getElementById('rentacar-bilgi'); if(!liste) return; liste.innerHTML = ''; if (rentACarFilosu.length === 0) { if(bilgi) bilgi.style.display = 'block'; } else { if(bilgi) bilgi.style.display = 'none'; let toplam = 0; rentACarFilosu.forEach(a => { if(!a.gunlukKiraBedeli) a.gunlukKiraBedeli = Math.floor(a.fiyat * 0.005); toplam += a.gunlukKiraBedeli; let kaskoBadge = a.kaskolu ? `<span class="etiket" style="background:#3498db; margin-left:10px;">🛡️ Kaskolu</span>` : `<span class="etiket" style="background:#bdc3c7; margin-left:10px;">Kasko Yok</span>`; let kaskoBtn = !a.kaskolu ? `<button class="btn btn-mavi" style="margin-bottom:5px;" onclick="kaskoYaptir(${a.id})">🛡️ Kasko Yaptır (15.000 ₺)</button>` : ''; liste.innerHTML += `<div class="ilan-karti" style="border-left: 5px solid #d35400;"><div class="araba-foto"><img src="${a.gorsel}" style="width:100%; height:100%; object-fit:cover; border-radius:8px;"></div><div class="ilan-detay"><h3 class="ilan-baslik">${a.marka} ${a.model} ${kaskoBadge}</h3><div style="margin-top:8px; color:#27ae60; font-size:16px; font-weight: bold;">Günlük Getiri: +${a.gunlukKiraBedeli.toLocaleString('tr-TR')} ₺</div></div><div class="ilan-sag-taraf">${kaskoBtn}<button class="btn btn-turuncu" onclick="kiradanCek(${a.id})">Kiradan Çek</button></div></div>`; }); liste.innerHTML = `<h3 style="color:#27ae60; text-align:center;">Toplam Günlük Pasif Gelir: ${toplam.toLocaleString('tr-TR')} ₺</h3>` + liste.innerHTML; } }
-function rentACarGelirVeRiskYonetimi() { if (rentACarFilosu.length === 0) return; let kazanilan = 0; for (let i = rentACarFilosu.length - 1; i >= 0; i--) { let a = rentACarFilosu[i]; if(!a.gunlukKiraBedeli) a.gunlukKiraBedeli = Math.floor(a.fiyat * 0.005); let risk = Math.random(); if (risk < 0.02) { rentACarFilosu.splice(i, 1); if(a.kaskolu) { paramiz += a.fiyat; toplamGelir += a.fiyat; oyunSesi('kasa'); ozelUyari(`🚨 Araç Çalındı! Ancak 🛡️ KASKO aracın bedelini ödedi.`, "basari"); } else { oyunSesi('hata'); ozelUyari(`🚨 ŞOK! Kiradaki ${a.marka} aracın çalındı ve kaskosu yoktu!`, "hata"); } } else if (risk < 0.07) { rentACarFilosu.splice(i, 1); if(a.kaskolu) { paramiz += a.fiyat; toplamGelir += a.fiyat; oyunSesi('kasa'); ozelUyari(`🚨 Kaza Haberi! Müşteri aracı pert etti ancak 🛡️ KASKO bedelini ödedi.`, "basari"); } else { a.hasarli = true; a.tamirMasrafi = Math.floor(a.fiyat * 0.20); a.fiyat = Math.floor(a.fiyat * 0.70); garaj.push(a); oyunSesi('hata'); ozelUyari(`🚨 KAZA! Müşteri kaza yaptı! Çekiciyle garaja atıldı. Kasko yok zarar sende.`, "hata"); } } else if (risk < 0.15) { if (a.kaskolu) { kazanilan += a.gunlukKiraBedeli; } else { let ceza = Math.floor(a.gunlukKiraBedeli * 2); paramiz -= ceza; toplamGider += ceza; kazanilan += a.gunlukKiraBedeli; ozelUyari(`⚠️ Kiradaki ${a.marka} hor kullanılmış. Masrafı sana kaldı.`, "bilgi"); } } else { kazanilan += a.gunlukKiraBedeli; a.km += Math.floor(Math.random() * 200) + 50; } } if (kazanilan > 0) { paramiz += kazanilan; toplamGelir += kazanilan; oyunSesi('kasa'); } }
-
-function personelEkraniGuncelle() { 
-    let mBar = document.getElementById('moral-bar'); let mTxt = document.getElementById('moral-text');
-    if(mBar) {
-        mBar.style.width = personelMorali + "%";
-        if(personelMorali > 75) { mBar.style.background = "#00b894"; mTxt.innerText = "Durum: Mükemmel (%"+personelMorali+")"; }
-        else if(personelMorali > 40) { mBar.style.background = "#f39c12"; mTxt.innerText = "Durum: İdare Eder (%"+personelMorali+")"; }
-        else { mBar.style.background = "#d63031"; mTxt.innerText = "Durum: İsyan Çıkabilir! (%"+personelMorali+")"; }
-    }
-    let roller = ['usta', 'smUzman', 'satisTemsilci', 'vale', 'eksper', 'avukat'];
-    roller.forEach(r => {
-        let b = document.getElementById('btn-personel-' + r);
-        if(b) {
-            if(personeller[r]) { b.innerHTML = `<button class="btn btn-kirmizi" onclick="personelKov('${r}')">İşten Çıkar</button> <div style="margin-top:5px; color:#27ae60; font-weight:bold;">✅ Çalışıyor</div>`; } 
-            else { b.innerHTML = `<button class="btn btn-yesil" onclick="personelIseAl('${r}')">İşe Al</button>`; }
-        }
-    });
-}
-function personelIseAl(rol) { 
-    let m = { usta: 25000, smUzman: 15000, satisTemsilci: 30000, vale: 10000, eksper: 20000, avukat: 40000 }; 
-    if(!bakiyeYeterliMi(m[rol])) { ozelUyari("Bütçen yetersiz!", "hata"); return; } 
-    paramiz -= m[rol]; toplamGider += m[rol]; personeller[rol] = true; 
-    personelMorali += 10; if(personelMorali > 100) personelMorali = 100;
-    oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Personel işe alındı!`, "basari"); 
-}
-function personelKov(rol) { personeller[rol] = false; personelMorali -= 15; oyunSesi('hata'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Kovuldu. Kalan personelin morali bozuldu.`, "bilgi"); }
-function primDagit() {
-    if(!bakiyeYeterliMi(15000)) { ozelUyari("Prim dağıtacak paranız yok!", "hata"); return; }
-    if(personelMorali >= 100) { ozelUyari("Personelin keyfi zaten yerinde!", "bilgi"); return; }
-    paramiz -= 15000; toplamGider += 15000; personelMorali += 30; if(personelMorali > 100) personelMorali = 100;
-    oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("💸 Personele 15.000 ₺ prim dağıtıldı. Yüzler gülüyor!", "basari");
-}
-
-function dukkanEkraniniGuncelle() { let isim=document.getElementById('dukkan-isim'); if(!isim)return; const bil = seviyeler[dukkanSeviyesi - 1]; isim.innerText = `${bil.isim} (Seviye ${bil.seviye})`; document.getElementById('dukkan-kapasite').innerText = bil.kapasite === 999 ? "Sınırsız" : bil.kapasite; const alan = document.getElementById('yukseltme-alani'); if (dukkanSeviyesi < seviyeler.length) { alan.style.display = 'block'; document.getElementById('yeni-seviye-isim').innerText = seviyeler[dukkanSeviyesi].isim; document.getElementById('yeni-seviye-fiyat').innerText = seviyeler[dukkanSeviyesi].fiyat.toLocaleString('tr-TR') + " TL"; } else { alan.innerHTML = `<h3 style="color: #27ae60;">Maksimum seviyedesin!</h3>`; } }
-function dukkaniYukselt() { if (dukkanSeviyesi >= seviyeler.length) return; const son = seviyeler[dukkanSeviyesi]; if (bakiyeYeterliMi(son.fiyat)) { oyunSesi('tamir'); paramiz -= son.fiyat; toplamGider += son.fiyat; dukkanSeviyesi++; aracKapasitesi = son.kapasite; aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Dükkan büyüdü!`, "basari"); } else { oyunSesi('hata'); ozelUyari("Para yok!", "hata"); } }
-function istatistikleriGuncelle() { let st=document.getElementById('ist-satilan'); if(st) st.innerText=toplamSatilanArac; let gl=document.getElementById('ist-gelir'); if(gl) gl.innerText=toplamGelir.toLocaleString('tr-TR'); let gd=document.getElementById('ist-gider'); if(gd) gd.innerText=toplamGider.toLocaleString('tr-TR'); let nt=document.getElementById('ist-net'); if(nt){ let k=toplamGelir-toplamGider; nt.innerText=k.toLocaleString('tr-TR'); nt.style.color=k<0?'#d63031':'#00b894'; } }
-
-// ==========================================
-// 10. SOSYAL MEDYA
-// ==========================================
-function sosyalEkraniGuncelle() { 
-    let k = document.getElementById('sosyal-kurulum'); let y = document.getElementById('sosyal-yonetim'); 
-    if (!sosyalMedya.aktif) { if(k) k.style.display = 'block'; if(y) y.style.display = 'none'; } 
-    else { 
-        if(k) k.style.display = 'none'; if(y) y.style.display = 'block'; 
-        let isim = sosyalMedya.kullaniciAdi.replace('@', '');
-        document.getElementById('profil-ad').innerHTML = `@${isim}`; document.getElementById('sm-avatar-harf').innerText = isim.charAt(0).toUpperCase(); document.getElementById('profil-platform').innerText = sosyalMedya.platform; document.getElementById('mavi-tik-ikon').style.display = sosyalMedya.maviTik ? 'inline' : 'none';
-        document.getElementById('profil-takipci').innerText = Math.floor(sosyalMedya.takipci).toLocaleString('tr-TR'); document.getElementById('profil-gonderi-sayisi').innerText = sosyalMedya.gonderiler.length;
-        let etkilesim = sosyalMedya.maviTik ? 18.5 : (sosyalMedya.gonderiler.length * 1.2 + 2.4); if (sosyalMedya.lincKalanGun > 0) etkilesim = 0.1; document.getElementById('profil-etkilesim').innerText = "%" + etkilesim.toFixed(1);
-        let grafikAlan = document.getElementById('sm-grafik'); grafikAlan.innerHTML = ''; let maxTakipci = Math.max(...sosyalMedya.takipciGecmisi, 100); 
-        sosyalMedya.takipciGecmisi.forEach((deger, index) => { let yukseklik = (deger / maxTakipci) * 100; if(yukseklik < 5) yukseklik = 5; let kMetin = deger > 1000 ? (deger/1000).toFixed(1) + "k" : Math.floor(deger); grafikAlan.innerHTML += `<div class="grafik-sutun" style="height: ${yukseklik}%;"><span class="grafik-deger">${kMetin}</span><span class="grafik-gun">G${gun - (6 - index)}</span></div>`; });
-        let grid = document.getElementById('sm-post-grid'); grid.innerHTML = '';
-        if (sosyalMedya.gonderiler.length === 0) { grid.innerHTML = `<div style="grid-column: 1 / -1; text-align:center; color:#b2bec3; padding: 30px; background:var(--card-bg); border-radius:10px;">Henüz hiç gönderi paylaşmadın.</div>`; } 
-        else { sosyalMedya.gonderiler.forEach(p => { grid.innerHTML += `<div class="sm-post-item"><img src="${p.gorsel}"><div class="sm-post-overlay"><span>❤️ ${p.begeni.toLocaleString('tr-TR')}</span><span>💬 ${p.yorum.toLocaleString('tr-TR')}</span></div></div>`; }); }
-        let lu = document.getElementById('sosyal-linc-uyari'); let lk = document.getElementById('linc-kalan'); 
-        if (sosyalMedya.lincKalanGun > 0) { if(lu) lu.style.display = "block"; if(lk) lk.innerText = sosyalMedya.lincKalanGun; } else { if(lu) lu.style.display = "none"; } 
-        dmKutusunuEkranaBas(); 
-    } 
-}
-function sosyalHesapAc() { let ka = document.getElementById('sm-kullanici-adi').value; let plat = document.getElementById('sm-platform').value; if (ka.trim() === "") return ozelUyari("İsim girin.", "hata"); sosyalMedya.aktif = true; sosyalMedya.platform = plat; sosyalMedya.kullaniciAdi = ka.startsWith('@') ? ka : '@'+ka; sosyalMedya.takipci = 50; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); }
-function maviTikAl() { if (sosyalMedya.maviTik) return; if (!bakiyeYeterliMi(25000)) return ozelUyari("Para yok!", "hata"); paramiz -= 25000; sosyalMedya.maviTik = true; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari("Mavi Tik Alındı.", "basari"); }
-function cekilisYap() { if (!bakiyeYeterliMi(80000)) return ozelUyari("Para yok!", "hata"); if (sosyalMedya.lincKalanGun > 0) return ozelUyari("Linç yiyorsun!", "hata"); paramiz -= 80000; if (Math.random() < 0.15) { sosyalMedya.lincKalanGun = 5; sosyalMedya.takipci -= Math.floor(sosyalMedya.takipci * 0.10); oyunSesi('hata'); ozelUyari(`🚨 İFŞALANDIN!`, "hata"); } else { sosyalMedya.takipci += 15000; oyunSesi('kasa'); ozelUyari(`🎁 Çekiliş patladı!`, "basari"); } aktifEkraniYenile(); oyunuKaydet(); }
-function postIcinArabaSec() { if (garaj.length === 0) return ozelUyari("Garaj boş!", "hata"); if (!bakiyeYeterliMi(1500)) return ozelUyari("Para yok.", "hata"); const lst = document.getElementById('post-araba-listesi'); lst.innerHTML = ''; garaj.forEach(a => { lst.innerHTML += `<div class="teklif-karti"><div><b>${a.marka} ${a.model}</b></div><button class="btn btn-yesil" onclick="videoCekVePaylas(${a.id})">Çek</button></div>`; }); document.getElementById('post-secim-modal').style.display = "block"; }
-function videoCekVePaylas(id) { 
-    const a = garaj.find(x => x.id === id); if (!a) return; modaliKapat('post-secim-modal'); paramiz -= 1500; 
-    let kazanilanTakipci = Math.floor(Math.random() * 1000) + 1000; if(sosyalMedya.maviTik) kazanilanTakipci *= 2; sosyalMedya.takipci += kazanilanTakipci; 
-    let begeni = Math.floor(sosyalMedya.takipci * (Math.random() * 0.15 + 0.05)); let yorum = Math.floor(begeni * (Math.random() * 0.1 + 0.02));
-    sosyalMedya.gonderiler.unshift({ gorsel: a.gorsel, begeni: begeni, yorum: yorum }); if (sosyalMedya.gonderiler.length > 9) sosyalMedya.gonderiler.pop();
-    document.getElementById('post-sonuc-takipci').innerText = `+${kazanilanTakipci} Takipçi`; document.getElementById('post-yorumlar').innerHTML = `<div style="margin-bottom:5px;"><b>@sokak_tayfasi:</b> Ateş ediyor 🔥</div><div style="margin-bottom:5px;"><b>@otomanyak:</b> Fiyat nedir usta?</div><div><b>@${sosyalMedya.kullaniciAdi.replace('@','')}_fan:</b> Kral yine piyasayı belirlemişsin.</div>`; 
-    oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); document.getElementById('post-sonuc-modal').style.display = "block"; 
-}
-function influencerReklamVer() { if (!bakiyeYeterliMi(50000)) return ozelUyari("Para yok!", "hata"); paramiz -= 50000; sosyalMedya.takipci += 8000; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Reklam verildi!`, "basari"); }
-function dmKutusunuEkranaBas() { const k = document.getElementById('dm-kutusu'); if(!k) return; k.innerHTML = ''; if (dmKutusu.length === 0) { k.innerHTML = '<p style="color:var(--text-muted);">Gelen kutusu boş.</p>'; return; } dmKutusu.forEach((m, i) => { k.innerHTML += `<div class="ilan-karti"><div><b>📩 ${m.gonderen}</b><br>Teklif: ${m.teklifFiyat.toLocaleString('tr-TR')} ₺</div><div style="display:flex; gap:10px;"><button class="btn btn-yesil" onclick="dmTeklifKabul(${i}, ${m.arabaId})">Sat</button> <button class="btn btn-kirmizi" onclick="dmSil(${i})">Sil</button></div></div>`; }); }
-function dmSil(i) { dmKutusu.splice(i, 1); oyunSesi('hata'); aktifEkraniYenile(); oyunuKaydet(); }
-function dmTeklifKabul(i, id) { const aI = garaj.findIndex(x => x.id === id); if (aI === -1) { dmSil(i); return; } let m = dmKutusu[i]; paramiz += (m.teklifFiyat - noterUcreti); garaj.splice(aI, 1); dmKutusu.splice(i, 1); oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`DM satışı tamam!`, "basari"); }
-
-function canliYayinIcinArabaSec() { if (garaj.length===0) return ozelUyari("Garajda araç yok.","hata"); if (sosyalMedya.takipci<500) return ozelUyari("En az 500 takipçin olmalı!","hata"); const l = document.getElementById('yayin-araba-listesi'); if(!l) return; l.innerHTML=''; garaj.forEach(a=>{ l.innerHTML+=`<div class="teklif-karti"><div><b>${a.marka} ${a.model}</b></div><button class="btn btn-kirmizi" onclick="canliYayiniBaslat(${a.id})">Yayınla</button></div>`; }); document.getElementById('yayin-secim-modal').style.display="block"; }
-function canliYayiniBaslat(id) { modaliKapat('yayin-secim-modal'); yayindakiAraba = garaj.find(x => x.id === id); anlikIzleyici = Math.floor(sosyalMedya.takipci * 0.1) + 10; anlikEnYuksekTeklif = Math.floor(yayindakiAraba.fiyat * 0.60); yayindakiTeklifci = "Sistem"; yayinTuruHype = 1.0; document.getElementById('yayin-araba-foto').src = yayindakiAraba.gorsel; document.getElementById('yayin-araba-baslik').innerText = `${yayindakiAraba.marka} ${yayindakiAraba.model}`; document.getElementById('yayin-araba-deger').innerText = yayindakiAraba.fiyat.toLocaleString('tr-TR'); document.getElementById('yayin-en-yuksek-teklif').innerText = anlikEnYuksekTeklif.toLocaleString('tr-TR'); document.getElementById('yayin-teklif-veren').innerText = "Başlangıç Fiyatı"; document.getElementById('yayin-chat').innerHTML = `<div style="color:#00b894; text-align:center;">Yayın başladı...</div>`; document.getElementById('canli-yayin-modal').style.display="block"; if(yayinInterval) clearInterval(yayinInterval); yayinInterval = setInterval(yayinDongusu, 1500); }
-function yayinDongusu() { anlikIzleyici += Math.floor((Math.random()*20-10)*yayinTuruHype); if(anlikIzleyici<5)anlikIzleyici=5; document.getElementById('yayin-izleyici').innerText = anlikIzleyici; if(yayinTuruHype>1.0) yayinTuruHype -= 0.1; let ct = document.getElementById('yayin-chat'); let sans = 0.35 * yayinTuruHype; if (anlikEnYuksekTeklif > (yayindakiAraba.fiyat * 1.20)) sans = 0.05; if(Math.random() < sans) { anlikEnYuksekTeklif += Math.floor(Math.random() * 30000) + 10000; yayindakiTeklifci = "Anonim" + Math.floor(Math.random()*99); document.getElementById('yayin-en-yuksek-teklif').innerText = anlikEnYuksekTeklif.toLocaleString('tr-TR'); document.getElementById('yayin-teklif-veren').innerText = yayindakiTeklifci; ct.innerHTML += `<div style="color:#00b894;">💰 Benden ${anlikEnYuksekTeklif.toLocaleString('tr-TR')} ₺ çalışır!</div>`; oyunSesi('kasa'); } else { let bosYorumlar = ["Araba yorgun duruyor", "Fiyat çok şişti", "O paraya uçak alırım", "🔥🔥🔥", "Değişeni var mı?"]; let yorum = bosYorumlar[Math.floor(Math.random() * bosYorumlar.length)]; ct.innerHTML += `<div><span style="color:#dfe6e9;">${yorum}</span></div>`; } ct.scrollTop=ct.scrollHeight; }
-function yayinGazaGetir() { yayinTuruHype = 2.5; let chat = document.getElementById('yayin-chat'); chat.innerHTML += `<div style="color:#ff7675;">📣 HAYDİ BEYLER!</div>`; chat.scrollTop = chat.scrollHeight; }
-function yayindaSat() { if(anlikEnYuksekTeklif < (yayindakiAraba.fiyat * 0.5)) return ozelUyari("Çok ucuz!","hata"); clearInterval(yayinInterval); modaliKapat('canli-yayin-modal'); paramiz += anlikEnYuksekTeklif; garaj = garaj.filter(x => x.id !== yayindakiAraba.id); oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`Yayında Satıldı!`, "basari"); }
-function yayiniBitir() { clearInterval(yayinInterval); modaliKapat('canli-yayin-modal'); }
+function satisiTamamla(id, tId, tip, sF) { const a = garaj.find(x => x.id === id); const t = a.teklifler.find(x => x.id === tId); modaliKapat('teklif-modal'); let netKazanc = 0; if(tip === "nakit") { netKazanc = t.fiyat - noterUcreti; paramiz += netKazanc; toplamGelir += netKazanc; if (t.tip === "Takas") { if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari(`TAKAS edilen araca yer yok!`, "hata"); return; } garaj.push(t.takasArac); ozelUyari(`Takas Başarılı!`, "basari"); } else { ozelUyari(`Araç Nakit Satıldı!`, "basari"); } } else { let pes = Math.round(sF * 0.20); netKazanc = sF; paramiz += pes; toplamGelir += pes; senetler.push({ id: 'snt-'+Math.floor(Math.random()*10000), musteri: t.musteri, arabaMarka: a.marka, toplamBorc: sF, odenen: pes, taksit: Math.round((sF-pes)/10), kalanGun: 10, durum: 'Düzenli Ödüyor' }); ozelUyari(`Araç Senetle Satıldı!`, "basari"); } let maliyet = a.alisFiyati || Math.floor(a.fiyat * 0.85); let kar = netKazanc - maliyet; if(kar > 0) vergiBorcu += Math.round(kar * 0.20); if(gizliKusurluAraclar.includes(id)) { sabikaliSatislar.push({ musteri: t.musteri, satilanFiyat: netKazanc, gun: gun, id: a.id }); gizliKusurluAraclar = gizliKusurluAraclar.filter(x => x !== id); } haritaPuani += 0.2; if(haritaPuani > 5.0) haritaPuani = 5.0; garaj = garaj.filter(x => x.id !== id); toplamSatilanArac++; oyunSesi('kasa'); aktifEkraniYenile(); oyunuKaydet(); }
 
 // ==========================================
 // 11. YEDİEMİN İHALESİ
@@ -642,89 +573,12 @@ function ihaleEkraniniGuncelle() {
     else if (ihaleInterval || ihaleAraba) { alan.innerHTML = `<button class="btn btn-mavi" style="font-size: 18px; padding: 15px;" onclick="document.getElementById('ihale-modal').style.display='block'">Aktif İhaleye Dön</button>`; } 
     else { let kalan = 3 - (gun % 3); alan.innerHTML = `<div class="uyari-mesaji">Şu an aktif bir ihale bulunmuyor. Bir sonraki ihale <b>${kalan} gün</b> sonra.</div>`; }
 }
-
 function ihaleyeGir() { if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! Devlet ihalesine giremezsin.", "hata"); return; } if(!bakiyeYeterliMi(5000)) { ozelUyari("Giriş bedeli için 5.000 ₺ paranız yok.", "hata"); return; } paramiz -= 5000; toplamGider += 5000; oyunSesi('kasa'); aktifEkraniYenile(); ihaleHazirla('manuel'); }
-
-function ihaleHazirla(tetik) { 
-    if (tetik !== 'manuel') return; 
-    if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari("Garaj kapasiteniz dolu!", "hata"); return; } 
-    ihaleAraba = rastgeleArabaUret(); 
-    ihaleFiyat = Math.floor(ihaleAraba.fiyat * 0.25); 
-    ihaleBizdeMi = false; 
-    ihaleKapanmaSayaci = 0; 
-    document.getElementById('ihale-araba-isim').innerText = `${ihaleAraba.marka} ${ihaleAraba.model}`; 
-    document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); 
-    document.getElementById('ihale-teklif-sahibi').innerText = "Başlangıç Bedeli"; 
-    document.getElementById('ihale-modal').style.display = 'block'; 
-    if(ihaleInterval) clearInterval(ihaleInterval); 
-    ihaleInterval = setInterval(ihaleDongusu, 2000); 
-    aktifEkraniYenile(); 
-}
-
-function ihaleDongusu() { 
-    if (ihaleKapanmaSayaci >= 3) { ihaleBitir(); return; } 
-    let npcMaxLimit = ihaleAraba.fiyat * 0.85; 
-    let npcTeklifSansi = ihaleBizdeMi ? 0.65 : 0.35; 
-
-    if (Math.random() < npcTeklifSansi && ihaleFiyat < npcMaxLimit) { 
-        let artis = (Math.floor(Math.random() * 3) + 1) * 10000; 
-        ihaleFiyat += artis; 
-        ihaleBizdeMi = false; 
-        ihaleKapanmaSayaci = 0; 
-        oyunSesi('hata'); 
-        document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); 
-        document.getElementById('ihale-teklif-sahibi').innerText = "Rakip Galeri (+" + artis.toLocaleString('tr-TR') + " ₺)"; 
-    } else { 
-        ihaleKapanmaSayaci++; 
-        let durumMetni = ihaleBizdeMi ? "Sende!" : "Rakip Galeri";
-        if (ihaleKapanmaSayaci === 1) document.getElementById('ihale-teklif-sahibi').innerText = durumMetni + " (Satıyorum...)"; 
-        if (ihaleKapanmaSayaci === 2) document.getElementById('ihale-teklif-sahibi').innerText = durumMetni + " (Sattıııım...)"; 
-    } 
-}
-
-function ihaleTeklifVer() { 
-    if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! İhaleye giremezsin.", "hata"); return; } 
-    if (!bakiyeYeterliMi(ihaleFiyat + 25000)) { ozelUyari("Para yok!", "hata"); return; } 
-    ihaleFiyat += 25000; 
-    ihaleBizdeMi = true; 
-    ihaleKapanmaSayaci = 0; 
-    oyunSesi('kasa'); 
-    document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); 
-    document.getElementById('ihale-teklif-sahibi').innerText = "Sende!"; 
-}
-
-function ihaleBitir() { 
-    if(ihaleInterval) clearInterval(ihaleInterval); 
-    modaliKapat('ihale-modal'); 
-    
-    if (ihaleBizdeMi && ihaleAraba) { 
-        paramiz -= ihaleFiyat; 
-        toplamGider += ihaleFiyat; 
-        ihaleAraba.fiyat = Math.floor(ihaleAraba.fiyat); 
-        ihaleAraba.alisFiyati = ihaleFiyat; 
-        ihaleAraba.rehinliMi = false; 
-        
-        garaj.push(ihaleAraba); 
-        ihaleAraba = null; 
-        ihaleInterval = null;
-        
-        aktifEkraniYenile(); oyunuKaydet(); 
-        ozelUyari(`🎉 İhaleyi Kazandın!\nSürpriz araç ${ihaleFiyat.toLocaleString('tr-TR')} ₺ karşılığında garajına çekildi.`, "basari"); 
-    } else { 
-        ihaleAraba = null; 
-        ihaleInterval = null; 
-        aktifEkraniYenile(); 
-        ozelUyari(`İhale Kapandı. Araç rakip galeriye satıldı.`, "bilgi"); 
-    } 
-}
-
-function ihaledenCekil() { 
-    if(ihaleInterval) clearInterval(ihaleInterval); 
-    ihaleAraba = null; 
-    ihaleInterval = null; 
-    modaliKapat('ihale-modal'); 
-    aktifEkraniYenile();
-}
+function ihaleHazirla(tetik) { if (tetik !== 'manuel') return; if ((garaj.length + rentACarFilosu.length) >= aracKapasitesi) { ozelUyari("Garaj kapasiteniz dolu!", "hata"); return; } ihaleAraba = rastgeleArabaUret(); ihaleFiyat = Math.round(ihaleAraba.fiyat * 0.25); ihaleBizdeMi = false; ihaleKapanmaSayaci = 0; document.getElementById('ihale-araba-isim').innerText = `${ihaleAraba.marka} ${ihaleAraba.model}`; document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Başlangıç Bedeli"; document.getElementById('ihale-modal').style.display = 'block'; if(ihaleInterval) clearInterval(ihaleInterval); ihaleInterval = setInterval(ihaleDongusu, 2000); aktifEkraniYenile(); }
+function ihaleDongusu() { if (ihaleKapanmaSayaci >= 3) { ihaleBitir(); return; } let npcMaxLimit = ihaleAraba.fiyat * 0.85; let npcTeklifSansi = ihaleBizdeMi ? 0.65 : 0.35; if (Math.random() < npcTeklifSansi && ihaleFiyat < npcMaxLimit) { let artis = (Math.floor(Math.random() * 3) + 1) * 10000; ihaleFiyat += artis; ihaleBizdeMi = false; ihaleKapanmaSayaci = 0; oyunSesi('hata'); document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Rakip Galeri (+" + artis.toLocaleString('tr-TR') + " ₺)"; } else { ihaleKapanmaSayaci++; let durumMetni = ihaleBizdeMi ? "Sende!" : "Rakip Galeri"; if (ihaleKapanmaSayaci === 1) document.getElementById('ihale-teklif-sahibi').innerText = durumMetni + " (Satıyorum...)"; if (ihaleKapanmaSayaci === 2) document.getElementById('ihale-teklif-sahibi').innerText = durumMetni + " (Sattıııım...)"; } }
+function ihaleTeklifVer() { if(eHacizAktif) { ozelUyari("Hesaplarında e-Haciz var! İhaleye giremezsin.", "hata"); return; } if (!bakiyeYeterliMi(ihaleFiyat + 25000)) { ozelUyari("Para yok!", "hata"); return; } ihaleFiyat += 25000; ihaleBizdeMi = true; ihaleKapanmaSayaci = 0; oyunSesi('kasa'); document.getElementById('ihale-guncel-teklif').innerText = ihaleFiyat.toLocaleString('tr-TR'); document.getElementById('ihale-teklif-sahibi').innerText = "Sende!"; }
+function ihaleBitir() { if(ihaleInterval) clearInterval(ihaleInterval); modaliKapat('ihale-modal'); if (ihaleBizdeMi && ihaleAraba) { paramiz -= ihaleFiyat; toplamGider += ihaleFiyat; ihaleAraba.fiyat = Math.round(ihaleAraba.fiyat); ihaleAraba.alisFiyati = ihaleFiyat; ihaleAraba.rehinliMi = false; garaj.push(ihaleAraba); ihaleAraba = null; ihaleInterval = null; aktifEkraniYenile(); oyunuKaydet(); ozelUyari(`🎉 İhaleyi Kazandın!\nSürpriz araç ${ihaleFiyat.toLocaleString('tr-TR')} ₺ karşılığında garajına çekildi.`, "basari"); } else { ihaleAraba = null; ihaleInterval = null; aktifEkraniYenile(); ozelUyari(`İhale Kapandı. Araç rakip galeriye satıldı.`, "bilgi"); } }
+function ihaledenCekil() { if(ihaleInterval) clearInterval(ihaleInterval); ihaleAraba = null; ihaleInterval = null; modaliKapat('ihale-modal'); aktifEkraniYenile(); }
 
 // ==========================================
 // BAŞLANGIÇ
