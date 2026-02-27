@@ -440,95 +440,68 @@ body.dark-mode .uyari-mesaji {
 }
 
 /* =========================================================
-   V7.3 KİBAR VE ZARİF HEADER (MİNİMALİST TASARIM)
+   V7.2 MOBİL NATIVE HEADER TASARIMI (SWIPEABLE PILLS)
 ========================================================= */
 @media (max-width: 768px) {
-    /* Header'ı ince, şeffaf ve köşesiz yap */
+    /* Header'ı biraz incelt ve iç boşlukları ayarla */
     .sari-baslik {
-        padding: 8px 12px 10px 12px !important;
-        background: rgba(255, 255, 255, 0.4) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.2) !important;
-        box-shadow: 0 4px 20px rgba(0,0,0,0.02) !important;
-    }
-    body.dark-mode .sari-baslik {
-        background: rgba(20, 20, 20, 0.5) !important;
-        border-bottom: 1px solid rgba(255, 255, 255, 0.05) !important;
+        padding: 10px 15px !important;
     }
     
-    .mobil-ust-satir { 
-        margin-bottom: 8px !important; 
-        padding-bottom: 0 !important; 
+    /* Logo ortada, butonlar kenarlarda kalsın */
+    .mobil-ust-satir {
+        position: relative;
+        display: flex;
+        justify-content: space-between !important;
+        align-items: center;
         border-bottom: none !important;
-        display: flex;
-        align-items: center;
+        padding-bottom: 5px !important;
+        margin-bottom: 10px;
     }
     
-    /* Logo inceltildi */
-    .logo { 
-        font-size: 16px !important; 
-        font-weight: 800 !important; 
-        position: relative !important;
-        left: auto !important;
-        transform: none !important;
-    }
-    
-    /* Sağ Üst Bakiye Rozeti Tasarımı */
-    .kibar-bakiye {
-        font-family: 'Montserrat', sans-serif;
-        font-weight: 800;
-        font-size: 12px;
-        background: rgba(0, 184, 148, 0.1);
-        color: #00b894;
-        padding: 5px 10px;
-        border-radius: 8px;
-        border: 1px solid rgba(0, 184, 148, 0.3);
-        display: flex;
-        align-items: center;
-        gap: 2px;
+    .logo {
+        position: absolute;
+        left: 50%;
+        transform: translateX(-50%);
+        font-size: 20px !important;
         white-space: nowrap;
     }
-    body.dark-mode .kibar-bakiye { background: rgba(0, 184, 148, 0.05); }
 
-    /* Yatay Kaydırma (Swipe) Açık */
+    /* BİLGİ KUTULARI (Yatay Kaydırılabilir Ekran) */
     .kullanici-bilgi {
         display: flex;
-        flex-wrap: nowrap !important;
-        overflow-x: auto;
+        flex-wrap: nowrap !important; /* Alt satıra inmesini engeller */
+        overflow-x: auto; /* Yatay kaydırma açar */
         overflow-y: hidden;
-        -webkit-overflow-scrolling: touch;
-        scrollbar-width: none;
-        gap: 6px !important;
+        -webkit-overflow-scrolling: touch; /* Mobilde yağ gibi kaysın diye */
+        scrollbar-width: none; /* Firefox için scrollbar gizleme */
+        gap: 10px !important;
         justify-content: flex-start !important;
-        padding-bottom: 2px !important;
+        padding-bottom: 5px; /* Gölgenin kesilmemesi için */
         width: 100%;
     }
-    .kullanici-bilgi::-webkit-scrollbar { display: none; }
     
-    /* Mikro Bilgi Hapları */
+    /* Chrome/Safari için scrollbar gizleme */
+    .kullanici-bilgi::-webkit-scrollbar {
+        display: none;
+    }
+
+    /* Kapsül Tasarımları (Küçültüldü ve Yatay Hale Getirildi) */
     .bilgi-kutu {
-        flex: 0 0 auto !important;
-        flex-direction: row !important;
-        padding: 4px 10px !important;
-        font-size: 11px !important;
-        font-weight: 600 !important;
-        border-radius: 8px !important;
-        background: rgba(255, 255, 255, 0.5) !important;
-        border: 1px solid rgba(255, 255, 255, 0.4) !important;
-        box-shadow: none !important;
-        display: flex;
-        align-items: center;
-        gap: 4px;
+        flex: 0 0 auto !important; /* Kutuların sıkışıp daralmasını engeller */
+        flex-direction: row !important; /* İçeriği yan yana dizer */
+        padding: 8px 16px !important;
+        border-radius: 20px !important;
+        font-size: 13px !important;
+        box-shadow: 0 4px 6px rgba(0,0,0,0.05) !important;
     }
-    body.dark-mode .bilgi-kutu {
-        background: rgba(0, 0, 0, 0.3) !important;
-        border-color: rgba(255, 255, 255, 0.05) !important;
+
+    .bilgi-kutu.bakiye {
+        font-size: 15px !important;
     }
     
-    .bilgi-kutu i { font-size: 13px !important; }
-    
-    /* Ayarlar ve Gece Modu Butonlarını Tıraşla */
-    .ayarlar-btn { background: transparent !important; box-shadow: none !important; padding: 0 !important; }
-    
-    /* Üst menü inceldiği için ana içeriği yukarı çekiyoruz */
-    .ana-konteyner { margin-top: 5px !important; }
+    /* İçeriklerin üstten fazla boşluk bırakmasını engelleme */
+    .ana-konteyner {
+        margin-top: 5px !important;
+    }
 }
