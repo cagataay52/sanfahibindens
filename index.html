@@ -195,6 +195,44 @@
     </div>
 
     <div id="hisse-islem-modal" class="modal" style="z-index: 4600;"><div class="modal-icerik" style="max-width: 400px; text-align: center;"><span class="kapat-btn" onclick="modaliKapat('hisse-islem-modal')">&times;</span><h2 class="modal-baslik" id="hisse-modal-baslik">Hisse İşlemi</h2><div style="background: rgba(0,0,0,0.05); padding: 15px; border-radius: 10px; margin-bottom: 20px;"><div style="font-size: 24px; font-weight: bold; color: var(--text-main);" id="hisse-modal-kod">KOD</div><div style="color: var(--text-muted); font-size: 14px;" id="hisse-modal-isim">İsim</div><div style="margin-top: 10px; font-size: 24px; font-weight: bold; color: #0984e3;" id="hisse-modal-fiyat">0.00 ₺</div></div><div style="text-align: left; margin-bottom: 15px;"><label style="font-size: 13px; font-weight: bold; color: var(--text-main);">İşlem Adedi (Lot):</label><input type="number" id="hisse-modal-adet" oninput="hisseModalHesapla()" style="width: 100%; padding: 12px; margin-top: 5px; border: 2px solid rgba(0,0,0,0.1); border-radius: 8px; font-size: 16px; outline: none; box-sizing:border-box; background:transparent; color:var(--text-main);" value="100"><div id="hisse-modal-bilgi" style="font-size: 12px; color: var(--text-muted); margin-top: 5px;">Maksimum: 0 Lot</div></div><div style="background: #2d3436; color: white; padding: 15px; border-radius: 10px; margin-bottom: 20px; text-align: center;"><div style="font-size: 13px; color: #bdc3c7;">Toplam İşlem Tutarı:</div><div style="font-size: 28px; font-weight: bold; color:#00b894;" id="hisse-modal-tutar">0 ₺</div></div><button class="btn btn-mavi" id="hisse-modal-onay-btn" style="padding: 15px; font-size: 18px;" onclick="hisseIslemOnayla()">Onayla</button></div></div>
+   <div id="baslangic-modal" class="modal" style="display: none; background: url('https://images.unsplash.com/photo-1603584173870-7f23fdae1b7a?auto=format&fit=crop&q=80&w=1920') center/cover no-repeat; z-index: 99999;">
+    <div style="position: absolute; inset: 0; background: linear-gradient(180deg, rgba(0,0,0,0.4) 0%, rgba(0,0,0,0.95) 100%); backdrop-filter: blur(8px);"></div>
+    
+    <div class="modal-icerik premium-login-kutu">
+        <div class="login-logo-alani">
+            <i class='bx bxs-car-garage' style="font-size: 55px; color: #0984e3; text-shadow: 0 0 25px rgba(9, 132, 227, 0.6);"></i>
+            <h1 style="color: #fff; margin: 10px 0 5px 0; font-family: 'Montserrat', sans-serif; font-size: 32px; letter-spacing: 1px;">Sahibinden<span style="color: #0984e3; font-weight: 300;">Motors</span></h1>
+            <p style="color: #b2bec3; font-size: 13px; margin-bottom: 30px;">Türkiye'nin En Gerçekçi Galeri Simülasyonu</p>
+        </div>
+
+        <div class="login-input-alani">
+            <div class="input-grup">
+                <i class='bx bx-user'></i>
+                <input type="text" id="galeri-adi-input" placeholder="Karakter veya Galeri Adı" autocomplete="off">
+            </div>
+            <button class="btn-basla-premium" onclick="galeriAdiniKaydet()">
+                Maceraya Başla <i class='bx bx-right-arrow-alt' style="font-size: 20px;"></i>
+            </button>
+        </div>
+
+        <div class="login-ayirici">
+            <span>veya</span>
+        </div>
+
+        <div class="sosyal-login-butonlari">
+            <button class="btn-sosyal google" onclick="ozelUyari('Google ile giriş çok yakında eklenecek!', 'bilgi')">
+                <i class='bx bxl-google' style="font-size: 18px;"></i> Google ile Devam Et
+            </button>
+            <button class="btn-sosyal apple" onclick="ozelUyari('Apple ID ile giriş çok yakında eklenecek!', 'bilgi')">
+                <i class='bx bxl-apple' style="font-size: 18px;"></i> Apple ile Devam Et
+            </button>
+        </div>
+        
+        <div style="margin-top: 25px; font-size: 11px; color: #636e72;">
+            Oyuna giriş yaparak <span style="color: #0984e3; cursor: pointer;">Kullanıcı Sözleşmesini</span> kabul etmiş olursun.
+        </div>
+    </div>
+</div>
     
     <div id="ayarlar-modal" class="modal" style="z-index: 5000;">
         <div class="modal-icerik" style="max-width: 400px;">
@@ -229,28 +267,6 @@
         <div class="bottom-nav-item" onclick="mobilMenuKapatAc()"><i class='bx bx-menu' style="font-size:24px;"></i>Diğer</div>
     </nav>
     <button id="fab-gun-atla" onclick="sonrakiGun()"><span style="font-size: 16px; margin-bottom: 2px;"><i class='bx bx-moon'></i></span><span>Günü<br>Bitir</span></button>
-
-    <div id="ana-menu-ekrani" class="ana-menu-kaplama">
-        <div class="ana-menu-icerik">
-            <div style="font-size: 60px; margin-bottom: 10px; color: #0984e3;"><i class='bx bxs-car-garage'></i></div>
-            <h1 class="ana-menu-logo">Sahibinden<span>Motors</span></h1>
-            <p class="ana-menu-slogan">Kendi Otomotiv ve Holding İmparatorluğunu Kur!</p>
-            
-            <div id="ana-menu-butonlar" style="display: flex; flex-direction: column; gap: 15px; margin-top: 30px;">
-                <button id="btn-devam-et" class="btn btn-yesil" style="display: none; padding: 18px; font-size: 16px; margin: 0; box-shadow: 0 4px 15px rgba(0, 184, 148, 0.4);" onclick="oyunaDevamEt()"><i class='bx bx-play-circle'></i> Kaldığın Yerden Devam Et</button>
-                <button class="btn btn-mavi" style="padding: 18px; font-size: 16px; margin: 0; box-shadow: 0 4px 15px rgba(9, 132, 227, 0.4);" onclick="yeniOyunKurulumAc()"><i class='bx bx-plus-circle'></i> Yeni Kariyere Başla</button>
-            </div>
-
-            <div id="ana-menu-yeni-oyun" style="display: none; margin-top: 30px;">
-                <p style="color: #dfe6e9; font-size: 13px; margin-bottom: 15px;">Kuracağın galerinin ve holdingin adını belirle:</p>
-                <input type="text" id="yeni-galeri-adi" placeholder="Örn: Çağatay Motors" style="width: 100%; padding: 15px; border-radius: 8px; border: 2px solid #0984e3; background: rgba(0,0,0,0.5); color: white; font-size: 16px; margin-bottom: 15px; outline: none; text-align: center;">
-                <div style="display: flex; gap: 10px;">
-                    <button class="btn btn-yesil" style="flex: 1; padding: 15px; font-size: 15px; margin: 0;" onclick="yeniKariyerBaslat()">Başla 🚀</button>
-                    <button class="btn btn-kirmizi" style="flex: 1; padding: 15px; font-size: 15px; margin: 0; background: transparent; border: 1px solid #d63031; color: #d63031;" onclick="yeniOyunIptal()">Geri Dön</button>
-                </div>
-            </div>
-        </div>
-    </div>
 
     <script src="app.js"></script>
 </body>
